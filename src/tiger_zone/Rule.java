@@ -134,7 +134,7 @@ class TestRule extends BasicRule
 				return true;
 			}
 			else
-				execute();//if the test condition fails
+				testFailure();//if the test condition fails
 			
 		}
 		catch(Exception ex)
@@ -146,7 +146,7 @@ class TestRule extends BasicRule
 	}
 	
 	@Override
-	public void execute() throws Exception
+	public void testFailure() throws Exception
 	{
 		throw new Exception(super.getName() + " failed under condition input: \"" + input + "\" does not equal \"Hello World\"");
 	}
@@ -165,9 +165,9 @@ class BasicRule implements Rule
 		return false;
 	}
 	
-	public void execute() throws Exception
+	public void testFailure() throws Exception
 	{
-		throw new Exception("Basic Rule Method: Execute was not overriden");
+		throw new Exception("Basic Rule Method: testFailure was not overriden");
 	}
 	
 	@Override
@@ -194,7 +194,7 @@ public interface Rule
 	
 	//Description: the result of failing a rule
 	//returns: void
-	void execute() throws Exception;
+	void testFailure() throws Exception;
 	
 	//Description: basic rule name getter
 	//returns: the name of the string
