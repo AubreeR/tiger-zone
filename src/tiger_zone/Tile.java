@@ -1,6 +1,6 @@
+package tiger_zone;
+
 import java.io.File;
-import java.util.Collections;
-import java.util.Stack;
 
 public class Tile {
 	// TLC = Top left corner, TL = Top left, BRC = Bottom right corner, etc
