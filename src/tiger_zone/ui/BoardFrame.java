@@ -31,7 +31,7 @@ class BoardFrame extends JFrame {
 			}
 		}	
 
-		ImageIcon img = new ImageIcon("./src/resources/Tile1.png");
+		ImageIcon img = new ImageIcon("./src/resources/tile1.png");
 		JLabel label = new JLabel();
 		label.setIcon(img);
 		panelBoard[2][2].add(label);
