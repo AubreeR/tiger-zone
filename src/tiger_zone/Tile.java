@@ -45,6 +45,6 @@ public class Tile {
 //		stack.push(t3);
 //		Collections.shuffle(stack);
 //		ts = stack.pop(); 
-		
-	}
+	
+
 }
