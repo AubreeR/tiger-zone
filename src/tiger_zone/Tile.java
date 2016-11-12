@@ -5,8 +5,9 @@ import java.io.File;
 public class Tile {
 	public Tile(char[] sides, char cent){
 		private int row;
-		private in col; 
+		private int col; 
 		private boolean shield;
+		File file; 
 		private boolean meeple; 
 		
 	}
