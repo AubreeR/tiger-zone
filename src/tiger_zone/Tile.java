@@ -1,5 +1,8 @@
 package tiger_zone;
 
+/**
+ * The <code>Tile</code> class represents a game tile.
+ */
 public class Tile {
 	private char[] sides;
 	private char center;
@@ -7,7 +10,7 @@ public class Tile {
 	private String imagePath;
 	
 	/**
-	 * The <code>Tile</code> class represents a game tile.
+	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
 	 * 
 	 * @param sides Describes the edges of this <code>Tile</code> in a clockwise fashion, beginning at the top-left
 	 *              corner.
