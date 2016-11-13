@@ -3,13 +3,11 @@ package tiger_zone;
 import java.util.Stack;
 
 public class Board {
+	private Tile[][] tileArray = new Tile[152][152];
+	private Stack<Tile> pile;
 	
-	Tile[][] tileArray = new Tile[154][154];
-	public static Stack gameTiles = new Stack();
-
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
+	Board(Stack<Tile> pile) {
+		this.pile = pile;
 	}
 	
 	public static void initTiles() {
