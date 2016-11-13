@@ -1,8 +1,6 @@
 package tiger_zone;
 
-import java.util.Collections;
 import java.util.Stack;
-
 
 public class Board {
 	
