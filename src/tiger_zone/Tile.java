@@ -1,50 +1,31 @@
 package tiger_zone;
 
-import java.io.File;
-
 public class Tile {
-	// TLC = Top left corner, TL = Top left, BRC = Bottom right corner, etc
-	char[] tileArr; 
-	char cent;
-	File file; 
-	Boolean pennant; 
-	int row, col;
-
-	//static Stack<Tile> stack = new Stack<>(); 
+	private char[] sides;
+	private char center;
+	private boolean hasPennant = false;
+	private String imagePath;
 	
-	public static void main(String[] args){
-		Tile t1 = new Tile(); 
-		Tile t2 = new Tile();
-		Tile t3 = new Tile();
-		
-		// Monastery surrounded by farm and south road (tile 1)
-		char[] t1Arr = {'f','f','f','f','f','f','f','f','f','f','r','f','f','f','f','f'};
-		t1.tileArr = t1Arr;
-		t1.pennant = false;
-		t1.cent = 'm';
-		File f1 = new File("C:/Users/Kyle/Dropbox/Tiles/Tile1.png");
-		t1.file = f1; 
-		
-		// Monastery surrounded by farm (tile 2)
-		char[] t2Arr = {'f','f','f','f','f','f','f','f','f','f','f','f','f','f','f','f'};
-		t2.tileArr = t2Arr;
-		t2.pennant = false;
-		t2.cent = 'm'; 
-		File f2 = new File("C:/Users/Kyle/Dropbox/Tiles/Tile2.png");
-		t2.file = f2;
-		
-		// Completely city tile
-		char[] t3Arr = {'c','c','c','c','c','c','c','c','c','c','c','c','c','c','c','c','c'};
-		t3.tileArr = t3Arr;
-		t3.pennant = true;
-		File f3 = new File("C:/Users/Kyle/Dropbox/Tiles/Tile3.png");
-		t3.file = f3;
-		
-//		stack.push(t1);
-//		stack.push(t2);
-//		stack.push(t3);
-//		Collections.shuffle(stack);
-//		ts = stack.pop(); 
+	/**
+	 * The <code>Tile</code> class represents a game tile.
+	 * 
+	 * @param sides Describes the edges of this <code>Tile</code> in a clockwise fashion, beginning at the top-left
+	 *              corner.
+	 * @param center Describes the center of this <code>Tile</code>.
+	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
+	 */
+	public Tile(char[] sides, char center, String imagePath) {
+		this.sides = sides;
+		this.center = center;
+		this.imagePath = imagePath;
+	}
 	
-
+	/**
+	 * Returns the path to the image file which portrays this tile.
+	 * 
+	 * @return path to image file
+	 */
+	public String getImagePath() {
+		return this.imagePath;
+	}
 }
