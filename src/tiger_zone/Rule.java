@@ -111,6 +111,40 @@ class RuleEngine
 	
 }
 
+
+class AdjacencyRule extends BasicRule
+{
+	
+	
+	@Override
+	public boolean evaluate()
+	{
+		try
+		{
+			if(true)
+			{
+				
+			}
+			else
+				testFailure();//if the test condition fails
+			
+		}
+		catch(Exception ex)
+		{
+			System.out.println(ex);//display the error 
+			return false;
+		}
+		return false;
+	}
+	
+	@Override
+	public void testFailure() throws Exception
+	{
+		throw new Exception(super.getName() + " failed under condition input: \"" + "\" does not equal \"Hello World\"");
+	}
+	
+}
+
 //Description: an extension of a basic rule meant to see if the input string
 //		says hello world. Eventually this will probably need to know about the
 //		board somehow to check. see Basic rule and rule interface for method descriptions
@@ -139,7 +173,7 @@ class TestRule extends BasicRule
 		}
 		catch(Exception ex)
 		{
-			System.out.println(ex);//display the error 
+			System.err.println(ex);//display the error 
 			return false;
 		}
 		return false;
