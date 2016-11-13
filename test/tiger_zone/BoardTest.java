@@ -1,6 +1,7 @@
 package tiger_zone;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
 
 import java.util.Stack;
 
@@ -19,7 +20,7 @@ public class BoardTest {
 
 	@Test
 	public void getPileTest() {
-		assertEquals(pile, board.getPile());
+		assertSame(pile, board.getPile());
 	}
 	
 	@Test
