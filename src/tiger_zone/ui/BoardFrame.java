@@ -2,17 +2,13 @@ package tiger_zone.ui;
 
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.Image;
 import java.awt.event.MouseAdapter;
-import java.util.Stack;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
-import tiger_zone.Tile;
 
 class BoardFrame extends JFrame {
 	private static final long serialVersionUID = 575149023846295616L;
