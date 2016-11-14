@@ -1,8 +1,5 @@
 package tiger_zone;
 
-import java.util.Stack;
-import java.util.ArrayList;
-
 // need to ditch tiger from boardCell class
 // need to ditch player... potentially
 // tile(setXCoord(X), setYCoord(Y));
