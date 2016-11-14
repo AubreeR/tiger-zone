@@ -134,12 +134,6 @@ class UnitTest{
 
 
 
-class Tiger{
-	String name;
-	public Tiger(String name){
-		this.name = name;
-	}
-}
 class Player{}
 class Tile{
 	int x;
