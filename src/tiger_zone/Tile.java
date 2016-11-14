@@ -6,12 +6,11 @@ package tiger_zone;
 public class Tile {
 	private char[] sides;
 	private char center;
-	private boolean hasPennant = false;
 	private String imagePath;
-	
+
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
-	 * 
+	 *
 	 * @param sides Describes the edges of this <code>Tile</code> in a clockwise fashion, beginning at the top-left
 	 *              corner.
 	 * @param center Describes the center of this <code>Tile</code>.
@@ -22,10 +21,10 @@ public class Tile {
 		this.center = center;
 		this.imagePath = imagePath;
 	}
-	
+
 	/**
 	 * Returns the path to the image file which portrays this tile.
-	 * 
+	 *
 	 * @return path to image file
 	 */
 	public String getImagePath() {
