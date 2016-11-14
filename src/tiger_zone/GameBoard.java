@@ -100,48 +100,4 @@ public class GameBoard{
 
 
 	}
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-class UnitTest{
-	UnitTest(){
-
-	}
-	public  String ModTest(String s1, String s2){
-		if(s1 == s2){
-			return "TEST PASSED";
-		}
-		else
-			return "TEST FAILED";
-	}
-
-}
-
-
-
-
-class Player{}
-class Tile{
-	int x;
-	int y;
-	String name;
-	public Tile(int x, int y, String name){
-		this. x = x;
-		this.y = y;
-		this.name = name;
-	}
 }
