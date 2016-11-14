@@ -7,35 +7,63 @@ import java.util.Stack;
  * been placed.
  */
 public class Board {
-	private Tile[][] tileArray = new Tile[152][152];
+	private final BoardCell[][] gameGrid = new BoardCell[152][152];
 	private Stack<Tile> pile;
-	
+
 	/**
 	 * Creates an empty board with a particular stack of tiles.
-	 * 
+	 *
 	 * @param pile Stack of unplaced tiles.
 	 */
-	public Board(Stack<Tile> pile) {
+	public Board(final Stack<Tile> pile) {
 		this.pile = pile;
+
+		for (int i = 0; i < this.gameGrid.length; ++i) {
+			for (int j = 0; j <  this.gameGrid.length; ++j) {
+				this.gameGrid[i][j] = new BoardCell(i, j);
+			}
+		}
 	}
-	
+
+	/**
+	 * Adds tile to this board at position (x, y).
+	 *
+	 * @param x The x coordinate of the destination
+	 * @param y The y coordinate of the destination
+	 * @param tile The instance of <code>Tile</code> to add
+	 */
+	public void addTile(final int x, final int y, final Tile tile) {
+		gameGrid[x][y].setTile(tile);
+	}
+
+	/**
+	 * Returns the tile located at position (x, y).
+	 *
+	 * @param x The x coordinate
+	 * @param y The y coordinate
+	 * @return the instance of <code>Tile</code> at position (x, y)
+	 */
+	public Tile getTile(final int x, final int y){
+		return gameGrid[x][y].getTile();
+	}
+
 	/**
 	 * Returns this board's stack of unplaced tiles.
-	 * 
+	 *
 	 * @return Stack of unplaced tiles.
 	 */
 	public Stack<Tile> getPile() {
 		return this.pile;
 	}
-	
+
 	/**
 	 * Creates a "default stack", which contains one of each tile "in order" (e.g. tile A is at the bottom of the stack
 	 * whilst tile X is at the top of the stack).
-	 * 
+	 *
 	 * @return Stack of tiles.
 	 */
 	public static Stack<Tile> createDefaultStack() {
-		// f = farm, c = city, 
+		// f = farm, c = city,
 		//sides names:   TLC  TL  TM  TR TRC  RT  RM  RB BRC BR  BM   BL BLC  LB  LM  LT
 		//sides values:   1   2   3   4   5   6   7   8   9  10  11   12  13  14  15  16
 		char[] Asides = {'f','f','f','f','f','f','f','f','f','f','r','f','f','f','f','f'};
@@ -89,5 +117,5 @@ public class Board {
 		pile.push(new Tile(Wsides, 'r', "./src/resources/tile23.png"));
 		pile.push(new Tile(Xsides, 'r', "./src/resources/tile24.png"));
 		return pile;
-	}	
+	}
 }
