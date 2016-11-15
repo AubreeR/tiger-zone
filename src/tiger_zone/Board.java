@@ -80,19 +80,19 @@ public class Board {
 		char[] Lsides = {'l','l','l','j','j','j','l','l','l','j','j','j'};
 		char[] Msides = {'l','l','l','j','j','j','j','j','j','j','j','j'};
 		char[] Nsides = {'j','j','j','l','l','l','l','l','l','j','j','j'};
-		char[] Osides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		char[] Psides = {'c','c','c','c','c','f','r','f','f','f','r','f'};
-		char[] Qsides = {'c','c','c','c','c','c','c','c','c','f','f','f'};
-		char[] Rsides = {'c','c','c','c','c','c','c','c','c','f','f','f'};
-		char[] Ssides = {'c','c','c','c','c','c','c','c','c','f','r','f'};
-		char[] Tsides = {'c','c','c','c','c','c','c','c','c','f','r','f'};
-		char[] Usides = {'f','f','r','f','f','f','f','f','f','f','r','f'};
-		char[] Vsides = {'f','f','f','f','f','f','f','f','f','f','r','f'};
-		char[] Wsides = {'f','f','f','f','f','f','r','f','f','f','r','f'};
-		char[] Xsides = {'f','f','r','f','f','f','r','f','f','f','r','f'};
-		char[] Ysides = {'f','f','r','f','f','f','r','f','f','f','r','f'};
-		char[] Zsides = {'f','f','r','f','f','f','r','f','f','f','r','f'};
-		char[] AAsides = {'f','f','r','f','f','f','r','f','f','f','r','f'};
+		char[] Osides = {'j','r','j','l','l','l','j','j','j','j','r','j'};
+		char[] Psides = {'j','r','j','l','l','l','j','j','j','j','r','j'};
+		char[] Qsides = {'j','j','j','l','l','l','j','r','j','j','r','j'};
+		char[] Rsides = {'j','j','j','l','l','l','j','r','j','j','r','j'};
+		char[] Ssides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
+		char[] Tsides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
+		char[] Usides = {'j','r','j','l','l','l','l','l','l','l','l','l'};
+		char[] Vsides = {'j','r','j','l','l','l','j','r','j','j','r','j'};
+		char[] Wsides = {'j','r','j','l','l','l','j','r','j','j','r','j'};
+		char[] Xsides = {'j','r','j','l','l','l','l','l','l','j','r','j'};
+		char[] Ysides = {'j','r','j','l','l','l','l','l','l','j','r','j'};
+		char[] Zsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
+		char[] AAsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
 		
 
 		Stack<Tile> pile = new Stack<Tile>();
