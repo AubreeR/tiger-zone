@@ -7,6 +7,7 @@ public class Tile {
 	private char[] sides;
 	private char center;
 	private String imagePath;
+	
 
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.

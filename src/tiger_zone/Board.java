@@ -25,6 +25,10 @@ public class Board {
 		}
 	}
 
+	public final BoardCell[][] getGameState() {
+		return this.gameGrid;
+	}
+	
 	/**
 	 * Adds tile to this board at position (x, y).
 	 *
@@ -94,7 +98,6 @@ public class Board {
 		char[] Zsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
 		char[] AAsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
 		
-
 		Stack<Tile> pile = new Stack<Tile>();
 		pile.push(new Tile(Asides, 'j', "./src/resources/tile1.png"));
 		pile.push(new Tile(Bsides, 'd', "./src/resources/tile2.png"));

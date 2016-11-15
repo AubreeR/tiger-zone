@@ -7,6 +7,9 @@ import javax.swing.JFrame;
 
 import tiger_zone.Board;
 import tiger_zone.Tile;
+import tiger_zone.RuleEngine;
+import tiger_zone.AdjacencyRule;
+import tiger_zone.SideMatchRule;
 
 public class Main {
 	public static Board board;
@@ -19,10 +22,11 @@ public class Main {
 		char[] sides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
 		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
 		board.addTile(5, 5, init);
-		
-		
-		//char[] sides = {'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f'};
-		//new Tile(sides, 'm', "./src/resources/tile19.png");
+
+		RuleEngine placementRules = new RuleEngine();
+		AdjacencyRule ar = new AdjacencyRule(board.getGameState(), 2,2);
+		placementRules.addRule(ar);
+		placementRules.evaluateRules();
 		
 		BoardFrame bf = new BoardFrame();
 		bf.setSize(600, 600);

@@ -3,17 +3,17 @@ package tiger_zone;
 import java.util.ArrayList;
 
 //Manages rules and validation of tile placement
-class RuleEngine
+public class RuleEngine
 {
 	ArrayList<Rule> ruleList;
-	RuleEngine()
+	public RuleEngine()
 	{
 		ruleList = new ArrayList<Rule>();
 	}
 	
 	//Description: adds a rule to to the existing set of tests
 	//returns: void
-	void addRule(Rule gameRule)
+	public void addRule(Rule gameRule)
 	{
 		ruleList.add(gameRule);	
 	}
@@ -22,7 +22,7 @@ class RuleEngine
 	//	uses the name of the rule to find it
 	//returns: 	true == rules successfully found and removed
 	//			false == rule was not found or was not removed
-	boolean removeRule(String ruleName)
+	public boolean removeRule(String ruleName)
 	{
 		boolean flagReturn = false;
 		for (int i = 0; i < ruleList.size(); i++)
@@ -39,7 +39,7 @@ class RuleEngine
 	//Description: test a specific subset of the rules
 	//returns: 	true == all rules passes
 	//			false == a rule failed
-	boolean evaluateRules(ArrayList<String> ruleSet)
+	public boolean evaluateRules(ArrayList<String> ruleSet)
 	{
 		boolean flagReturn = true;
 		//should probably implement a find functionality that 
@@ -66,7 +66,7 @@ class RuleEngine
 	//Description: test a specific subset of the rules with the same name
 	//returns: 	true == all rules passes
 	//			false == a rule failed
-	boolean evaluateRules(String testRule)
+	public boolean evaluateRules(String testRule)
 	{
 	    boolean flagReturn = true;	
 		for(Rule rule : ruleList)
@@ -84,7 +84,7 @@ class RuleEngine
 	//Description: test the entire set of existing rules
 	//returns: 	true== all rules passed
 	//       	false == a rule failed
-	boolean evaluateRules()
+	public boolean evaluateRules()
 	{
 		boolean flagReturn = true;
 		for(Rule rule : ruleList)
