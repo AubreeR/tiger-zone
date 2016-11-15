@@ -2,6 +2,7 @@ package tiger_zone.ui;
 
 import java.awt.Color;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.event.MouseAdapter;
 
 import javax.swing.ImageIcon;
@@ -32,7 +33,8 @@ class BoardFrame extends JFrame {
 		}	
 		
 		ImageIcon img = new ImageIcon("./src/resources/tile4.png");
-		
+		//ImageIcon imgScale = new ImageIcon(img.getImage().
+		//		getScaledInstance(panelBoard[1][1].getHeight(), panelBoard[1][1].getWidth(), Image.SCALE_SMOOTH));
 		JLabel label = new JLabel();
 		label.setIcon(img);
 		panelBoard[2][2].add(label);
