@@ -63,7 +63,7 @@ public class Board {
 	 * @return Stack of tiles.
 	 */
 	public static Stack<Tile> createDefaultStack() {
-		// f = farm, c = city,
+		// j = jungle, l = lake, r = road (game-trail), d = den, e = end (road block)
 		//sides names:    TL  TM  TR RT  RM  RB  BR  BM   BL LB  LM   LT
 		//sides values:   1   2   3   4   5   6   7   8   9  10  11   12  
 		char[] Asides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
@@ -96,30 +96,33 @@ public class Board {
 		
 
 		Stack<Tile> pile = new Stack<Tile>();
-		pile.push(new Tile(Asides, 'm', "./src/resources/tile1.png"));
-		pile.push(new Tile(Bsides, 'm', "./src/resources/tile2.png"));
-		pile.push(new Tile(Csides, 'c', "./src/resources/tile3.png"));
-		pile.push(new Tile(Dsides, 'r', "./src/resources/tile4.png"));
-		pile.push(new Tile(Esides, 'f', "./src/resources/tile5.png"));
-		pile.push(new Tile(Fsides, 'c', "./src/resources/tile6.png"));
-		pile.push(new Tile(Gsides, 'c', "./src/resources/tile7.png"));
-		pile.push(new Tile(Hsides, 'f', "./src/resources/tile8.png"));
-		pile.push(new Tile(Isides, 'f', "./src/resources/tile9.png"));
-		pile.push(new Tile(Jsides, 'r', "./src/resources/tile10.png"));
-		pile.push(new Tile(Ksides, 'r', "./src/resources/tile11.png"));
-		pile.push(new Tile(Lsides, 'r', "./src/resources/tile12.png"));
-		pile.push(new Tile(Msides, 'f', "./src/resources/tile13.png"));
-		pile.push(new Tile(Nsides, 'f', "./src/resources/tile14.png"));
+		pile.push(new Tile(Asides, 'j', "./src/resources/tile1.png"));
+		pile.push(new Tile(Bsides, 'd', "./src/resources/tile2.png"));
+		pile.push(new Tile(Csides, 'd', "./src/resources/tile3.png"));
+		pile.push(new Tile(Dsides, 'e', "./src/resources/tile4.png"));
+		pile.push(new Tile(Esides, 'r', "./src/resources/tile5.png"));
+		pile.push(new Tile(Fsides, 'r', "./src/resources/tile6.png"));
+		pile.push(new Tile(Gsides, 'e', "./src/resources/tile7.png"));
+		pile.push(new Tile(Hsides, 'l', "./src/resources/tile8.png"));
+		pile.push(new Tile(Isides, 'l', "./src/resources/tile9.png"));
+		pile.push(new Tile(Jsides, 'l', "./src/resources/tile10.png"));
+		pile.push(new Tile(Ksides, 'l', "./src/resources/tile11.png"));
+		pile.push(new Tile(Lsides, 'j', "./src/resources/tile12.png"));
+		pile.push(new Tile(Msides, 'j', "./src/resources/tile13.png"));
+		pile.push(new Tile(Nsides, 'j', "./src/resources/tile14.png"));
 		pile.push(new Tile(Osides, 'r', "./src/resources/tile15.png"));
 		pile.push(new Tile(Psides, 'r', "./src/resources/tile16.png"));
-		pile.push(new Tile(Qsides, 'c', "./src/resources/tile17.png"));
-		pile.push(new Tile(Rsides, 'c', "./src/resources/tile18.png"));
-		pile.push(new Tile(Ssides, 'c', "./src/resources/tile19.png"));
-		pile.push(new Tile(Tsides, 'c', "./src/resources/tile20.png"));
-		pile.push(new Tile(Usides, 'r', "./src/resources/tile21.png"));
-		pile.push(new Tile(Vsides, 'r', "./src/resources/tile22.png"));
-		pile.push(new Tile(Wsides, 'r', "./src/resources/tile23.png"));
+		pile.push(new Tile(Qsides, 'r', "./src/resources/tile17.png"));
+		pile.push(new Tile(Rsides, 'r', "./src/resources/tile18.png"));
+		pile.push(new Tile(Ssides, 'r', "./src/resources/tile19.png"));
+		pile.push(new Tile(Tsides, 'r', "./src/resources/tile20.png"));
+		pile.push(new Tile(Usides, 'l', "./src/resources/tile21.png"));
+		pile.push(new Tile(Vsides, 'e', "./src/resources/tile22.png"));
+		pile.push(new Tile(Wsides, 'e', "./src/resources/tile23.png"));
 		pile.push(new Tile(Xsides, 'r', "./src/resources/tile24.png"));
+		pile.push(new Tile(Ysides, 'r', "./src/resources/tile25.png"));
+		pile.push(new Tile(Zsides, 'r', "./src/resources/tile26.png"));
+		pile.push(new Tile(AAsides, 'r', "./src/resources/tile27.png"));
 		return pile;
 	}
 }
