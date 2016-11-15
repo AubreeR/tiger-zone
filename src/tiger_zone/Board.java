@@ -64,23 +64,23 @@ public class Board {
 	 */
 	public static Stack<Tile> createDefaultStack() {
 		// f = farm, c = city,
-		//sides names:   TLC  TL  TM  TR TRC  RT  RM  RB BRC BR  BM   BL BLC  LB  LM  LT
-		//sides values:   1   2   3   4   5   6   7   8   9  10  11   12  13  14  15  16
+		//sides names:    TL  TM  TR RT  RM  RB  BR  BM   BL LB  LM   LT
+		//sides values:   1   2   3   4   5   6   7   8   9  10  11   12  
 		char[] Asides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
 		char[] Bsides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		char[] Csides = {'j','j','j','j','j','j','j','j','j','j','r','j'};
-		char[] Dsides = {'j','j','r','j','j','j','r','j','j','j','r','j'};
-		char[] Esides = {'j','j','r','j','j','j','j','j','j','j','r','j'};
-		char[] Fsides = {'j','j','r','j','j','j','j','j','j','j','j','j'};
-		char[] Gsides = {'j','j','r','j','j','j','j','j','j','j','r','j'};
-		char[] Hsides = {'l','j','j','j','l','l','l','l','l','j','j','j'};
-		char[] Isides = {'f','f','f','f','c','c','c','c','c','c','c','c'};
-		char[] Jsides = {'c','c','c','c','c','f','r','f','f','f','r','f'};
-		char[] Ksides = {'f','f','r','f','c','c','c','c','c','f','f','f'};
-		char[] Lsides = {'f','f','r','f','c','c','c','c','c','f','r','f'};
-		char[] Msides = {'c','c','c','c','c','f','f','f','f','f','f','f'};
-		char[] Nsides = {'c','c','c','c','c','f','f','f','f','f','f','f'};
-		char[] Osides = {'c','c','c','c','c','f','r','f','f','f','r','f'};
+		char[] Csides = {'j','j','j','j','j','j','j','r','j','j','j','j'};
+		char[] Dsides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
+		char[] Esides = {'j','r','j','j','r','j','j','r','j','j','r','j'};
+		char[] Fsides = {'j','r','j','j','j','j','j','j','j','j','r','j'};
+		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
+		char[] Hsides = {'l','l','l','l','l','l','l','l','l','l','l','l'};
+		char[] Isides = {'j','j','j','l','l','l','l','l','l','l','l','l'};
+		char[] Jsides = {'l','l','l','l','l','l','j','j','j','j','j','j'};
+		char[] Ksides = {'j','j','j','l','l','l','j','j','j','l','l','l'};
+		char[] Lsides = {'l','l','l','j','j','j','l','l','l','j','j','j'};
+		char[] Msides = {'l','l','l','j','j','j','j','j','j','j','j','j'};
+		char[] Nsides = {'j','j','j','l','l','l','l','l','l','j','j','j'};
+		char[] Osides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
 		char[] Psides = {'c','c','c','c','c','f','r','f','f','f','r','f'};
 		char[] Qsides = {'c','c','c','c','c','c','c','c','c','f','f','f'};
 		char[] Rsides = {'c','c','c','c','c','c','c','c','c','f','f','f'};
