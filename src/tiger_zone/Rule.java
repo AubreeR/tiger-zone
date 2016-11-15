@@ -22,12 +22,45 @@ class AdjacencyRule extends BasicRule
 {
 	
 	
+	
 	@Override
 	public boolean evaluate()
 	{
 		try
 		{
-			if(true)
+			if(boardState[r][c])
+			{
+				
+			}
+			else
+				testFailure();//if the test condition fails
+			
+		}
+		catch(Exception ex)
+		{
+			System.err.println(ex);//display the error 
+			return false;
+		}
+		return false;
+	}
+	
+	@Override
+	public void testFailure() throws Exception
+	{
+		throw new Exception(super.getName() + " failed under condition input: \"" + "\" does not equal \"Hello World\"");
+	}
+	
+}
+
+class SideMatchRule extends BasicRule
+{
+	
+	@Override
+	public boolean evaluate()
+	{
+		try
+		{
+			if(true/*check all adjacent tiles*/)
 			{
 				
 			}
@@ -51,60 +84,38 @@ class AdjacencyRule extends BasicRule
 	
 }
 
-//Description: an extension of a basic rule meant to see if the input string
-//		says hello world. Eventually this will probably need to know about the
-//		board somehow to check. see Basic rule and rule interface for method descriptions
-class TestRule extends BasicRule
-{
-	String input;
-	TestRule(String in)
-	{
-		this.input = in;
-		this.setRuleName("AdjacencyRule");
-	}
-	
-	@Override
-	public boolean evaluate()
-	{
-		try
-		{
-			if(input.compareTo("Hello World") == 0)
-			{
-				System.out.println("TestRule passed under condition input: \"" + input + "\" equals \"Hello World\"");
-				return true;
-			}
-			else
-				testFailure();//if the test condition fails
-			
-		}
-		catch(Exception ex)
-		{
-			System.err.println(ex);//display the error 
-			return false;
-		}
-		return false;
-	}
-	
-	@Override
-	public void testFailure() throws Exception
-	{
-		throw new Exception(super.getName() + " failed under condition input: \"" + input + "\" does not equal \"Hello World\"");
-	}
-	
-	
-}
+
 
 //Maps basic rules 
 class BasicRule implements Rule
 {
 	
 	private String ruleName = "";
+	private BoardCell[][] boardState;
+	private int row, col;
 	
+	@Override
+	public void setBoardState(BoardCell[][] boardState, int row, int col)
+	{
+		this.boardState = boardState;
+		this.row = row;
+		this.col = col;
+		
+	}
+	
+	@Override
+	public void setBoardState(BoardCell[][] boardState)
+	{
+		this.boardState = boardState;
+	}
+	
+	@Override
 	public boolean evaluate() 
 	{
 		return false;
 	}
 	
+	@Override
 	public void testFailure() throws Exception
 	{
 		throw new Exception("Basic Rule Method: testFailure was not overriden");
@@ -124,7 +135,9 @@ class BasicRule implements Rule
 
 public interface Rule
 {
-
+	void setBoardState(BoardCell[][] boardState);
+	void setBoardState(BoardCell[][] boardState, int row, int col);
+	
 	//Description:hold conditions for passing or failing 
 	//	the given rule set
 	//returns: 	true if rule is validated
