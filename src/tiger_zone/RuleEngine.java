@@ -71,11 +71,19 @@ public class RuleEngine
 	    boolean flagReturn = true;	
 		for(Rule rule : ruleList)
 		{
-			if(testRule.compareTo(rule.getName()) == 0)
+			if(flagReturn)
 			{
-				flagReturn = rule.evaluate() && flagReturn;
-				
+				if(testRule.compareTo(rule.getName()) == 0)
+				{
+					flagReturn = rule.evaluate() && flagReturn;
+					
+				}
 			}
+			else
+			{
+				break;
+			}
+					
 			
 		}
 		return flagReturn;
@@ -87,8 +95,18 @@ public class RuleEngine
 	public boolean evaluateRules()
 	{
 		boolean flagReturn = true;
+		int i = 1;
 		for(Rule rule : ruleList)
-			flagReturn = rule.evaluate() && flagReturn;
+		{
+			
+			if(flagReturn)
+			{
+				System.out.println(i++);
+				flagReturn = rule.evaluate() && flagReturn;
+			}
+			else
+				break;
+		}
 		return flagReturn;
 	}
 	

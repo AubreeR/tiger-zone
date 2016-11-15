@@ -24,9 +24,18 @@ public class Main {
 		board.addTile(5, 5, init);
 
 		RuleEngine placementRules = new RuleEngine();
-		AdjacencyRule ar = new AdjacencyRule(board.getGameState(), 2,2);
-		placementRules.addRule(ar);
+		
+		AdjacencyRule ar;
+		long millis = System.currentTimeMillis() % 1000;
+		for(int i = 0; i < 1000; i++)
+		{
+			ar = new AdjacencyRule(board.getGameState(), 2,2);
+			placementRules.addRule(ar);
+		}
 		placementRules.evaluateRules();
+
+		millis = System.currentTimeMillis() % 1000 - millis;
+		System.out.println("Millieconds to evaluate 1000 rules: " + millis);
 		
 		BoardFrame bf = new BoardFrame();
 		bf.setSize(600, 600);

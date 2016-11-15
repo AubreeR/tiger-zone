@@ -4,10 +4,13 @@ package tiger_zone;
 
 public class SideMatchRule extends PlacementRule
 {
+	private Tile nextTile;//we must know the next tile to be placed in order to match sides
 	
-	public SideMatchRule(BoardCell[][] boardState,int row, int col)
+	public SideMatchRule(BoardCell[][] boardState,int row, int col, Tile nextTile)
 	{
 		super(boardState,row, col);
+		this.nextTile = nextTile;
+		
 	}
 	
 	@Override
@@ -15,8 +18,12 @@ public class SideMatchRule extends PlacementRule
 	{
 		try
 		{
+			//check each tile around it
+			//center ALWAYS HAS TO MATCH
+			//side fields on a face can diverge iff a diagonal side matches the divergent
 			if(true/*check all adjacent tiles*/)
 			{
+				return true;
 				
 			}
 			else

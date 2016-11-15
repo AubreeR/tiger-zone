@@ -24,7 +24,7 @@ public class Board {
 			}
 		}
 	}
-
+	
 	public final BoardCell[][] getGameState() {
 		return this.gameGrid;
 	}
