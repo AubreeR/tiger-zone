@@ -31,6 +31,10 @@ public class Tile {
 		return this.center;
 	}
 
+	public char getSide(int index)
+	{
+		return sides[index];
+	}
 	/**
 	 * Returns the path to the image file which portrays this tile.
 	 *

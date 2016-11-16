@@ -23,6 +23,7 @@ public class Main {
 		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
 		board.addTile(5, 5, init);
 
+		//testing rule engine
 		RuleEngine placementRules = new RuleEngine();
 		
 		AdjacencyRule ar;
