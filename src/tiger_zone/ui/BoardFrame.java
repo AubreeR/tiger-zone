@@ -11,12 +11,28 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import tiger_zone.Board;
+import tiger_zone.Tile;
+
+/**
+ * @BoardFrame The GUI representation of the Board class. 
+ * Generates a 2d array of JPanels which can be clicked and their icon
+ * set to that of the next tile
+ * 
+ * @Params
+ * Mouseadapter ma - Listens for the click of a JPanel
+ * panelBoard - 2d array of JPanels
+ * preview - JFrame window holding image of next tile on stack
+ * previewLabel - Will hold the actual icon of next tile
+ */ 
 class BoardFrame extends JFrame {
 	private static final long serialVersionUID = 575149023846295616L;
+	public JFrame preview = new JFrame(); 
+	public JLabel previewLabel = new JLabel();
 	
 	public BoardFrame() {
-		final int rows = 5;
-		final int cols = 5;
+		final int rows = 10;
+		final int cols = 10;
 		
 		MouseAdapter ma = new OnBoardClick(); 
 				
@@ -31,12 +47,23 @@ class BoardFrame extends JFrame {
 				this.add(panelBoard[i][j]);
 			}
 		}	
-		
-		ImageIcon img = new ImageIcon("./src/resources/tile4.png");
+		Tile test = Main.board.getTile(5,5);
+		ImageIcon img = new ImageIcon(test.getImagePath());
 		//ImageIcon imgScale = new ImageIcon(img.getImage().
 		//		getScaledInstance(panelBoard[1][1].getHeight(), panelBoard[1][1].getWidth(), Image.SCALE_SMOOTH));
 		JLabel label = new JLabel();
 		label.setIcon(img);
-		panelBoard[2][2].add(label);
+		
+		panelBoard[5][5].add(label);
+		
+		
+		Tile nextTile = Main.board.getPile().peek(); 
+		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
+		previewLabel.setIcon(previewImg);
+		preview.add(previewLabel);
+		preview.setSize(200, 200);
+		preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		preview.setVisible(true);
+		
 	}
 }
