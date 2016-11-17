@@ -21,6 +21,14 @@ public class Tile {
 		this.center = center;
 		this.imagePath = imagePath;
 	}
+	
+	public char[] getSides() {
+		return this.sides;
+	}
+	
+	public char getCenter() {
+		return this.center;
+	}
 
 	/**
 	 * Returns the path to the image file which portrays this tile.
