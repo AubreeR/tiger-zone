@@ -35,6 +35,10 @@ public class RuleEngine
 		return flagReturn;
 	}
 	
+	public void clearRules()
+	{
+		ruleList = new ArrayList<Rule>();
+	}
 	
 	//Description: test a specific subset of the rules
 	//returns: 	true == all rules passes

@@ -36,7 +36,21 @@ public class Main {
 		placementRules.evaluateRules();
 
 		millis = System.currentTimeMillis() % 1000 - millis;
-		System.out.println("Millieconds to evaluate 1000 rules: " + millis);
+		System.out.println("Millieconds to evaluate AR 1000 rules: " + millis);
+		
+		placementRules.clearRules();
+		
+		SideMatchRule smr;
+		millis = System.currentTimeMillis() % 1000;
+		for(int i = 0; i < 1000; i++)
+		{
+			char[] Fsides = {'j','r','j','j','j','j','j','j','j','j','r','j'};
+			smr = new SideMatchRule(board.getGameState(), 2,2,  new Tile(Fsides,'r', "./src/resources/tile6.png")    );
+			placementRules.addRule(smr);
+		}
+		placementRules.evaluateRules();
+		millis = System.currentTimeMillis() % 1000 - millis;
+		System.out.println("Millieconds to evaluate 1000 SMR rules: " + millis);
 		
 		BoardFrame bf = new BoardFrame();
 		bf.setSize(600, 600);

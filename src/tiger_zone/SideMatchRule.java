@@ -40,7 +40,6 @@ public class SideMatchRule extends PlacementRule
 					
 					
 			}
-			
 			if(row + 1 >= 0 && row + 1 < boardState.length)//down
 			{
 				if(col - 1 >= 0 && col - 1 < boardState[0].length)//downleft
