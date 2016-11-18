@@ -7,7 +7,6 @@ public class Tile {
 	private char[] sides;
 	private char center;
 	private String imagePath;
-	
 
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
@@ -26,15 +25,16 @@ public class Tile {
 	public char[] getSides() {
 		return this.sides;
 	}
-	
-	public char getCenter() {
-		return this.center;
-	}
 
 	public char getSide(int index)
 	{
 		return sides[index];
 	}
+	
+	public char getCenter() {
+		return this.center;
+	}
+
 	/**
 	 * Returns the path to the image file which portrays this tile.
 	 *

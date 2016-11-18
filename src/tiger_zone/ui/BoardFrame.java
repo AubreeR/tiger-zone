@@ -47,7 +47,7 @@ class BoardFrame extends JFrame {
 				this.add(panelBoard[i][j]);
 			}
 		}
-		
+	
 		Tile test = Main.board.getTile(5,5);
 		ImageIcon img = new ImageIcon(test.getImagePath());
 		//ImageIcon imgScale = new ImageIcon(img.getImage().

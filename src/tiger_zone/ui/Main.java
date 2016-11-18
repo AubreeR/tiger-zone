@@ -7,9 +7,6 @@ import javax.swing.JFrame;
 
 import tiger_zone.Board;
 import tiger_zone.Tile;
-import tiger_zone.RuleEngine;
-import tiger_zone.AdjacencyRule;
-import tiger_zone.SideMatchRule;
 
 public class Main {
 	public static Board board;
@@ -18,40 +15,10 @@ public class Main {
 		Stack<Tile> pile = Board.createDefaultStack();
 		Collections.shuffle(pile);
 		board = new Board(pile);
-		
-		char[] sides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
-		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
-		board.addTile(5, 5, init);
 
-		//testing rule engine
-		RuleEngine placementRules = new RuleEngine();
-		
-		AdjacencyRule ar;
-		long millis = System.currentTimeMillis() % 1000;
-		for(int i = 0; i < 1000; i++)
-		{
-			ar = new AdjacencyRule(board.getGameState(), 2,2);
-			placementRules.addRule(ar);
-		}
-		placementRules.evaluateRules();
+		char[] Asides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
+		board.addTile(4, 5, new Tile(Asides, 'j', "./src/resources/tile1.png"));
 
-		millis = System.currentTimeMillis() % 1000 - millis;
-		System.out.println("Millieconds to evaluate AR 1000 rules: " + millis);
-		
-		placementRules.clearRules();
-		
-		SideMatchRule smr;
-		millis = System.currentTimeMillis() % 1000;
-		for(int i = 0; i < 1000; i++)
-		{
-			char[] Fsides = {'j','r','j','j','j','j','j','j','j','j','r','j'};
-			smr = new SideMatchRule(board.getGameState(), 2,2,  new Tile(Fsides,'r', "./src/resources/tile6.png")    );
-			placementRules.addRule(smr);
-		}
-		placementRules.evaluateRules();
-		millis = System.currentTimeMillis() % 1000 - millis;
-		System.out.println("Millieconds to evaluate 1000 SMR rules: " + millis);
-		
 		BoardFrame bf = new BoardFrame();
 		bf.setSize(600, 600);
 		bf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

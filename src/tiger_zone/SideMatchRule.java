@@ -73,26 +73,26 @@ public class SideMatchRule extends PlacementRule
 				case 0:
 					break;
 				case 1: //UC Case
-					if(nextTile.getSide(1) != adj[i].getSide(1))
+					if(nextTile.getSides()[1] != adj[i].getSides()[1])
 						throw new Exception(super.getName() + " failed under condition that the northern tile did not match");
 					break;
 				case 2:
 					break;
 				case 3://center right
-					if(nextTile.getSide(4) != adj[i].getSide(4))
+					if(nextTile.getSides()[4] != adj[i].getSides()[4])
 						throw new Exception(super.getName() + " failed under condition that the Easter tile did not match");
 					break;
 				case 4:
 					
 					break;
 				case 5://center down
-					if(nextTile.getSide(7) != adj[i].getSide(7))
+					if(nextTile.getSides()[7] != adj[i].getSides()[7])
 						throw new Exception(super.getName() + " failed under condition that the southern tile did not match");
 					break;
 				case 6:
 					break;
 				case 7:
-					if(nextTile.getSide(10) != adj[i].getSide(10))
+					if(nextTile.getSides()[10] != adj[i].getSides()[10])
 						throw new Exception(super.getName() + " failed under condition that the western tile did not match");
 					break;
 				default:
@@ -114,7 +114,7 @@ public class SideMatchRule extends PlacementRule
 		}
 		catch(Exception ex)
 		{
-			System.out.println(ex);//display the error 
+			System.err.println(ex);//display the error 
 			return false;
 		}
 		return false;

@@ -99,13 +99,13 @@ public class RuleEngine
 	public boolean evaluateRules()
 	{
 		boolean flagReturn = true;
-		int i = 1;
+		
 		for(Rule rule : ruleList)
 		{
 			
 			if(flagReturn)
 			{
-				System.out.println(i++);
+				
 				flagReturn = rule.evaluate() && flagReturn;
 			}
 			else
