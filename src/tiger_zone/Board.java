@@ -46,23 +46,21 @@ public class Board {
 	}
 
 	/**
-	 * checks to see if the tile can be placed at board position (x,y)
-	 * @param x the x coordinate of the tile
-	 * @param y the y coordinate of the tile
-	 * @param tile the instance of <code>Tile</code> to add
-	 * @return true if the tile can be placed in the location, false otherwise
+	 * Check if the tile can be placed at board position (x, y).
+	 *
+	 * @param x The x coordinate of the tile
+	 * @param y The y coordinate of the tile
+	 * @param tile The instance of <code>Tile</code> to add
+	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
-	public boolean validPlacement(final int x, final int y, final Tile tile)
-	{
+	public final boolean validPlacement(final int x, final int y, final Tile tile) {
 		placementEngine.clearRules();
-		placementEngine.addRule( new AdjacencyRule(this.gameGrid, x, y));//checks to see if there is an adjacent tile
+
+		// Check for adjacent tiles
+		placementEngine.addRule(new AdjacencyRule(this.gameGrid, x, y));
 		placementEngine.addRule(new SideMatchRule(this.gameGrid, x, y, tile));
-		if(placementEngine.evaluateRules())
-		{
-			return true;
-		}
-		else
-			return false;
+
+		return placementEngine.evaluateRules();
 	}
 
 	/**
