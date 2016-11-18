@@ -100,8 +100,8 @@ public class Board {
 		char[] Asides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
 		char[] Bsides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
 		char[] Csides = {'j','j','j','j','j','j','j','r','j','j','j','j'};
-		char[] Dsides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		char[] Esides = {'j','r','j','j','r','j','j','r','j','j','r','j'};
+		char[] Dsides = {'j','r','j','j','r','j','j','r','j','j','r','j'};
+		char[] Esides = {'j','r','j','j','j','j','j','r','j','j','j','j'};
 		char[] Fsides = {'j','r','j','j','j','j','j','j','j','j','r','j'};
 		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
 		char[] Hsides = {'l','l','l','l','l','l','l','l','l','l','l','l'};
