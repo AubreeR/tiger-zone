@@ -27,8 +27,8 @@ import tiger_zone.Tile;
  */ 
 class BoardFrame extends JFrame {
 	private static final long serialVersionUID = 575149023846295616L;
-	public JFrame preview = new JFrame(); 
-	public JLabel previewLabel = new JLabel();
+	public static JFrame preview = new JFrame(); 
+	public static JLabel previewLabel = new JLabel();
 	
 	public BoardFrame() {
 		final int rows = 10;
