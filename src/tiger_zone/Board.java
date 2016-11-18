@@ -9,7 +9,7 @@ import java.util.Stack;
 public class Board {
 	private final BoardCell[][] gameGrid = new BoardCell[152][152];
 	private Stack<Tile> pile;
-	private RuleEngine placementEngine;
+	private final RuleEngine placementEngine = new RuleEngine();
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.
@@ -18,7 +18,6 @@ public class Board {
 	 */
 	public Board(final Stack<Tile> pile) {
 		this.pile = pile;
-		this.placementEngine = new RuleEngine();
 		for (int i = 0; i < this.gameGrid.length; ++i) {
 			for (int j = 0; j <  this.gameGrid.length; ++j) {
 				this.gameGrid[i][j] = new BoardCell(i, j);
