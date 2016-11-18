@@ -26,7 +26,7 @@ public class Board {
 
 		char[] sides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
 		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
-		gameGrid[5][5].setTile(init);
+		this.gameGrid[5][5].setTile(init);
 	}
 
 	/**
@@ -35,9 +35,10 @@ public class Board {
 	 * @param x The x coordinate of the destination
 	 * @param y The y coordinate of the destination
 	 * @param tile The instance of <code>Tile</code> to add
+	 * @return if tile was successfully placed
 	 */
 	public final boolean addTile(final int x, final int y, final Tile tile) {
-		if (validPlacement(x, y, tile)) {
+		if (this.validPlacement(x, y, tile)) {
 			this.gameGrid[x][y].setTile(tile);
 			return true;
 		}
@@ -53,6 +54,10 @@ public class Board {
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
 	public final boolean validPlacement(final int x, final int y, final Tile tile) {
+		if (x < 0 || y < 0 || x > this.gameGrid.length || y > this.gameGrid.length) {
+			return false;
+		}
+
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
