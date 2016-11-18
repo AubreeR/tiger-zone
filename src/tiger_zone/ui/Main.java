@@ -16,8 +16,9 @@ public class Main {
 		Collections.shuffle(pile);
 		board = new Board(pile);
 
-		char[] Asides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		board.addTile(4, 5, new Tile(Asides, 'j', "./src/resources/tile1.png"));
+		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
+		
+		board.addTile(4, 5,new Tile(Gsides, 'e', "./src/resources/tile7.png"));
 
 		BoardFrame bf = new BoardFrame();
 		bf.setSize(600, 600);

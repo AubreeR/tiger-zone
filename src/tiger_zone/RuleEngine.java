@@ -84,11 +84,7 @@ public class RuleEngine
 				}
 			}
 			else
-			{
 				break;
-			}
-					
-			
 		}
 		return flagReturn;
 	}

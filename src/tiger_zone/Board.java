@@ -9,6 +9,7 @@ import java.util.Stack;
 public class Board {
 	private final BoardCell[][] gameGrid = new BoardCell[152][152];
 	private Stack<Tile> pile;
+	private RuleEngine placementEngine;
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.
@@ -17,16 +18,16 @@ public class Board {
 	 */
 	public Board(final Stack<Tile> pile) {
 		this.pile = pile;
-
+		this.placementEngine = new RuleEngine();
 		for (int i = 0; i < this.gameGrid.length; ++i) {
 			for (int j = 0; j <  this.gameGrid.length; ++j) {
 				this.gameGrid[i][j] = new BoardCell(i, j);
 			}
 		}
-	}
-	
-	public final BoardCell[][] getGameState() {
-		return this.gameGrid;
+
+		char[] sides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
+		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
+		gameGrid[5][5].setTile(init);
 	}
 	
 	/**
@@ -36,8 +37,36 @@ public class Board {
 	 * @param y The y coordinate of the destination
 	 * @param tile The instance of <code>Tile</code> to add
 	 */
-	public void addTile(final int x, final int y, final Tile tile) {
-		gameGrid[x][y].setTile(tile);
+	public boolean addTile(final int x, final int y, final Tile tile) {
+		
+		if(validPlacement(x,y,tile))
+		{
+			gameGrid[x][y].setTile(tile);
+			return true;
+		}
+		else
+			return false;
+	}
+	
+	
+	/**
+	 * checks to see if the tile can be placed at board position (x,y)
+	 * @param x the x coordinate of the tile
+	 * @param y the y coordinate of the tile
+	 * @param tile the instance of <code>Tile</code> to add
+	 * @return true if the tile can be placed in the location, false otherwise
+	 */
+	public boolean validPlacement(final int x, final int y, final Tile tile)
+	{
+		placementEngine.clearRules();
+		placementEngine.addRule( new AdjacencyRule(this.gameGrid, x, y));//checks to see if there is an adjacent tile
+		placementEngine.addRule(new SideMatchRule(this.gameGrid, x, y, tile));
+		if(placementEngine.evaluateRules())
+		{
+			return true;
+		}
+		else
+			return false;
 	}
 
 	/**

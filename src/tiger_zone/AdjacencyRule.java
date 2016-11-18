@@ -21,6 +21,7 @@ public class AdjacencyRule extends PlacementRule
 			//make sure that the provided values are on the board
 			boolean checkSize = (row < boardState.length && row >= 0) && (col < boardState.length && col >= 0);
 			boolean PlacementTileEmpty = boardState[row][col].getTile() == null;
+			
 			//if its a valid size and the tile you want to put something is empty, 
 			//check to see if there is an adjacent tile
 			if(checkSize && PlacementTileEmpty)
@@ -36,6 +37,7 @@ public class AdjacencyRule extends PlacementRule
 			}
 			else	
 				throw new Exception(super.getName() + " failed under test condition index out of bounds or tile already occupied");
+			
 			//these will all be false if the size or placement is 
 			if(checkUp || checkDown || checkLeft || checkRight)
 			{
