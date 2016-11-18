@@ -41,6 +41,7 @@ public class Board {
 		
 		if(validPlacement(x,y,tile))
 		{
+			System.out.println("Tile, " + tile.getImagePath() + " , placed at (" + x + "," + y + ")");
 			gameGrid[x][y].setTile(tile);
 			return true;
 		}

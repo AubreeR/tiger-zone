@@ -19,6 +19,9 @@ public class Main {
 		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
 		
 		board.addTile(4, 5,new Tile(Gsides, 'e', "./src/resources/tile7.png"));
+		
+		char[] Esides = {'j','r','j','j','r','j','j','r','j','j','r','j'};
+		board.addTile(4, 4, new Tile(Esides, 'r', "./src/resources/tile5.png"));
 
 		BoardFrame bf = new BoardFrame();
 		bf.setSize(600, 600);
