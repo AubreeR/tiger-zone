@@ -9,6 +9,7 @@ public class AdjacencyRule extends PlacementRule
 		super.setRuleName("Adjacency Rule");
 	}
 	
+	
 	@Override
 	public boolean evaluate()
 	{
