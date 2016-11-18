@@ -29,7 +29,7 @@ public class Board {
 		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
 		gameGrid[5][5].setTile(init);
 	}
-	
+
 	/**
 	 * Adds tile to this board at position (x, y).
 	 *
@@ -37,19 +37,14 @@ public class Board {
 	 * @param y The y coordinate of the destination
 	 * @param tile The instance of <code>Tile</code> to add
 	 */
-	public boolean addTile(final int x, final int y, final Tile tile) {
-		
-		if(validPlacement(x,y,tile))
-		{
-			System.out.println("Tile, " + tile.getImagePath() + " , placed at (" + x + "," + y + ")");
-			gameGrid[x][y].setTile(tile);
+	public final boolean addTile(final int x, final int y, final Tile tile) {
+		if (validPlacement(x, y, tile)) {
+			this.gameGrid[x][y].setTile(tile);
 			return true;
 		}
-		else
-			return false;
+		return false;
 	}
-	
-	
+
 	/**
 	 * checks to see if the tile can be placed at board position (x,y)
 	 * @param x the x coordinate of the tile
@@ -99,7 +94,7 @@ public class Board {
 	public static Stack<Tile> createDefaultStack() {
 		// j = jungle, l = lake, r = road (game-trail), d = den, e = end (road block)
 		//sides names:    TL  TM  TR RT  RM  RB  BR  BM   BL LB  LM   LT
-		//sides values:   1   2   3   4   5   6   7   8   9  10  11   12  
+		//sides values:   1   2   3   4   5   6   7   8   9  10  11   12
 		char[] Asides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
 		char[] Bsides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
 		char[] Csides = {'j','j','j','j','j','j','j','r','j','j','j','j'};
@@ -127,7 +122,7 @@ public class Board {
 		char[] Ysides = {'j','r','j','l','l','l','l','l','l','j','r','j'};
 		char[] Zsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
 		char[] AAsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
-		
+
 		Stack<Tile> pile = new Stack<Tile>();
 		pile.push(new Tile(Asides, 'j', "./src/resources/tile1.png"));
 		pile.push(new Tile(Bsides, 'd', "./src/resources/tile2.png"));
