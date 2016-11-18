@@ -14,16 +14,15 @@ import tiger_zone.Tile;
 public class OnBoardClick extends MouseAdapter {
 	public void mouseClicked(MouseEvent event) {
 		JPanel j = (JPanel)event.getSource();
-		BoardFrame b = new BoardFrame();
 		Tile t = Main.board.getPile().pop();
 		Tile nextTile = Main.board.getPile().peek(); 
 		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
 		
-		b.previewLabel.setIcon(previewImg);
-		b.preview.add(b.previewLabel);
-		b.preview.setSize(200, 200);
-		b.preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		b.preview.setVisible(true);
+		BoardFrame.previewLabel.setIcon(previewImg);
+		BoardFrame.preview.add(BoardFrame.previewLabel);
+		BoardFrame.preview.setSize(200, 200);
+		BoardFrame.preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		BoardFrame.preview.setVisible(true);
 		
 		ImageIcon img = new ImageIcon(t.getImagePath());
 		ImageIcon imgScale = new ImageIcon(img.getImage().
