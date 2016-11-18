@@ -42,18 +42,18 @@ class BoardFrame extends JFrame {
 				panelBoard[i][j] = new JPanel();
 				panelBoard[i][j].addMouseListener(ma);
 				panelBoard[i][j].setBorder(new LineBorder(Color.BLACK));
+
+				Tile current = Main.board.getTile(i, j);
+				if (current != null) {
+					ImageIcon img = new ImageIcon(current.getImagePath());
+					JLabel label = new JLabel();
+					label.setIcon(img);
+					panelBoard[i][j].add(label);
+				}
+
 				this.add(panelBoard[i][j]);
 			}
 		}
-
-		Tile test = Main.board.getTile(5,5);
-		ImageIcon img = new ImageIcon(test.getImagePath());
-		//ImageIcon imgScale = new ImageIcon(img.getImage().
-		//		getScaledInstance(panelBoard[1][1].getHeight(), panelBoard[1][1].getWidth(), Image.SCALE_SMOOTH));
-		JLabel label = new JLabel();
-		label.setIcon(img);
-
-		panelBoard[5][5].add(label);
 
 		Tile nextTile = Main.board.getPile().peek();
 		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());

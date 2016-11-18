@@ -75,7 +75,7 @@ public class Board {
 	 * @return the instance of <code>Tile</code> at position (x, y)
 	 */
 	public Tile getTile(final int x, final int y){
-		return gameGrid[x][y].getTile();
+		return this.gameGrid[x][y].getTile();
 	}
 
 	/**
