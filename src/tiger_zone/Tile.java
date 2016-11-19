@@ -50,7 +50,7 @@ public class Tile {
 	}
 
 	/**
-	 * Returns the rotation of this tile in degrees, clockwise from the northern axis.
+	 * Returns the rotation of this tile in degrees, counterclockwise.
 	 *
 	 * @return rotation
 	 */
@@ -59,7 +59,7 @@ public class Tile {
 	}
 
 	/**
-	 * Rotates this tile 90 degrees clockwise.
+	 * Rotates this tile 90 degrees counterclockwise.
 	 */
 	public final void rotate() {
 		this.rotation += 90;
@@ -68,7 +68,7 @@ public class Tile {
 		}
 
 		// char[] rotation, source: http://codereview.stackexchange.com/a/69305
-		final int offset = sides.length - 3 % sides.length;
+		final int offset = sides.length + 3 % sides.length;
 		if (offset > 0) {
 			final char[] copy = sides.clone();
 			for (int i = 0; i < sides.length; i++) {

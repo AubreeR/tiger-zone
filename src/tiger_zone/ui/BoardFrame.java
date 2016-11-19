@@ -5,14 +5,13 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
-
+import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
-
 import tiger_zone.Tile;
 
 /**
@@ -41,24 +40,25 @@ class BoardFrame extends JFrame {
 		
 		MouseAdapter ma = new OnBoardClick();
 
-		JPanel[][] panelBoard = new JPanel[rows][cols];
-		this.setLayout(new GridLayout(rows,cols));
+		this.setLayout(new GridLayout(rows, cols));
 
-		for(int i = 0; i < rows; i++){
-			for(int j = 0; j < cols; j++){
-				panelBoard[i][j] = new JPanel();
-				panelBoard[i][j].addMouseListener(ma);
-				panelBoard[i][j].setBorder(new LineBorder(Color.BLACK));
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				// By default, all panels are "blank" with a transparent image
+				TilePanel panel = new TilePanel(new ImageIcon(new BufferedImage(64, 64,
+						BufferedImage.TYPE_INT_ARGB)), 0);
 
 				Tile current = Main.board.getTile(i, j);
+
+				// A tile exists at the position, so get its image and rotation and apply them to this panel
 				if (current != null) {
-					ImageIcon img = new ImageIcon(current.getImagePath());
-					JLabel label = new JLabel();
-					label.setIcon(img);
-					panelBoard[i][j].add(label);
+					panel.setImg(new ImageIcon(current.getImagePath()));
+					panel.setRotation(current.getRotation());
 				}
 
-				this.add(panelBoard[i][j]);
+				panel.addMouseListener(ma);
+				panel.setBorder(new LineBorder(Color.BLACK));
+				this.add(panel);
 			}
 		}
 
@@ -77,6 +77,5 @@ class BoardFrame extends JFrame {
 		preview.setSize(250, 250);
 		preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		preview.setVisible(true);
-
 	}
 }
