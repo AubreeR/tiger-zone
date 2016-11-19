@@ -43,26 +43,26 @@ public class Board {
 		if (this.validPlacement(x, y, tile)) {
 
 			if(x >= 0){
-	       x = this.origin + x;
+	       			x = this.origin + x;
 
-	      if(y >= 0){
-	        y = this.origin - y;
-	      }
-	      else if(y < 0){
-	        y = this.origin - y;
-	      }
-	    }
-	    if (x < 0){
-	      x = x + this.origin;
-	      if(y >= 0){
-	        y = this.origin - y; // if positive move up
-	      }
-	      else if(y < 0){
-	        y = this.origin - y; // if negative move down
-	      }
-	    }
-	    //System.out.println("x = " + x);
-	    //System.out.println("y = " + y);
+	     			if(y >= 0){
+	       				 y = this.origin - y;
+	      			}
+	      			else if(y < 0){
+	        			y = this.origin - y;
+	      			}
+	   		 }
+	    		if (x < 0){
+	      			x = x + this.origin;
+	      				if(y >= 0){
+	        				y = this.origin - y; // if positive move up
+	      				}
+	      				else if(y < 0){
+	       					 y = this.origin - y; // if negative move down
+	     				 }
+	   		 }
+	    		//System.out.println("x = " + x);
+	   	 	//System.out.println("y = " + y);
 
 			this.gameGrid[x][y].setTile(tile);
 			return true;
