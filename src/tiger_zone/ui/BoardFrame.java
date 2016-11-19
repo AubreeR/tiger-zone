@@ -38,6 +38,7 @@ class BoardFrame extends JFrame {
 	public BoardFrame() {
 		final int rows = 10;		// Eventually replace these with BoardFrame size
 		final int cols = 10;
+
 		rotateTile.addActionListener(new ActionListener(){
 
 			@Override
@@ -47,6 +48,7 @@ class BoardFrame extends JFrame {
 			}
 			
 		});
+
 
 		MouseAdapter ma = new OnBoardClick();
 
@@ -77,6 +79,9 @@ class BoardFrame extends JFrame {
 
 		rotatePanel.add(rotateTile);
 		tigerPanel.add(placeTiger);
+
+
+		// preview.add(rotateTile);
 
 		preview.add(rotatePanel, BorderLayout.NORTH);
 		preview.add(tigerPanel, BorderLayout.CENTER);
