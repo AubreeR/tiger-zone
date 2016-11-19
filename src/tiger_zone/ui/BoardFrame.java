@@ -2,16 +2,17 @@ package tiger_zone.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+
 import tiger_zone.Tile;
 
 /**
@@ -37,7 +38,7 @@ class BoardFrame extends JFrame {
 	public BoardFrame() {
 		final int rows = 10;		// Eventually replace these with BoardFrame size
 		final int cols = 10;
-		
+
 		MouseAdapter ma = new OnBoardClick();
 
 		this.setLayout(new GridLayout(rows, cols));
@@ -66,7 +67,7 @@ class BoardFrame extends JFrame {
 		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
 		previewLabel.setIcon(previewImg);
 		preview.add(previewLabel, BorderLayout.SOUTH);
-		
+
 		rotatePanel.add(rotateTile);
 		tigerPanel.add(placeTiger);
 		//preview.add(rotateTile);
