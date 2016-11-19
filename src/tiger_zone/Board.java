@@ -76,15 +76,20 @@ public class Board {
 	}
 	/**
 	 * Translates: Cartesian-> 2D Matrix position
-	 * @param type int coordinate point(s)
-	 * @return value(s) from cartesian points to matrix gameGrid[][] index 
+	 * @param type int coordinate point
+	 * @return value from cartesian points to matrix gameGrid[x][?] index 
 	 *
-	 */ 
-	
+	 */
 	 public int  getBoardPosX(int x) {
     		return x + this.origin;
  	}
 	
+	/**
+	 * Translates: Cartesian-> 2D Matrix position
+	 * @param type int coordinate point
+	 * @return value from cartesian points to matrix gameGrid[?][y] index 
+	 *
+	 */
   	public int getBoardPosY(int y) {
 		
     		return this.origin - y;
