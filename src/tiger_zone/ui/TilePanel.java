@@ -3,7 +3,7 @@ package tiger_zone.ui;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
@@ -13,13 +13,6 @@ import javax.swing.JPanel;
  * a rotation. This class override's the usual <code>getPreferredSize()</code> of <code>JComponent</code> in order to
  * utilize the size of the image as being the size of the panel as a whole. Additionally, the
  * <code>paintComponent</code> method is overridden to enable the rotation of the image on the panel.
- *
- * If one needs to initialize a <code>TilePanel</code> without an image, use a transparent image (and bogus rotation)
- * like so:
- *
- * <pre>
- * new TilePanel(new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)), 0);
- * </pre>
  */
 public class TilePanel extends JPanel {
 	private static final long serialVersionUID = -7629110018399889413L;
@@ -27,10 +20,18 @@ public class TilePanel extends JPanel {
 	private int rotation;
 
 	/**
-	 * Creates a new instance of <code>TilePanel</code>.
+	 * Create a new instance of <code>TilePanel</code> with a transparent image and 0 rotation.
+	 */
+	public TilePanel() {
+		this.img = new ImageIcon(new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB));
+		this.rotation = 0;
+	}
+
+	/**
+	 * Creates a new instance of <code>TilePanel</code> with the specified image and rotation.
 	 *
 	 * @param img Image to display.
-	 * @param rotation Rotation of the image in degrees.
+	 * @param rotation Rotation of the image in degrees (counterclockwise).
 	 */
 	public TilePanel(final ImageIcon img, final int rotation) {
 		this.img = img;
