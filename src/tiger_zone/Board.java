@@ -74,6 +74,23 @@ public class Board {
 
 		return placementEngine.evaluateRules();
 	}
+	/**
+	 * Translates: Cartesian-> 2D Matrix position
+	 * @param type int coordinate point(s)
+	 * @return value(s) from cartesian points to matrix gameGrid[][] index 
+	 *
+	 */ 
+	
+	 public int  getBoardPosX(int x) {
+    		return x + this.origin;
+ 	}
+	
+  	public int getBoardPosY(int y) {
+		
+    		return this.origin - y;
+  	}
+
+
 
 	/**
 	 * Returns the tile located at position (x, y).
