@@ -1,5 +1,6 @@
 package tiger_zone.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,13 +15,15 @@ import tiger_zone.Tile;
 public class OnBoardClick extends MouseAdapter {
 	public void mouseClicked(MouseEvent event) {
 		JPanel j = (JPanel)event.getSource();
+		
+	
 		Tile t = Main.board.getPile().pop();
 		Tile nextTile = Main.board.getPile().peek(); 
 		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
 		
 		BoardFrame.previewLabel.setIcon(previewImg);
-		BoardFrame.preview.add(BoardFrame.previewLabel);
-		BoardFrame.preview.setSize(200, 200);
+		BoardFrame.preview.add(BoardFrame.previewLabel, BorderLayout.SOUTH);
+		BoardFrame.preview.setSize(250, 250);
 		BoardFrame.preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		BoardFrame.preview.setVisible(true);
 		
