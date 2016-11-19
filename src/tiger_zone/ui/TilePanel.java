@@ -68,9 +68,10 @@ public class TilePanel extends JPanel {
         final Graphics2D g2d = (Graphics2D) g.create();
         int x = this.getWidth() / 2;
         int y = this.getHeight() / 2;
-        g2d.setTransform(AffineTransform.getRotateInstance(Math.toRadians(this.rotation), x, y));
+        g2d.rotate(-Math.toRadians(this.rotation), x, y);
         x = (this.getWidth() - this.img.getIconWidth()) / 2;
         y = (this.getHeight() - this.img.getIconHeight()) / 2;
+        g2d.translate(x, y);
         this.img.paintIcon(this, g2d, x, y);
         g2d.dispose();
     }
