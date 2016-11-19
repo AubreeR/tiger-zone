@@ -34,7 +34,7 @@ public class Client {
 	   this.serverName = serverName;
 	   this.portNumber = portNumber;
        System.out.println ("Attemping to connect to host " +
-		serverName + " on port " + portNumber);
+		serverName + ":" + portNumber);
        
        echoSocket = null;
        output = null;
@@ -65,7 +65,7 @@ public class Client {
            //stdIn is used to get user input
            stdIn = new BufferedReader(
                    new InputStreamReader(System.in));
-
+           System.out.println("Client connection to " + serverName + ":" + portNumber + (this.isConnected() ? " succeeded." : " failed."));
            return true;
        } catch (UnknownHostException e) {
            System.err.println("Host Does Not Exist: " + serverName);
@@ -84,6 +84,7 @@ public class Client {
     */
    public void disconnect()
    {
+	   
 	   try{
 	   output.close();
 	   input.close();
@@ -121,7 +122,12 @@ public class Client {
 	   }
    }
    
-   
+   public boolean isConnected()
+   {
+	   //a socket will remain "connected" state if it is just closed
+	   //so we have to ensure that it is connected and currently open
+	   return echoSocket.isConnected() && (!echoSocket.isClosed());
+   }
    
    public String getServerName() 
    {
