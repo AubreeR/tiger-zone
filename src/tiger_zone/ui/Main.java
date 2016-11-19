@@ -16,7 +16,7 @@ public class Main {
 		Stack<Tile> pile = Board.createDefaultStack();
 		Collections.shuffle(pile);
 		board = new Board(pile);
-		Client c = new Client();
+		Client c = new Client("0.0.0.0", 8000);
 
 		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
 		
