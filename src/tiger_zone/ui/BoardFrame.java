@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import javax.swing.ImageIcon;
@@ -38,6 +40,16 @@ class BoardFrame extends JFrame {
 		final int rows = 10;		// Eventually replace these with BoardFrame size
 		final int cols = 10;
 		
+		rotateTile.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("TEST\n");
+				
+			}
+			
+		});
+		
 		MouseAdapter ma = new OnBoardClick();
 
 		this.setLayout(new GridLayout(rows, cols));
@@ -69,11 +81,9 @@ class BoardFrame extends JFrame {
 		
 		rotatePanel.add(rotateTile);
 		tigerPanel.add(placeTiger);
-		//preview.add(rotateTile);
 		preview.add(rotatePanel, BorderLayout.NORTH);
 		preview.add(tigerPanel, BorderLayout.CENTER);
 
-		//rotateTile.setBounds(r);
 		preview.setSize(250, 250);
 		preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		preview.setVisible(true);
