@@ -26,7 +26,7 @@ public class Board {
 			}
 		}
 
-		char[] sides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
+		char[] sides = {'T','L','T','J','-'};
 		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
 		this.gameGrid[5][5].setTile(init);
 	}

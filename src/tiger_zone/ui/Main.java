@@ -16,11 +16,11 @@ public class Main {
 		Collections.shuffle(pile);
 		board = new Board(pile);
 
-		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
+		char[] Gsides = {'T','J','T','T','-'};
 
 		board.addTile(4, 5,new Tile(Gsides, 'e', "./src/resources/tile7.png"));
 
-		char[] Dsides = {'j','r','j','j','r','j','j','r','j','j','r','j'};
+		char[] Dsides = {'T','T','T','T','-'};
 		board.addTile(4, 4, new Tile(Dsides, 'r', "./src/resources/tile4.png"));
 
 		BoardFrame bf = new BoardFrame();

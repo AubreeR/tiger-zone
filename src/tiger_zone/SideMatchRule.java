@@ -10,6 +10,7 @@ public class SideMatchRule extends PlacementRule
 	public SideMatchRule(BoardCell[][] boardState,int row, int col, Tile nextTile)
 	{
 		super(boardState,row, col);
+		super.setRuleName("SideMatch Rule");
 		this.nextTile = nextTile;
 		adj = new Tile[8];//UL, UC, UR, RC, DR, DC, DL, LC
 		
@@ -63,36 +64,36 @@ public class SideMatchRule extends PlacementRule
 				//don't do checks on something that isnt there
 				if(adj[i] == null)
 					continue;
-				//											0	1	2
-				//		UL	UC	RU		0	1	2		11				3
-				//		CL	XX	CR		7		3		10				4
-				//		DL	DC	DR		6	5	4		9				5
-				//											8	7	6
+				//												0
+				//		UL	UC	RU		0	1	2						
+				//		CL	XX	CR		7		3		3				1
+				//		DL	DC	DR		6	5	4						
+				//												2	
 				switch(i)//this is to figure out what side we are checking
 				{
 				case 0:
 					break;
 				case 1: //UC Case
-					if(nextTile.getSides()[1] != adj[i].getSides()[7])
+					if(nextTile.getSides()[0] != adj[i].getSides()[2])
 						throw new Exception(super.getName() + " failed under condition that the northern tile did not match");
 					break;
 				case 2:
 					break;
 				case 3://center right
-					if(nextTile.getSides()[4] != adj[i].getSides()[10])
+					if(nextTile.getSides()[1] != adj[i].getSides()[3])
 						throw new Exception(super.getName() + " failed under condition that the Easter tile did not match");
 					break;
 				case 4:
 					
 					break;
 				case 5://center down
-					if(nextTile.getSides()[7] != adj[i].getSides()[1])
+					if(nextTile.getSides()[2] != adj[i].getSides()[0])
 						throw new Exception(super.getName() + " failed under condition that the southern tile did not match");
 					break;
 				case 6:
 					break;
 				case 7:
-					if(nextTile.getSides()[10] != adj[i].getSides()[4])
+					if(nextTile.getSides()[3] != adj[i].getSides()[1])
 						throw new Exception(super.getName() + " failed under condition that the western tile did not match");
 					break;
 				default:
