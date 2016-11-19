@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 
 import tiger_zone.Board;
 import tiger_zone.Tile;
+import tiger_zone.Client;
 
 public class Main {
 	public static Board board;
@@ -15,6 +16,7 @@ public class Main {
 		Stack<Tile> pile = Board.createDefaultStack();
 		Collections.shuffle(pile);
 		board = new Board(pile);
+		Client c = new Client();
 
 		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
 		
