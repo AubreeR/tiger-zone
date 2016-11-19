@@ -76,8 +76,8 @@ class BoardFrame extends JFrame {
 		rotatePanel.add(rotateTile);
 		tigerPanel.add(placeTiger);
 
-		preview.add(rotatePanel, BorderLayout.NORTH);
-		preview.add(tigerPanel, BorderLayout.CENTER);
+		preview.add(rotatePanel, BorderLayout.EAST);
+		preview.add(tigerPanel, BorderLayout.WEST);
 
 		preview.setSize(250, 250);
 		preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

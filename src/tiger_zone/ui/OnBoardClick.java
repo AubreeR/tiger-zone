@@ -16,7 +16,7 @@ public class OnBoardClick extends MouseAdapter {
 
 		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
 		BoardFrame.tilePreview.setImg(previewImg);
-		BoardFrame.preview.add(BoardFrame.tilePreview, BorderLayout.CENTER);
+		BoardFrame.preview.add(BoardFrame.tilePreview, BorderLayout.SOUTH);
 		BoardFrame.preview.setSize(250, 250);
 		BoardFrame.preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		BoardFrame.preview.setVisible(true);
