@@ -1,15 +1,14 @@
 package tiger_zone;
 
-import java.lang.*;
 import java.io.*;
 import java.net.*;
 
 public class Client {
-	private String serverName;
-	private int portNumber;
-	private Socket echoSocket;
-	private PrintWriter output;
-	private BufferedReader input, stdIn;
+	private String serverName;//ip address of server
+	private int portNumber;//server port
+	private Socket echoSocket;//server connection object
+	private PrintWriter output;//used to send data to server
+	private BufferedReader input, stdIn;//reads input from server and user, respectively
 	
    public Client()
    {
@@ -23,31 +22,13 @@ public class Client {
        input = null;
        stdIn = null;
 
-       try {
-           connect(this.serverName, this.portNumber);
-           String userInput;
-
-           System.out.print ("input: ");
-           while ((userInput = stdIn.readLine()) != null) 
-           {
-        	   sendToServer(userInput);
-        	   System.out.println("echo: " + recieveFromServer());
-               System.out.print ("input: ");
-           }
-
-           output.close();
-           input.close();
-           stdIn.close();
-           echoSocket.close();
-       } catch (UnknownHostException e) {
-           System.err.println("Host Does Not Exist: " + serverName);
-           System.exit(1);
-       } catch (IOException e) {
-           System.err.println("Couldn't get I/O for the connection to: " + serverName);
-           System.exit(1);
-       }
    }
    
+   /**
+    * primary constructor that initializes the Client with usable server info
+    * @param serverName IP address of the server
+    * @param portNumber port that the tcp communication works through
+    */
    public Client(String serverName, int portNumber)
    {
 	   this.serverName = serverName;
@@ -59,39 +40,18 @@ public class Client {
        output = null;
        input = null;
        stdIn = null;
-
-       try {
-    	   //tries to connect the server, if it connects do logic
-           if(connect(this.serverName, this.portNumber))
-           {	
-        	   String userInput;
-	          
-        	   /*
-	           System.out.print ("input: ");
-	           while ((userInput = stdIn.readLine()) != null) 
-	           {
-	        	   sendToServer(userInput);
-	        	   if(userInput.equals("Connection with server terminated."))
-	        		   break;
-	        	   System.out.println("echo: " + recieveFromServer());
-	               System.out.print ("input: ");
-	           }
-	           */
-	       }
-           output.close();
-           input.close();
-           stdIn.close();
-           echoSocket.close();
-       } catch (UnknownHostException e) {
-           System.err.println("Host Does Not Exist: " + serverName);
-           System.exit(1);
-       } catch (IOException e) {
-           System.err.println("Couldn't get I/O for the connection to: " + serverName);
-           System.exit(1);
-       }
+       
+	   //tries to connect the server, if it connects do logic
+       connect(this.serverName, this.portNumber);
+   
    }
    
-   
+   /**
+    * attempts to make the connection with the server provided a name and port
+    * @param serverName the IP address of the given server
+    * @param portNumber the port that the tcp socket communicates with 
+    * @return true if the connection was successful, false if it failed
+    */
    public boolean connect(String serverName, int portNumber)
    {
 	   try {
@@ -105,8 +65,6 @@ public class Client {
            //stdIn is used to get user input
            stdIn = new BufferedReader(
                    new InputStreamReader(System.in));
-          
-           
 
            return true;
        } catch (UnknownHostException e) {
@@ -121,16 +79,53 @@ public class Client {
 	   
    }
    
+   /**
+    * closes out of the streams and disconnects from the srever
+    */
+   public void disconnect()
+   {
+	   try{
+	   output.close();
+	   input.close();
+	   stdIn.close();
+	   echoSocket.close();
+	   }
+	   catch(IOException io)
+	   {
+		   System.err.println(io);
+	   }
+   }
+   
+   /**
+    * Sends data to the server over a Printwriter
+    * @param input the string value to send to the server
+    */
    public void sendToServer(String input)
    {
 	   output.println(input);
    }
    
+   /**
+    * Gets a string from the server
+    * @return the servers response
+    * @throws IOException throws in the case that the connection is broken
+    */
    public String recieveFromServer() throws IOException
    {
 	   return input.readLine();
    }
    
+   
+   
+   public String getServerName() 
+   {
+	   return serverName;
+   }
+   
+   public int getPortNumber()
+   {
+	   return portNumber;
+   }
   
    
    
