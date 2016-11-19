@@ -34,35 +34,32 @@ public class Board {
 	/**
 	 * Adds tile to this board at position (x, y).
 	 *
-	 * @param x The x coordinate of the destination translation to  the cartesian system.
-	 * @param y The y coordinate of the destination translation to  the cartesian stytem.
+	 * @param x The x coordinate of the destination translation to the cartesian system.
+	 * @param y The y coordinate of the destination translation to the cartesian system.
 	 * @param tile The instance of <code>Tile</code> to add
 	 * @return if tile was successfully placed
 	 */
-	public final boolean addTile( int x, int y, final Tile tile) {
+	public final boolean addTile(int x, int y, final Tile tile) {
 		if (this.validPlacement(x, y, tile)) {
+			if (x >= 0) {
+				x = this.origin + x;
 
-			if(x >= 0){
-	       			x = this.origin + x;
-
-	     			if(y >= 0){
-	       				 y = this.origin - y;
-	      			}
-	      			else if(y < 0){
-	        			y = this.origin - y;
-	      			}
-	   		 }
-	    		if (x < 0){
-	      			x = x + this.origin;
-	      				if(y >= 0){
-	        				y = this.origin - y; // if positive move up
-	      				}
-	      				else if(y < 0){
-	       					 y = this.origin - y; // if negative move down
-	     				 }
-	   		 }
-	    		//System.out.println("x = " + x);
-	   	 	//System.out.println("y = " + y);
+				if (y >= 0) {
+					y = this.origin - y;
+				}
+				else if (y < 0) {
+					y = this.origin - y;
+				}
+			}
+			if (x < 0) {
+				x = x + this.origin;
+				if (y >= 0) {
+					y = this.origin - y; // if positive move up
+				}
+				else if (y < 0) {
+					y = this.origin - y; // if negative move down
+				}
+			}
 
 			this.gameGrid[x][y].setTile(tile);
 			return true;
@@ -120,8 +117,8 @@ public class Board {
 	 */
 	public static Stack<Tile> createDefaultStack() {
 		// j = jungle, l = lake, t = game-trail, x = den, b = buffalo, d = deer, p = boar, - = nothing specal
-		//sides names:    N   E   S   W 
-		//sides values:   1   2   3   4   
+		//sides names:    N   E   S   W
+		//sides values:   1   2   3   4
 		char[] Asides = {'j','j','j','j'};
 		char[] Bsides = {'j','j','j','j'};
 		char[] Csides = {'j','j','t','j'};
