@@ -19,13 +19,8 @@ public class Main {
 		board = new Board(pile);
 		Client c = new Client("0.0.0.0", 8000);
 		c.sendToServer("help");
-		try{
-		System.out.println(c.recieveFromServer());
-		}
-		catch(IOException io)
-		{
-			System.err.println(io);
-		}
+		System.out.println(c.receiveFromServer());
+		
 		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
 		
 		board.addTile(4, 5,new Tile(Gsides, 'e', "./src/resources/tile7.png"));

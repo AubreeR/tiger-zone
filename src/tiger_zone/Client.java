@@ -97,7 +97,7 @@ public class Client {
    }
    
    /**
-    * Sends data to the server over a Printwriter
+    * Sends data to the server over a PrintWriter
     * @param input the string value to send to the server
     */
    public void sendToServer(String input)
@@ -107,12 +107,18 @@ public class Client {
    
    /**
     * Gets a string from the server
-    * @return the servers response
-    * @throws IOException throws in the case that the connection is broken
+    * @return the servers response, null if there is a disconnection
     */
-   public String recieveFromServer() throws IOException
+   public String receiveFromServer()
    {
+	   try{
 	   return input.readLine();
+	   }
+	   catch(IOException io)
+	   {
+		   System.err.println(io);
+		   return null;
+	   }
    }
    
    
