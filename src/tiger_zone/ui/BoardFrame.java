@@ -39,16 +39,12 @@ class BoardFrame extends JFrame {
 		final int rows = 10;		// Eventually replace these with BoardFrame size
 		final int cols = 10;
 
-		rotateTile.addActionListener(new ActionListener(){
-
+		rotateTile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("TEST\n");
-				
 			}
-			
 		});
-
 
 		MouseAdapter ma = new OnBoardClick();
 
