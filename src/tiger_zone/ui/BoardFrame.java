@@ -4,12 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
-import java.awt.image.BufferedImage;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
@@ -29,7 +27,7 @@ import tiger_zone.Tile;
 class BoardFrame extends JFrame {
 	private static final long serialVersionUID = 575149023846295616L;
 	public static JFrame preview = new JFrame();
-	public static JLabel previewLabel = new JLabel();
+	public static TilePanel tilePreview = new TilePanel();
 	public static JButton rotateTile = new JButton("Rotate");
 	public static JButton placeTiger = new JButton("Add Tiger");
 	public static JPanel rotatePanel = new JPanel();
@@ -46,8 +44,7 @@ class BoardFrame extends JFrame {
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < cols; j++) {
 				// By default, all panels are "blank" with a transparent image
-				TilePanel panel = new TilePanel(new ImageIcon(new BufferedImage(64, 64,
-						BufferedImage.TYPE_INT_ARGB)), 0);
+				TilePanel panel = new TilePanel();
 
 				Tile current = Main.board.getTile(i, j);
 
@@ -64,13 +61,12 @@ class BoardFrame extends JFrame {
 		}
 
 		Tile nextTile = Main.board.getPile().peek();
-		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
-		previewLabel.setIcon(previewImg);
-		preview.add(previewLabel, BorderLayout.SOUTH);
+		tilePreview.setImg(new ImageIcon(nextTile.getImagePath()));
+		preview.add(tilePreview, BorderLayout.SOUTH);
 
 		rotatePanel.add(rotateTile);
 		tigerPanel.add(placeTiger);
-		//preview.add(rotateTile);
+		// preview.add(rotateTile);
 		preview.add(rotatePanel, BorderLayout.NORTH);
 		preview.add(tigerPanel, BorderLayout.CENTER);
 
