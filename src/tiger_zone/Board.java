@@ -41,25 +41,11 @@ public class Board {
 	 */
 	public final boolean addTile(int x, int y, final Tile tile) {
 		if (this.validPlacement(x, y, tile)) {
-			if (x >= 0) {
-				x = this.origin + x;
+			  x += this.origin;
+   			  y =  this.origin - y;
+    			//System.out.println("x = " + x);
+    			//System.out.println("y = " + y);
 
-				if (y >= 0) {
-					y = this.origin - y;
-				}
-				else if (y < 0) {
-					y = this.origin - y;
-				}
-			}
-			if (x < 0) {
-				x = x + this.origin;
-				if (y >= 0) {
-					y = this.origin - y; // if positive move up
-				}
-				else if (y < 0) {
-					y = this.origin - y; // if negative move down
-				}
-			}
 
 			this.gameGrid[x][y].setTile(tile);
 			return true;
