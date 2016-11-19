@@ -17,6 +17,8 @@ public class Main {
 		Collections.shuffle(pile);
 		board = new Board(pile);
 		Client c = new Client("0.0.0.0", 8000);
+		c.sendToServer("help");
+		
 
 		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
 		

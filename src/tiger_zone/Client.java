@@ -30,8 +30,8 @@ public class Client {
            System.out.print ("input: ");
            while ((userInput = stdIn.readLine()) != null) 
            {
-        	   output.println(userInput);//send input to the server
-        	   System.out.println("echo: " + input.readLine());//ouput the server's response
+        	   sendToServer(userInput);
+        	   System.out.println("echo: " + recieveFromServer());
                System.out.print ("input: ");
            }
 
@@ -66,15 +66,17 @@ public class Client {
            {	
         	   String userInput;
 	          
+        	   /*
 	           System.out.print ("input: ");
 	           while ((userInput = stdIn.readLine()) != null) 
 	           {
-	        	   output.println(userInput);//send input to the server
+	        	   sendToServer(userInput);
 	        	   if(userInput.equals("Connection with server terminated."))
 	        		   break;
-	        	   System.out.println("echo: " + input.readLine());//ouput the server's response
+	        	   System.out.println("echo: " + recieveFromServer());
 	               System.out.print ("input: ");
 	           }
+	           */
 	       }
            output.close();
            input.close();
@@ -114,8 +116,20 @@ public class Client {
            System.err.println("Couldn't get I/O for the connection to: " + serverName);
            return false;
        }
+	   
+	   
+	   
    }
    
+   public void sendToServer(String input)
+   {
+	   output.println(input);
+   }
+   
+   public String recieveFromServer() throws IOException
+   {
+	   return input.readLine();
+   }
    
   
    
