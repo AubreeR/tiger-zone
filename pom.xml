@@ -25,9 +25,9 @@
   </dependencies>
 
   <build>
-	<plugins>
-	  <plugin>
-		<groupId>org.apache.maven.plugins</groupId>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.6.0</version>
         <configuration>
@@ -35,7 +35,7 @@
           <source>1.7</source>
           <target>1.7</target>
         </configuration>
-	  </plugin>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
@@ -52,7 +52,7 @@
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <manifestEntries>
-                    <Main-Class>tiger_zone.Main</Main-Class>
+                    <Main-Class>tiger_zone.ui.Main</Main-Class>
                     <Class-Path>.</Class-Path>
                   </manifestEntries>
                 </transformer>
@@ -62,6 +62,6 @@
           </execution>
         </executions>
       </plugin>
-	</plugins>
+    </plugins>
   </build>
 </project>
