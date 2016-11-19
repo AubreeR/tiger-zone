@@ -97,7 +97,6 @@ public class Board {
 		// j = jungle, l = lake, r = road (game-trail), d = den, e = end (road block)
 		//sides names:    TL  TM  TR RT  RM  RB  BR  BM   BL LB  LM   LT
 		//sides values:   1   2   3   4   5   6   7   8   9  10  11   12
-<<<<<<< HEAD
 		char[] Asides = {'J','J','J','J','-'};
 		char[] Bsides = {'J','J','J','J','X'};
 		char[] Csides = {'J','J','T','J','X'};
@@ -125,35 +124,6 @@ public class Board {
 		char[] Ysides = {'T','L','L','T','B'};
 		char[] Zsides = {'L','J','T','J','-'};
 		char[] AAsides = {'L','J','T','J','D'};
-=======
-		char[] Asides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		char[] Bsides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		char[] Csides = {'j','j','j','j','j','j','j','r','j','j','j','j'};
-		char[] Dsides = {'j','r','j','j','r','j','j','r','j','j','r','j'};
-		char[] Esides = {'j','r','j','j','j','j','j','r','j','j','j','j'};
-		char[] Fsides = {'j','r','j','j','j','j','j','j','j','j','r','j'};
-		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
-		char[] Hsides = {'l','l','l','l','l','l','l','l','l','l','l','l'};
-		char[] Isides = {'j','j','j','l','l','l','l','l','l','l','l','l'};
-		char[] Jsides = {'l','l','l','l','l','l','j','j','j','j','j','j'};
-		char[] Ksides = {'j','j','j','l','l','l','j','j','j','l','l','l'};
-		char[] Lsides = {'l','l','l','j','j','j','l','l','l','j','j','j'};
-		char[] Msides = {'l','l','l','j','j','j','j','j','j','j','j','j'};
-		char[] Nsides = {'j','j','j','l','l','l','l','l','l','j','j','j'};
-		char[] Osides = {'j','r','j','l','l','l','j','j','j','j','r','j'};
-		char[] Psides = {'j','r','j','l','l','l','j','j','j','j','r','j'};
-		char[] Qsides = {'j','j','j','l','l','l','j','r','j','j','r','j'};
-		char[] Rsides = {'j','j','j','l','l','l','j','r','j','j','r','j'};
-		char[] Ssides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
-		char[] Tsides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
-		char[] Usides = {'j','r','j','l','l','l','l','l','l','l','l','l'};
-		char[] Vsides = {'j','r','j','l','l','l','j','r','j','j','r','j'};
-		char[] Wsides = {'j','r','j','l','l','l','j','r','j','j','r','j'};
-		char[] Xsides = {'j','r','j','l','l','l','l','l','l','j','r','j'};
-		char[] Ysides = {'j','r','j','l','l','l','l','l','l','j','r','j'};
-		char[] Zsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
-		char[] AAsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
->>>>>>> origin/master
 
 		Stack<Tile> pile = new Stack<Tile>();
 		pile.push(new Tile(Asides, 'j', "./src/resources/tile1.png"));
