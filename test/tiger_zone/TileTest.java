@@ -23,9 +23,9 @@ public class TileTest {
 	@Test
 	public void rotationTest() {
 		char[] originalSides = {'j', 'r', 'j', 'l', 'l', 'l', 'j', 'r', 'j', 'j', 'j', 'j'};
-		char[] rotatedSides1 = {'j', 'j', 'j', 'j', 'r', 'j', 'l', 'l', 'l', 'j', 'r', 'j'};
+		char[] rotatedSides1 = {'l', 'l', 'l', 'j', 'r', 'j', 'j', 'j', 'j', 'j', 'r', 'j'};
 		char[] rotatedSides2 = {'j', 'r', 'j', 'j', 'j', 'j', 'j', 'r', 'j', 'l', 'l', 'l'};
-		char[] rotatedSides3 = {'l', 'l', 'l', 'j', 'r', 'j', 'j', 'j', 'j', 'j', 'r', 'j'};
+		char[] rotatedSides3 = {'j', 'j', 'j', 'j', 'r', 'j', 'l', 'l', 'l', 'j', 'r', 'j'};
 
 		assertEquals(0, tile.getRotation());
 
