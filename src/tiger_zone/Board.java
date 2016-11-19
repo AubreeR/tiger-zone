@@ -39,7 +39,7 @@ public class Board {
 	 * @param tile The instance of <code>Tile</code> to add
 	 * @return if tile was successfully placed
 	 */
-	public final boolean addTile(final int x, final int y, final Tile tile) {
+	public final boolean addTile( int x, int y, final Tile tile) {
 		if (this.validPlacement(x, y, tile)) {
 
 			if(x >= 0){
