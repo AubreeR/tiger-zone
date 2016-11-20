@@ -51,6 +51,9 @@ public class Player {
 			//check if any lakes are completed
 			updatedScores = checkForLake(lastTileX, lastTileY, updatedScores);
 			
+			//check if road complete
+			updatedScores = checkForRoad(lastTileX, lastTileY, updatedScores);
+			
 			return updatedScores;
 		}
 		
@@ -76,6 +79,173 @@ public class Player {
 			}
 			return scores;
 		}
+		
+		public int[] checkForRoad(int x, int y, int[] scores) {
+			//check what type of road was placed, go down all ends of the road piece, if it hits an end point, return the tile total points count, else return 0
+			Boolean[][] flagGrid = new Boolean[152][152];
+			Tile checkTile = boardState.getTile(x, y);
+			char tileCenter = checkTile.getCenter();
+			char[] tileSides = checkTile.getSides();
+			int tileX = x;
+			int tileY = y;
+			int p1score = scores[0];
+			int p2score = scores[1];
+			int roadcount = 0;
+			int totalRoadScore = 0;
+			
+			for(int i = 1; i < 12; i+=3){ //find how many sides have a road
+				if(tileSides[i] == 'r') {
+					roadcount++;
+				}
+			}
+			flagGrid[tileX][tileY] = true;
+			if(roadcount == 0){ //tile has no roads
+				return scores;
+			}
+			else if(roadcount == 1) { //tile is a road end
+				while(true) {
+					if(tileSides[1] == 'r'){ //if this side has road
+						tileY--;
+						if(boardState.getTile(tileX, tileY) != null){ //check if we have been here
+							if(flagGrid[tileX][tileY] != true) { //check if theres a tile
+								checkTile = boardState.getTile(tileX, tileY);
+								tileSides = checkTile.getSides();
+								flagGrid[tileX][tileY] = true;
+								totalRoadScore++;
+								roadcount = 0;
+								for(int i = 1; i < 12; i+=3){ //find how many sides have a road
+									if(tileSides[i] == 'r') {
+										roadcount++;
+									}
+								}
+								if(roadcount == 1 || roadcount == 3 || roadcount == 4) { //road is complete or road traversal is continued
+									break;
+								}
+							}
+						}
+						else { //no tile there, road not complete
+							totalRoadScore = 0;
+							break;
+						}
+					}
+					if(tileSides[4] == 'r'){ //if this side has road
+						tileX++;
+						if(boardState.getTile(tileX, tileY) != null){ //check if we have been here
+							if(flagGrid[tileX][tileY] != true) { //check if theres a tile
+								checkTile = boardState.getTile(tileX, tileY);
+								tileSides = checkTile.getSides();
+								flagGrid[tileX][tileY] = true;
+								totalRoadScore++;
+								roadcount = 0;
+								for(int i = 1; i < 12; i+=3){ //find how many sides have a road
+									if(tileSides[i] == 'r') {
+										roadcount++;
+									}
+								}
+								if(roadcount == 1 || roadcount == 3 || roadcount == 4) { //road is complete or road traversal is continued
+									break;
+								}
+							}
+						}
+						else { //no tile there, road not complete
+							totalRoadScore = 0;
+							break;
+						}
+					}
+					if(tileSides[7] == 'r'){ //if this side has road
+						tileY++;
+						if(boardState.getTile(tileX, tileY) != null){ //check if we have been here
+							if(flagGrid[tileX][tileY] != true) { //check if theres a tile
+								checkTile = boardState.getTile(tileX, tileY);
+								tileSides = checkTile.getSides();
+								flagGrid[tileX][tileY] = true;
+								totalRoadScore++;
+								roadcount = 0;
+								for(int i = 1; i < 12; i+=3){ //find how many sides have a road
+									if(tileSides[i] == 'r') {
+										roadcount++;
+									}
+								}
+								if(roadcount == 1 || roadcount == 3 || roadcount == 4) { //road is complete or road traversal is continued
+									break;
+								}
+							}
+						}
+						else { //no tile there, road not complete
+							totalRoadScore = 0;
+							break;
+						}
+					}
+					if(tileSides[10] == 'r'){ //if this side has road
+						tileX--;
+						if(boardState.getTile(tileX, tileY) != null){ //check if we have been here
+							if(flagGrid[tileX][tileY] != true) { //check if theres a tile
+								checkTile = boardState.getTile(tileX, tileY);
+								tileSides = checkTile.getSides();
+								flagGrid[tileX][tileY] = true;
+								totalRoadScore++;
+								roadcount = 0;
+								for(int i = 1; i < 12; i+=3){ //find how many sides have a road
+									if(tileSides[i] == 'r') {
+										roadcount++;
+									}
+								}
+								if(roadcount == 1 || roadcount == 3 || roadcount == 4) { //road is complete or road traversal is continued
+									break;
+								}
+							}
+						}
+						else { //no tile there, road not complete
+							totalRoadScore = 0;
+							break;
+						}
+					}
+				}
+				totalRoadScore = 10000;// ADD TOTAL SCORES TO EACH PLAYER
+			}
+			else { //tile has 2, 3 or 4 sides with roads
+				if(tileSides[1] == 'r'){
+					tileY--;
+					if(boardState.getTile(tileX, tileY) != null){//check if there is a tile
+						if(flagGrid[tileX][tileY] != true) {//check if its been flagged
+							do{
+								checkTile = boardState.getTile(tileX, tileY);
+								tileSides = checkTile.getSides();
+								flagGrid[tileX][tileY] = true;
+								totalRoadScore++;
+								roadcount = 0;
+								for(int i = 1; i < 12; i+=3){ //find how many sides have a road
+									if(tileSides[i] == 'r') {
+										roadcount++;
+									}
+								}
+								if(roadcount == 1 || roadcount == 3 || roadcount == 4) { //road is complete or road traversal is continued
+									break;
+								}
+								else{ //means tile is a road with two sides with a road
+									if(tileSides[1] == 'r'){ //check if this side leads the way
+										tileY--;
+										if(boardState.getTile(tileX, tileY) != null){ //check if we have been here
+											if(flagGrid[tileX][tileY] != true) { //check if theres a tile
+												
+											}
+										}
+									}	
+								}
+							}while(true);
+							
+						}
+					}
+				}
+			}
+			
+			return scores;
+		}
+		
+		
+		
+		
+		
 		
 		/* TONS OF SPAGHETTI...... here's what I attempted
 		 * first if: push the cords and the tile (may only need to push cords) of the lastplaced tile into a stack
