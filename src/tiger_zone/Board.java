@@ -9,66 +9,97 @@ import java.util.Stack;
 public class Board {
 	private final BoardCell[][] gameGrid = new BoardCell[152][152];
 	private Stack<Tile> pile;
-	private RuleEngine placementEngine;
+	private int origin; // center of the gameGrid cartesian view
+	private final RuleEngine placementEngine = new RuleEngine();
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.
-	 *
+	 * Assigns an origin point to map cartesian coordinates.
 	 * @param pile Stack of unplaced tiles.
 	 */
 	public Board(final Stack<Tile> pile) {
 		this.pile = pile;
-		this.placementEngine = new RuleEngine();
+		this.origin = pile.size(); //calculates mid-point of initialized gameGrid.length
 		for (int i = 0; i < this.gameGrid.length; ++i) {
 			for (int j = 0; j <  this.gameGrid.length; ++j) {
 				this.gameGrid[i][j] = new BoardCell(i, j);
 			}
 		}
 
-		char[] sides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
+		char[] sides = {'t','l','t','j','-'};
 		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
-		gameGrid[5][5].setTile(init);
+		this.gameGrid[this.getBoardPosX(0)][this.getBoardPosY(0)].setTile(init);
 	}
-	
+
 	/**
 	 * Adds tile to this board at position (x, y).
 	 *
-	 * @param x The x coordinate of the destination
-	 * @param y The y coordinate of the destination
+	 * @param x The x coordinate of the destination translation to the cartesian system.
+	 * @param y The y coordinate of the destination translation to the cartesian system.
 	 * @param tile The instance of <code>Tile</code> to add
+	 * @return if tile was successfully placed
 	 */
-	public boolean addTile(final int x, final int y, final Tile tile) {
-		
-		if(validPlacement(x,y,tile))
-		{
-			System.out.println("Tile, " + tile.getImagePath() + " , placed at (" + x + "," + y + ")");
-			gameGrid[x][y].setTile(tile);
+	public final boolean addTile(int x, int y, final Tile tile) {
+		if (this.validPlacement(x, y, tile)) {
+			  x += this.origin;
+   			  y =  this.origin - y;
+    			//System.out.println("x = " + x);
+    			//System.out.println("y = " + y);
+
+
+			this.gameGrid[x][y].setTile(tile);
 			return true;
 		}
-		else
-			return false;
+		return false;
 	}
-	
+
+	/**
+	 * Check if the tile can be placed at board position (x, y).
+	 *
+	 * @param x The x coordinate of the tile
+	 * @param y The y coordinate of the tile
+	 * @param tile The instance of <code>Tile</code> to add
+	 * @return true, if the tile can be placed in the location, otherwise false
+	 */
+	public final boolean validPlacement(final int x, final int y, final Tile tile) {
+		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
+			return false;
+		}
+
+		placementEngine.clearRules();
+
+		// Check for adjacent tiles
+		placementEngine.addRule(new AdjacencyRule(this, x, y));
+		placementEngine.addRule(new SideMatchRule(this, x, y, tile));
+
+		return placementEngine.evaluateRules();
+	}
+	/**
+	 * Translates: Cartesian-> 2D Matrix position
+	 * @param type int coordinate point
+	 * @return value from cartesian points to matrix gameGrid[x][?] index 
+	 *
+	 */
+	 public int  getBoardPosX(int x) {
+    		return x + this.origin;
+ 	}
 	
 	/**
-	 * checks to see if the tile can be placed at board position (x,y)
-	 * @param x the x coordinate of the tile
-	 * @param y the y coordinate of the tile
-	 * @param tile the instance of <code>Tile</code> to add
-	 * @return true if the tile can be placed in the location, false otherwise
+	 * Translates: Cartesian-> 2D Matrix position
+	 * @param type int coordinate point
+	 * @return value from cartesian points to matrix gameGrid[?][y] index 
+	 *
 	 */
-	public boolean validPlacement(final int x, final int y, final Tile tile)
-	{
-		placementEngine.clearRules();
-		placementEngine.addRule( new AdjacencyRule(this.gameGrid, x, y));//checks to see if there is an adjacent tile
-		placementEngine.addRule(new SideMatchRule(this.gameGrid, x, y, tile));
-		if(placementEngine.evaluateRules())
-		{
-			return true;
-		}
-		else
-			return false;
-	}
+  	public int getBoardPosY(int y) {
+		
+    		return this.origin - y;
+  	}
+
+  	public int getBoardLength()
+  	{
+  		return this.gameGrid.length;
+  	}
+
 
 	/**
 	 * Returns the tile located at position (x, y).
@@ -78,7 +109,7 @@ public class Board {
 	 * @return the instance of <code>Tile</code> at position (x, y)
 	 */
 	public Tile getTile(final int x, final int y){
-		return gameGrid[x][y].getTile();
+		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)].getTile();
 	}
 
 	/**
@@ -97,65 +128,65 @@ public class Board {
 	 * @return Stack of tiles.
 	 */
 	public static Stack<Tile> createDefaultStack() {
-		// j = jungle, l = lake, r = road (game-trail), d = den, e = end (road block)
-		//sides names:    TL  TM  TR RT  RM  RB  BR  BM   BL LB  LM   LT
-		//sides values:   1   2   3   4   5   6   7   8   9  10  11   12  
-		char[] Asides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		char[] Bsides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		char[] Csides = {'j','j','j','j','j','j','j','r','j','j','j','j'};
-		char[] Dsides = {'j','j','j','j','j','j','j','j','j','j','j','j'};
-		char[] Esides = {'j','r','j','j','r','j','j','r','j','j','r','j'};
-		char[] Fsides = {'j','r','j','j','j','j','j','j','j','j','r','j'};
-		char[] Gsides = {'j','r','j','j','j','j','j','r','j','j','r','j'};
-		char[] Hsides = {'l','l','l','l','l','l','l','l','l','l','l','l'};
-		char[] Isides = {'j','j','j','l','l','l','l','l','l','l','l','l'};
-		char[] Jsides = {'l','l','l','l','l','l','j','j','j','j','j','j'};
-		char[] Ksides = {'j','j','j','l','l','l','j','j','j','l','l','l'};
-		char[] Lsides = {'l','l','l','j','j','j','l','l','l','j','j','j'};
-		char[] Msides = {'l','l','l','j','j','j','j','j','j','j','j','j'};
-		char[] Nsides = {'j','j','j','l','l','l','l','l','l','j','j','j'};
-		char[] Osides = {'j','r','j','l','l','l','j','j','j','j','r','j'};
-		char[] Psides = {'j','r','j','l','l','l','j','j','j','j','r','j'};
-		char[] Qsides = {'j','j','j','l','l','l','j','r','j','j','r','j'};
-		char[] Rsides = {'j','j','j','l','l','l','j','r','j','j','r','j'};
-		char[] Ssides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
-		char[] Tsides = {'j','r','j','l','l','l','j','r','j','j','j','j'};
-		char[] Usides = {'j','r','j','l','l','l','l','l','l','l','l','l'};
-		char[] Vsides = {'j','r','j','l','l','l','j','r','j','j','r','j'};
-		char[] Wsides = {'j','r','j','l','l','l','j','r','j','j','r','j'};
-		char[] Xsides = {'j','r','j','l','l','l','l','l','l','j','r','j'};
-		char[] Ysides = {'j','r','j','l','l','l','l','l','l','j','r','j'};
-		char[] Zsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
-		char[] AAsides = {'l','l','l','j','j','j','j','r','j','j','j','j'};
-		
+		// j = jungle, l = lake, t = game-trail, x = den, b = buffalo, d = deer, p = boar, - = nothing specal
+		//sides names:    N   E   S   W
+		//sides values:   1   2   3   4
+		char[] Asides = {'j','j','j','j'};
+		char[] Bsides = {'j','j','j','j'};
+		char[] Csides = {'j','j','t','j'};
+		char[] Dsides = {'t','t','t','t'};
+		char[] Esides = {'t','j','t','j'};
+		char[] Fsides = {'t','j','j','t'};
+		char[] Gsides = {'t','j','t','t'};
+		char[] Hsides = {'l','l','l','l'};
+		char[] Isides = {'j','l','l','l'};
+		char[] Jsides = {'l','l','j','j'};
+		char[] Ksides = {'j','l','j','l'};
+		char[] Lsides = {'l','j','l','j'};
+		char[] Msides = {'l','j','j','j'};
+		char[] Nsides = {'j','l','l','j'};
+		char[] Osides = {'t','l','j','t'};
+		char[] Psides = {'t','l','j','t'};
+		char[] Qsides = {'j','l','t','t'};
+		char[] Rsides = {'j','l','t','t'};
+		char[] Ssides = {'t','l','t','j'};
+		char[] Tsides = {'t','l','t','j'};
+		char[] Usides = {'t','l','l','l'};
+		char[] Vsides = {'t','l','t','t'};
+		char[] Wsides = {'t','l','t','t'};
+		char[] Xsides = {'t','l','l','t'};
+		char[] Ysides = {'t','l','l','t'};
+		char[] Zsides = {'l','j','t','j'};
+		char[] AAsides = {'l','j','t','j'};
+
 		Stack<Tile> pile = new Stack<Tile>();
-		pile.push(new Tile(Asides, 'j', "./src/resources/tile1.png"));
-		pile.push(new Tile(Bsides, 'd', "./src/resources/tile2.png"));
-		pile.push(new Tile(Csides, 'd', "./src/resources/tile3.png"));
-		pile.push(new Tile(Dsides, 'e', "./src/resources/tile4.png"));
-		pile.push(new Tile(Esides, 'r', "./src/resources/tile5.png"));
-		pile.push(new Tile(Fsides, 'r', "./src/resources/tile6.png"));
-		pile.push(new Tile(Gsides, 'e', "./src/resources/tile7.png"));
-		pile.push(new Tile(Hsides, 'l', "./src/resources/tile8.png"));
-		pile.push(new Tile(Isides, 'l', "./src/resources/tile9.png"));
-		pile.push(new Tile(Jsides, 'l', "./src/resources/tile10.png"));
-		pile.push(new Tile(Ksides, 'l', "./src/resources/tile11.png"));
-		pile.push(new Tile(Lsides, 'j', "./src/resources/tile12.png"));
-		pile.push(new Tile(Msides, 'j', "./src/resources/tile13.png"));
-		pile.push(new Tile(Nsides, 'j', "./src/resources/tile14.png"));
-		pile.push(new Tile(Osides, 'r', "./src/resources/tile15.png"));
-		pile.push(new Tile(Psides, 'r', "./src/resources/tile16.png"));
-		pile.push(new Tile(Qsides, 'r', "./src/resources/tile17.png"));
-		pile.push(new Tile(Rsides, 'r', "./src/resources/tile18.png"));
-		pile.push(new Tile(Ssides, 'r', "./src/resources/tile19.png"));
-		pile.push(new Tile(Tsides, 'r', "./src/resources/tile20.png"));
-		pile.push(new Tile(Usides, 'l', "./src/resources/tile21.png"));
-		pile.push(new Tile(Vsides, 'e', "./src/resources/tile22.png"));
-		pile.push(new Tile(Wsides, 'e', "./src/resources/tile23.png"));
-		pile.push(new Tile(Xsides, 'r', "./src/resources/tile24.png"));
-		pile.push(new Tile(Ysides, 'r', "./src/resources/tile25.png"));
-		pile.push(new Tile(Zsides, 'r', "./src/resources/tile26.png"));
-		pile.push(new Tile(AAsides, 'r', "./src/resources/tile27.png"));
+		pile.push(new Tile(Asides, '-', "./src/resources/tile1.png"));
+		pile.push(new Tile(Bsides, 'X', "./src/resources/tile2.png"));
+		pile.push(new Tile(Csides, 'X', "./src/resources/tile3.png"));
+		pile.push(new Tile(Dsides, '-', "./src/resources/tile4.png"));
+		pile.push(new Tile(Esides, '-', "./src/resources/tile5.png"));
+		pile.push(new Tile(Fsides, '-', "./src/resources/tile6.png"));
+		pile.push(new Tile(Gsides, '-', "./src/resources/tile7.png"));
+		pile.push(new Tile(Hsides, '-', "./src/resources/tile8.png"));
+		pile.push(new Tile(Isides, '-', "./src/resources/tile9.png"));
+		pile.push(new Tile(Jsides, '-', "./src/resources/tile10.png"));
+		pile.push(new Tile(Ksides, '-', "./src/resources/tile11.png"));
+		pile.push(new Tile(Lsides, '-', "./src/resources/tile12.png"));
+		pile.push(new Tile(Msides, '-', "./src/resources/tile13.png"));
+		pile.push(new Tile(Nsides, '-', "./src/resources/tile14.png"));
+		pile.push(new Tile(Osides, '-', "./src/resources/tile15.png"));
+		pile.push(new Tile(Psides, 'P', "./src/resources/tile16.png"));
+		pile.push(new Tile(Qsides, '-', "./src/resources/tile17.png"));
+		pile.push(new Tile(Rsides, 'B', "./src/resources/tile18.png"));
+		pile.push(new Tile(Ssides, '-', "./src/resources/tile19.png"));
+		pile.push(new Tile(Tsides, 'D', "./src/resources/tile20.png"));
+		pile.push(new Tile(Usides, '-', "./src/resources/tile21.png"));
+		pile.push(new Tile(Vsides, '-', "./src/resources/tile22.png"));
+		pile.push(new Tile(Wsides, 'P', "./src/resources/tile23.png"));
+		pile.push(new Tile(Xsides, '-', "./src/resources/tile24.png"));
+		pile.push(new Tile(Ysides, 'B', "./src/resources/tile25.png"));
+		pile.push(new Tile(Zsides, '-', "./src/resources/tile26.png"));
+		pile.push(new Tile(AAsides, 'D', "./src/resources/tile27.png"));
 		return pile;
 	}
 }

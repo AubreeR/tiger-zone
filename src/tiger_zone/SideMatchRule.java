@@ -7,9 +7,10 @@ public class SideMatchRule extends PlacementRule
 	private Tile nextTile;//we must know the next tile to be placed in order to match sides
 	private Tile[] adj;
 	
-	public SideMatchRule(BoardCell[][] boardState,int row, int col, Tile nextTile)
+	public SideMatchRule(Board boardState,int cartX, int cartY, Tile nextTile)
 	{
-		super(boardState,row, col);
+		super(boardState,cartX, cartY);
+		super.setRuleName("SideMatch Rule");
 		this.nextTile = nextTile;
 		adj = new Tile[8];//UL, UC, UR, RC, DR, DC, DL, LC
 		
@@ -22,77 +23,80 @@ public class SideMatchRule extends PlacementRule
 	@Override
 	public boolean evaluate()
 	{
+		int length = boardState.getBoardLength();
 		try
 		{
-			if(row > boardState.length || row < 0 || col > boardState[0].length || col < 0)
+			if(Math.abs(cartX) > length || (Math.abs(cartY) > length ))
 				throw new Exception(super.getName() + " failed under condition: tile tile desired palcement out of bounds.");
 			/*
 			 * check to see which tiles are adjacent if any
 			 */
-			if(row - 1 >= 0 && row - 1 < boardState.length)//up
+			if(cartX - 1 >= (-1)*(length - 1))//left
 			{
-				if(col - 1 >= 0 && col - 1 < boardState[0].length)//upleft
-					adj[0] = boardState[row-1][col-1].getTile();
-				if(col >= 0 && col < boardState[0].length)
-					adj[1] = boardState[row - 1][col].getTile();
-				if(col + 1 >= 0 && col+1 < boardState[0].length)
-					adj[2] = boardState[row - 1][col+1].getTile();
+				if(cartY - 1 >= 0 && cartY - 1 < length)//downleft
+					adj[6] = boardState.getTile(cartX-1,cartY-1);
+				if(cartY >= 0 && cartY < length)//left center
+					adj[7] = boardState.getTile(cartX - 1,cartY);
+				if(cartY + 1 >= 0 && cartY+1 < length)//left up
+					adj[0] = boardState.getTile(cartX - 1,cartY+1);
 					
 					
 			}
-			if(row + 1 >= 0 && row + 1 < boardState.length)//down
+			if(cartX + 1 >= (-1)*(length - 1) && cartX + 1 <length)//right
 			{
-				if(col - 1 >= 0 && col - 1 < boardState[0].length)//downleft
-					adj[4] = boardState[row+1][col-1].getTile();
-				if(col >= 0 && col < boardState[0].length)//downcenter
-					adj[5] = boardState[row + 1][col].getTile();
-				if(col + 1 >= 0 && col+1 < boardState[0].length)//downright
-					adj[6] = boardState[row + 1][col+1].getTile();
+				if(cartY - 1 >= 0 && cartY - 1 < length)//downright
+					adj[4] = boardState.getTile(cartX+1,cartY-1);
+				if(cartY >= 0 && cartY < length)//center right
+					adj[3] = boardState.getTile(cartX + 1,cartY);
+				if(cartY + 1 >= 0 && cartY+1 < length)//upright
+					adj[2] = boardState.getTile(cartX + 1,cartY+1);
 					
 					
 			}
 				
-			if(col - 1 >= 0 && col - 1 < boardState[0].length)//centerleft
-				adj[7] = boardState[row][col-1].getTile();
+			if(cartY - 1 >= 0 && cartY - 1 < length)//down center
+				adj[5] = boardState.getTile(cartX,cartY-1);
 			
-			if(col + 1 >= 0 && col+1 < boardState[0].length)//center right
-				adj[3] = boardState[row][col+1].getTile();
+			if(cartY + 1 >= 0 && cartY+1 < length)//center up
+				adj[1] = boardState.getTile(cartX,cartY+1);
 			
 			for(int i = 0; i < 8; i++)//cycle through all possible adjacent tiles
 			{
 				//don't do checks on something that isnt there
 				if(adj[i] == null)
 					continue;
-				//											0	1	2
-				//		UL	UC	RU		0	1	2		11				3
-				//		CL	XX	CR		7		3		10				4
-				//		DL	DC	DR		6	5	4		9				5
-				//											8	7	6
+				//												0
+				//		UL	UC	RU		0	1	2						
+				//		CL	XX	CR		7		3		3				1
+				//		DL	DC	DR		6	5	4						
+				//												2	
 				switch(i)//this is to figure out what side we are checking
 				{
 				case 0:
 					break;
 				case 1: //UC Case
-					if(nextTile.getSides()[1] != adj[i].getSides()[7])
+					
+					if(nextTile.getSides()[0] != adj[i].getSides()[2])
 						throw new Exception(super.getName() + " failed under condition that the northern tile did not match");
 					break;
 				case 2:
 					break;
 				case 3://center right
-					if(nextTile.getSides()[4] != adj[i].getSides()[10])
+					if(nextTile.getSides()[1] != adj[i].getSides()[3])
 						throw new Exception(super.getName() + " failed under condition that the Easter tile did not match");
 					break;
 				case 4:
 					
 					break;
 				case 5://center down
-					if(nextTile.getSides()[7] != adj[i].getSides()[1])
+					System.out.println("south: "+adj[i].getSides()[0]+adj[i].getSides()[1]+adj[i].getSides()[2]+adj[i].getSides()[3]);
+					if(nextTile.getSides()[2] != adj[i].getSides()[0])
 						throw new Exception(super.getName() + " failed under condition that the southern tile did not match");
 					break;
 				case 6:
 					break;
 				case 7:
-					if(nextTile.getSides()[10] != adj[i].getSides()[4])
+					if(nextTile.getSides()[3] != adj[i].getSides()[1])
 						throw new Exception(super.getName() + " failed under condition that the western tile did not match");
 					break;
 				default:

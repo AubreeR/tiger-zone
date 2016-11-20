@@ -18,33 +18,33 @@ class PlacementRule implements Rule
 {
 	
 	private String ruleName = "";
-	protected BoardCell[][] boardState;
-	protected int row, col;
-	PlacementRule(BoardCell[][] boardState, int row, int col)
+	protected Board boardState;
+	protected int cartX, cartY;
+	PlacementRule(Board boardState, int cartX, int cartY)
 	{
 		this.boardState = boardState;
-		this.row = row;
-		this.col = col;
+		this.cartX = cartX;
+		this.cartY = cartY;
 	}
 	
 	@Override
-	public void setBoardState(BoardCell[][] boardState, int row, int col)
+	public void setBoardState(Board boardState, int cartX, int cartY)
 	{
 		this.boardState = boardState;
-		this.row = row;
-		this.col = col;
+		this.cartX = cartX;
+		this.cartY = cartY;
 		
 	}
 	
 	@Override
-	public void setPosition(int row, int col)
+	public void setPosition(int cartX, int cartY)
 	{
-		this.row = row;
-		this.col = col;
+		this.cartX = cartX;
+		this.cartY = cartY;
 	}
 	
 	@Override
-	public void setBoardState(BoardCell[][] boardState)
+	public void setBoardState(Board boardState)
 	{
 		this.boardState = boardState;
 	}
@@ -76,10 +76,10 @@ class PlacementRule implements Rule
 
 public interface Rule
 {
-	void setBoardState(BoardCell[][] boardState);
-	void setBoardState(BoardCell[][] boardState, int row, int col);
+	void setBoardState(Board boardState);
+	void setBoardState(Board boardState, int cartX, int cartY);
 	
-	void setPosition(int row, int col);
+	void setPosition(int cartX, int cartY);
 	
 	//Description:hold conditions for passing or failing 
 	//	the given rule set

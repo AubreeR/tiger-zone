@@ -3,9 +3,9 @@ package tiger_zone;
 public class AdjacencyRule extends PlacementRule
 {
 	
-	public AdjacencyRule(BoardCell[][] boardState,int row, int col)
+	public AdjacencyRule(Board boardState,int cartX, int cartY)
 	{
-		super(boardState,row, col);
+		super(boardState,cartX, cartY);
 		super.setRuleName("Adjacency Rule");
 	}
 	
@@ -20,21 +20,21 @@ public class AdjacencyRule extends PlacementRule
 		try
 		{
 			//make sure that the provided values are on the board
-			boolean checkSize = (row < boardState.length && row >= 0) && (col < boardState.length && col >= 0);
-			boolean PlacementTileEmpty = boardState[row][col].getTile() == null;
+			boolean checkSize = (Math.abs(cartX) < boardState.getBoardLength() && Math.abs(cartX) >= 0) && (Math.abs(cartY) < boardState.getBoardLength() && Math.abs(cartY) >= 0);
+			boolean PlacementTileEmpty = boardState.getTile(cartX,cartY) == null;
 			
 			//if its a valid size and the tile you want to put something is empty, 
 			//check to see if there is an adjacent tile
 			if(checkSize && PlacementTileEmpty)
 			{
-				if(row != 0)
-					checkUp = boardState[row-1][col] != null;
-				if(row != boardState.length - 1)
-					checkDown = boardState[row+1][col] != null;
-				if(col != 0)
-					checkLeft = boardState[row][col-1] != null;
-				if(col != boardState[row].length)
-					checkRight = boardState[row][col+1] != null;
+				if(cartX != boardState.getBoardLength() - 1)
+					checkRight = boardState.getTile(cartX+1, cartY) != null;
+				if(cartX != (-1) *(boardState.getBoardLength() - 1))
+					checkLeft = boardState.getTile(cartX -1, cartY) != null;
+				if(cartY != (-1) *(boardState.getBoardLength() - 1))
+					checkDown =boardState.getTile(cartX, cartY-1) != null;
+				if(cartY != boardState.getBoardLength() - 1)
+					checkUp = boardState.getTile(cartX, cartY+1) != null;
 			}
 			else	
 				throw new Exception(super.getName() + " failed under test condition index out of bounds or tile already occupied");

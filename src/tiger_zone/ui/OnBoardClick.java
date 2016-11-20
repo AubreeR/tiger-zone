@@ -1,37 +1,29 @@
 package tiger_zone.ui;
 
-import java.awt.Image;
+import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import tiger_zone.Tile;
 
 public class OnBoardClick extends MouseAdapter {
 	public void mouseClicked(MouseEvent event) {
-		JPanel j = (JPanel)event.getSource();
-		BoardFrame b = new BoardFrame();
-		Tile t = Main.board.getPile().pop();
-		Tile nextTile = Main.board.getPile().peek(); 
-		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
-		
-		b.previewLabel.setIcon(previewImg);
-		b.preview.add(b.previewLabel);
-		b.preview.setSize(200, 200);
-		b.preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		b.preview.setVisible(true);
-		
-		ImageIcon img = new ImageIcon(t.getImagePath());
-		ImageIcon imgScale = new ImageIcon(img.getImage().
-				getScaledInstance(j.getHeight(), j.getWidth(), Image.SCALE_SMOOTH));
+		Tile placedTile = Main.board.getPile().pop();
+		Tile nextTile = Main.board.getPile().peek();
 
-		JLabel label = new JLabel();
-		label.setIcon(imgScale);
-		j.add(label);
-		j.revalidate();
+		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
+		BoardFrame.tilePreview.setImg(previewImg);
+		BoardFrame.preview.add(BoardFrame.tilePreview, BorderLayout.SOUTH);
+		BoardFrame.preview.setSize(250, 250);
+		BoardFrame.preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		BoardFrame.preview.setVisible(true);
+
+		TilePanel j = (TilePanel)event.getSource();
+		ImageIcon img = new ImageIcon(placedTile.getImagePath());
+		j.setImg(img);
+		j.setRotation(placedTile.getRotation());
 	}
 }

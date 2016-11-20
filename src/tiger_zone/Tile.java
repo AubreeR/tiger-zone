@@ -7,6 +7,7 @@ public class Tile {
 	private char[] sides;
 	private char center;
 	private String imagePath;
+	private int rotation = 0;
 
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
@@ -21,17 +22,21 @@ public class Tile {
 		this.center = center;
 		this.imagePath = imagePath;
 	}
-	
-	public char[] getSides() {
+
+	/**
+	 * Returns the sides of this tile.
+	 *
+	 * @return sides
+	 */
+	public final char[] getSides() {
 		return this.sides;
 	}
 
-	public char getSide(int index)
-	{
-		return sides[index];
+	public final char getSide(int index) {
+		return this.sides[index];
 	}
-	
-	public char getCenter() {
+
+	public final char getCenter() {
 		return this.center;
 	}
 
@@ -40,7 +45,36 @@ public class Tile {
 	 *
 	 * @return path to image file
 	 */
-	public String getImagePath() {
+	public final String getImagePath() {
 		return this.imagePath;
+	}
+
+	/**
+	 * Returns the rotation of this tile in degrees, counterclockwise.
+	 *
+	 * @return rotation
+	 */
+	public final int getRotation() {
+		return this.rotation;
+	}
+
+	/**
+	 * Rotates this tile 90 degrees counterclockwise.
+	 */
+	public final void rotate() {
+		this.rotation += 90;
+		if (this.rotation == 360) {
+			this.rotation = 0;
+		}
+
+		// char[] rotation, source: http://codereview.stackexchange.com/a/69305
+		final int offset = sides.length + 3 % sides.length;
+		if (offset > 0) {
+			final char[] copy = sides.clone();
+			for (int i = 0; i < sides.length; i++) {
+				final int j = (i + offset) % sides.length;
+				sides[i] = copy[j];
+			}
+		}
 	}
 }

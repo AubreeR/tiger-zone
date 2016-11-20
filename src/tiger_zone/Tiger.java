@@ -1,5 +1,7 @@
 package tiger_zone;
 
+import java.util.Stack;
+
 enum TigerPlacement
 {
 	JUNGLE,
@@ -19,7 +21,7 @@ public class Tiger {
 	private Tile tile;//the tile it is placed on
 	private int locationPlaced;//what array index is the tiger placed on
 	private TigerPlacement placement;//the role fo the tiger
-	
+	private int tigerCount;//Can use a max of 7 tigers
 	Tiger()
 	{
 		xCoor = -1;
@@ -27,6 +29,8 @@ public class Tiger {
 		locationPlaced = -1;
 		tile = null;
 		placement = TigerPlacement.NOTPLACED;
+		
+		
 	}
 	
 	
