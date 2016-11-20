@@ -7,9 +7,10 @@ import java.util.Stack;
 import javax.swing.JFrame;
 
 import tiger_zone.Board;
-import tiger_zone.Tile;
+
 import tiger_zone.Client;
 import tiger_zone.Player;
+import tiger_zone.Tile;
 
 public class Main {
 	public static Board board;
