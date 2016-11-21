@@ -17,8 +17,8 @@ public class Main {
 		Collections.shuffle(pile);
 		board = new Board(pile);
 
-		Protocol p = new Protocol("0.0.0.0",8000,"tpass","user","pass");
-		p.tournamentProtocol();
+		//Protocol p = new Protocol("0.0.0.0",8000,"tpass","user","pass");
+		//p.tournamentProtocol();
 		char[] Gsides = {'T','J','T','T','-'};
 
 		board.addTile(4, 5,new Tile(Gsides, 'e', "./src/resources/tile7.png"));

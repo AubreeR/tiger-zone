@@ -117,11 +117,20 @@ public class Protocol extends Client
 			}
 
 		}
-		System.out.println("CID: " + cid + " ROUNDS: " + rounds);
+		
+		
+		for(int i = 0; i < Integer.parseInt(rounds); i++)
+		{
+			roundProtocol(receiveFromServer());
+		}
+		
+		fromServer = receiveFromServer();
+		//END OF CHALLENGES or PLEASE WAIT FOR NEXT CHALLEGE
 	}
 	
 	public void roundProtocol(String fromServer)
 	{
+		//fromServer should start with BEGIN ROUND <rid> OF <rounds>
 		
 	}
 	
