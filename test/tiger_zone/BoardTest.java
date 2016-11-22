@@ -16,17 +16,17 @@ public class BoardTest {
 
 	@BeforeClass
 	public static void setup() {
-		pile = new Stack<Tile>();
+		pile = Board.createDefaultStack();
 		board = new Board(pile);
 	}
 
 	@Test
 	public void addGetTileTest() {
-		char[] sides = {'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f', 'f'};
-		Tile t = new Tile(sides, 'm', "./src/resources/tile2.png");
-		assertTrue(board.addTile(0, 0, t));
-		assertSame(t, board.getTile(0, 0));
-		assertFalse(board.addTile(-1, -1, t));
+		char[] sides = {'t','j','t','j'};
+		Tile t = new Tile(sides, 't', "./src/resources/tile5.png");
+		assertTrue(board.addTile(0, -1, t));
+		assertSame(t, board.getTile(0, -1));
+		assertFalse(board.addTile(0, -1, t));
 	}
 
 	@Test
