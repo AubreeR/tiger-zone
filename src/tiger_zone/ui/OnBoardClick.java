@@ -27,16 +27,9 @@ public class OnBoardClick extends MouseAdapter {
 		TilePanel j = (TilePanel)event.getSource();
 		rowClick = (int) j.getClientProperty("row");
 		colClick = (int) j.getClientProperty("col");
-		
-		int x = 0;
-		int y = 0; 
-		
-		x += Main.board.origin;
-		y =  Main.board.origin - colClick;
-		
+				
 		Main.board.addTile(colClick, rowClick, placedTile);
 		System.out.println("Board: " + rowClick + ", " + colClick);
-		System.out.println("Cartesian: " + x + ", " + y);
 		ImageIcon img = new ImageIcon(placedTile.getImagePath());
 		j.setImg(img);
 		j.setRotation(placedTile.getRotation());

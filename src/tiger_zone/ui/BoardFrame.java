@@ -57,10 +57,12 @@ class BoardFrame extends JFrame {
 				// By default, all panels are "blank" with a transparent image
 				TilePanel panel = new TilePanel();
 
-				Tile current = Main.board.getTile(i, j);
+				int tmpX = (-guiX/2)+j;
+				int tmpY = (guiY/2)-i;
+				panel.putClientProperty("row", tmpX);
+				panel.putClientProperty("col", tmpY);
 				
-				panel.putClientProperty("row", (-guiX/2)+j);
-				panel.putClientProperty("col", (guiY/2)-i);
+				Tile current = Main.board.getTile(tmpX, tmpY);
 				
 				// A tile exists at the position, so get its image and rotation and apply them to this panel
 				if (current != null) {
