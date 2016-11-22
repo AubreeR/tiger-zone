@@ -8,6 +8,8 @@ public class Tile {
 	private char center;
 	private String imagePath;
 	private int rotation = 0;
+	private char[] tigerSpots; 
+	
 
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
@@ -77,4 +79,9 @@ public class Tile {
 			}
 		}
 	}
+
+	public char[] getTigerSpots() {
+		return tigerSpots;
+	}
+
 }

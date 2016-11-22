@@ -9,7 +9,7 @@ import java.util.Stack;
 public class Board {
 	private final BoardCell[][] gameGrid = new BoardCell[152][152];
 	private Stack<Tile> pile;
-	private int origin; // center of the gameGrid cartesian view
+	public int origin; // center of the gameGrid cartesian view
 	private final RuleEngine placementEngine = new RuleEngine();
 
 	/**
@@ -130,6 +130,12 @@ public class Board {
 	public Stack<Tile> getPile() {
 		return this.pile;
 	}
+	
+	public static void buildStack(Stack<Tile> pile, char[] edges, char center, String file, int tileCount){
+		for(int i = 0; i < tileCount; i++){
+			pile.push(new Tile(edges, center, file)); 
+		}
+	}
 
 	/**
 	 * Creates a "default stack", which contains one of each tile "in order" (e.g. tile A is at the bottom of the stack
@@ -168,35 +174,45 @@ public class Board {
 		char[] Ysides = {'t','l','l','t'};
 		char[] Zsides = {'l','j','t','j'};
 		char[] AAsides = {'l','j','t','j'};
+		char[] ABsides = {'t','l','l','l'}; 
+		
+		char[] Atigers = {'j','=','=','=','=','=','=','=','='};
+		char[] Btigers = {'j','=','=','=','x','=','=','=','='};
+		char[] Ctigers = {'j','=','=','=','x','=','=','t','='};
+		char[] Dtigers = {'j','t','j','t','=','t','j','t','j'};
+		
+		 
 
 		Stack<Tile> pile = new Stack<Tile>();
-		pile.push(new Tile(Asides, '-', "./src/resources/tile1.png"));
-		pile.push(new Tile(Bsides, 'X', "./src/resources/tile2.png"));
-		pile.push(new Tile(Csides, 'X', "./src/resources/tile3.png"));
-		pile.push(new Tile(Dsides, '-', "./src/resources/tile4.png"));
-		pile.push(new Tile(Esides, '-', "./src/resources/tile5.png"));
-		pile.push(new Tile(Fsides, '-', "./src/resources/tile6.png"));
-		pile.push(new Tile(Gsides, '-', "./src/resources/tile7.png"));
-		pile.push(new Tile(Hsides, '-', "./src/resources/tile8.png"));
-		pile.push(new Tile(Isides, '-', "./src/resources/tile9.png"));
-		pile.push(new Tile(Jsides, '-', "./src/resources/tile10.png"));
-		pile.push(new Tile(Ksides, '-', "./src/resources/tile11.png"));
-		pile.push(new Tile(Lsides, '-', "./src/resources/tile12.png"));
-		pile.push(new Tile(Msides, '-', "./src/resources/tile13.png"));
-		pile.push(new Tile(Nsides, '-', "./src/resources/tile14.png"));
-		pile.push(new Tile(Osides, '-', "./src/resources/tile15.png"));
-		pile.push(new Tile(Psides, 'P', "./src/resources/tile16.png"));
-		pile.push(new Tile(Qsides, '-', "./src/resources/tile17.png"));
-		pile.push(new Tile(Rsides, 'B', "./src/resources/tile18.png"));
-		pile.push(new Tile(Ssides, '-', "./src/resources/tile19.png"));
-		pile.push(new Tile(Tsides, 'D', "./src/resources/tile20.png"));
-		pile.push(new Tile(Usides, '-', "./src/resources/tile21.png"));
-		pile.push(new Tile(Vsides, '-', "./src/resources/tile22.png"));
-		pile.push(new Tile(Wsides, 'P', "./src/resources/tile23.png"));
-		pile.push(new Tile(Xsides, '-', "./src/resources/tile24.png"));
-		pile.push(new Tile(Ysides, 'B', "./src/resources/tile25.png"));
-		pile.push(new Tile(Zsides, '-', "./src/resources/tile26.png"));
-		pile.push(new Tile(AAsides, 'D', "./src/resources/tile27.png"));
+		// One Tile1
+		buildStack(pile, Asides, '-', "./src/resources/tile1.png", 1);
+		buildStack(pile, Bsides, 'x', "./src/resources/tile2.png",4);
+		buildStack(pile, Csides, 'x', "./src/resources/tile3.png",2);
+		buildStack(pile, Dsides, '-', "./src/resources/tile4.png",1);
+		buildStack(pile, Esides, '-', "./src/resources/tile5.png",8);
+		buildStack(pile, Fsides, '-', "./src/resources/tile6.png",8);	// Change 8 to 9
+		buildStack(pile, Gsides, '-', "./src/resources/tile7.png",4);
+		buildStack(pile, Hsides, '-', "./src/resources/tile8.png",1);
+		buildStack(pile, Isides, '-', "./src/resources/tile9.png",4);
+		buildStack(pile, Jsides, '-', "./src/resources/tile10.png",5);
+		buildStack(pile, Ksides, '-', "./src/resources/tile11.png",3);
+		buildStack(pile, Lsides, '-', "./src/resources/tile12.png",3);
+		buildStack(pile, Msides, '-', "./src/resources/tile13.png",5);
+		buildStack(pile, Nsides, '-', "./src/resources/tile14.png",2);
+		buildStack(pile, Osides, '-', "./src/resources/tile15.png",1);
+		buildStack(pile, Psides, 'p', "./src/resources/tile16.png",2);
+		buildStack(pile, Qsides, '-', "./src/resources/tile17.png",1);
+		buildStack(pile, Rsides, 'b', "./src/resources/tile18.png",2);
+		buildStack(pile, Ssides, '-', "./src/resources/tile19.png",2);
+		buildStack(pile, Tsides, 'd', "./src/resources/tile20.png",2);
+		buildStack(pile, Usides, '-', "./src/resources/tile21.png",1);
+		buildStack(pile, Vsides, '-', "./src/resources/tile22.png",1);
+		buildStack(pile, Wsides, 'p', "./src/resources/tile23.png",2);
+		buildStack(pile, Xsides, '-', "./src/resources/tile24.png",3);
+		buildStack(pile, Ysides, 'b', "./src/resources/tile25.png",2);
+		buildStack(pile, Zsides, '-', "./src/resources/tile26.png",1);
+		buildStack(pile, AAsides, 'd', "./src/resources/tile27.png",2);
+		buildStack(pile, ABsides, 'c', "./src/resources/tile27.png",2);
 		return pile;
 	}
 }

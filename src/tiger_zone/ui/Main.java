@@ -28,21 +28,21 @@ public class Main {
 		Player p = new Player(0);
 		
 		
-		char[] Gsides = {'j','j','l','l','-'};
+		char[] Gsides = {'j','j','l','l'};
 
 
-		board.addTile(1,0,new Tile(Gsides, 'e', "./src/resources/tile7.png"));
+		board.addTile(1,0,new Tile(Gsides, '-', "./src/resources/tile7.png"));
 		//System.out.println(p.scores.scoreLake(board, 1,0));
 
-		char[] Hsides = {'l','j','j','j','-'};
-		board.addTile(1,-1,new Tile(Hsides, 'e', "./src/resources/tile7.png"));
+		char[] Hsides = {'l','j','j','j'};
+		board.addTile(1,-1,new Tile(Hsides, '-', "./src/resources/tile7.png"));
 		//System.out.println(p.scores.scoreLake(board, 1,-1));
 		//char[] Dsides = {'T','T','T','T','-'};
 		//board.addTile(4, 4, new Tile(Dsides, 'r', "./src/resources/tile4.png"));
 
 
 		BoardFrame bf = new BoardFrame();
-		bf.setSize(600, 600);
+		bf.setSize(900, 900);
 		bf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		bf.setVisible(true);
 	}

@@ -36,13 +36,15 @@ class BoardFrame extends JFrame {
 	public static JPanel tigerPanel = new JPanel();
 
 	public BoardFrame() {
-		final int rows = 10;		// Eventually replace these with BoardFrame size
-		final int cols = 10;
+		final int rows = 20;		// Eventually replace these with BoardFrame size
+		final int cols = 20;
 
 		rotateTile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("TEST\n");
+				Tile next = Main.board.getPile().peek();
+				next.rotate();
+				System.out.println(next.getSide(0) + " " + next.getRotation());
 			}
 		});
 
@@ -56,7 +58,8 @@ class BoardFrame extends JFrame {
 				TilePanel panel = new TilePanel();
 
 				Tile current = Main.board.getTile(i, j);
-
+				panel.putClientProperty("row", i);
+				panel.putClientProperty("col", j); 
 				// A tile exists at the position, so get its image and rotation and apply them to this panel
 				if (current != null) {
 					panel.setImg(new ImageIcon(current.getImagePath()));
@@ -70,6 +73,7 @@ class BoardFrame extends JFrame {
 		}
 
 		Tile nextTile = Main.board.getPile().peek();
+				
 		tilePreview.setImg(new ImageIcon(nextTile.getImagePath()));
 		preview.add(tilePreview, BorderLayout.SOUTH);
 
