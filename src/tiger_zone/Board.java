@@ -27,8 +27,8 @@ public class Board {
 		}
 
 
-		char[] sides = {'t','l','t','j','-'};
-		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
+		char[] sides = {'t','l','t','j'};
+		Tile init = new Tile(sides, '-', "./src/resources/tile19.png");
 		this.gameGrid[this.getBoardPosX(0)][this.getBoardPosY(0)].setTile(init);
 
 	}
@@ -217,7 +217,7 @@ public class Board {
 		buildStack(pile, Ysides, 'b', "./src/resources/tile25.png",2);
 		buildStack(pile, Zsides, '-', "./src/resources/tile26.png",1);
 		buildStack(pile, AAsides, 'd', "./src/resources/tile27.png",2);
-		buildStack(pile, ABsides, 'c', "./src/resources/tile27.png",2);
+		buildStack(pile, ABsides, 'c', "./src/resources/tile28.png",2);
 		return pile;
 	}
 }
