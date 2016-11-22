@@ -7,9 +7,11 @@ public class SideMatchRule extends PlacementRule
 	private Tile nextTile;//we must know the next tile to be placed in order to match sides
 	private Tile[] adj;
 	
-	public SideMatchRule(BoardCell[][] boardState,int row, int col, Tile nextTile)
+	public SideMatchRule(Board boardState,int cartX, int cartY, Tile nextTile)
 	{
-		super(boardState,row, col);
+
+		super(boardState,cartX, cartY);
+
 		super.setRuleName("SideMatch Rule");
 		this.nextTile = nextTile;
 		adj = new Tile[8];//UL, UC, UR, RC, DR, DC, DL, LC
@@ -23,41 +25,42 @@ public class SideMatchRule extends PlacementRule
 	@Override
 	public boolean evaluate()
 	{
+		int length = boardState.getBoardLength();
 		try
 		{
-			if(row > boardState.length || row < 0 || col > boardState[0].length || col < 0)
+			if(Math.abs(cartX) > length || (Math.abs(cartY) > length ))
 				throw new Exception(super.getName() + " failed under condition: tile tile desired palcement out of bounds.");
 			/*
 			 * check to see which tiles are adjacent if any
 			 */
-			if(row - 1 >= 0 && row - 1 < boardState.length)//up
+			if(cartX - 1 >= (-1)*(length - 1))//left
 			{
-				if(col - 1 >= 0 && col - 1 < boardState[0].length)//upleft
-					adj[0] = boardState[row-1][col-1].getTile();
-				if(col >= 0 && col < boardState[0].length)
-					adj[1] = boardState[row - 1][col].getTile();
-				if(col + 1 >= 0 && col+1 < boardState[0].length)
-					adj[2] = boardState[row - 1][col+1].getTile();
+				if(cartY - 1 >= 0 && cartY - 1 < length)//downleft
+					adj[6] = boardState.getTile(cartX-1,cartY-1);
+				if(cartY >= 0 && cartY < length)//left center
+					adj[7] = boardState.getTile(cartX - 1,cartY);
+				if(cartY + 1 >= 0 && cartY+1 < length)//left up
+					adj[0] = boardState.getTile(cartX - 1,cartY+1);
 					
 					
 			}
-			if(row + 1 >= 0 && row + 1 < boardState.length)//down
+			if(cartX + 1 >= (-1)*(length - 1) && cartX + 1 <length)//right
 			{
-				if(col - 1 >= 0 && col - 1 < boardState[0].length)//downleft
-					adj[4] = boardState[row+1][col-1].getTile();
-				if(col >= 0 && col < boardState[0].length)//downcenter
-					adj[5] = boardState[row + 1][col].getTile();
-				if(col + 1 >= 0 && col+1 < boardState[0].length)//downright
-					adj[6] = boardState[row + 1][col+1].getTile();
+				if(cartY - 1 >= 0 && cartY - 1 < length)//downright
+					adj[4] = boardState.getTile(cartX+1,cartY-1);
+				if(cartY >= 0 && cartY < length)//center right
+					adj[3] = boardState.getTile(cartX + 1,cartY);
+				if(cartY + 1 >= 0 && cartY+1 < length)//upright
+					adj[2] = boardState.getTile(cartX + 1,cartY+1);
 					
 					
 			}
 				
-			if(col - 1 >= 0 && col - 1 < boardState[0].length)//centerleft
-				adj[7] = boardState[row][col-1].getTile();
+			if(cartY - 1 >= 0 && cartY - 1 < length)//down center
+				adj[5] = boardState.getTile(cartX,cartY-1);
 			
-			if(col + 1 >= 0 && col+1 < boardState[0].length)//center right
-				adj[3] = boardState[row][col+1].getTile();
+			if(cartY + 1 >= 0 && cartY+1 < length)//center up
+				adj[1] = boardState.getTile(cartX,cartY+1);
 			
 			for(int i = 0; i < 8; i++)//cycle through all possible adjacent tiles
 			{
@@ -74,6 +77,7 @@ public class SideMatchRule extends PlacementRule
 				case 0:
 					break;
 				case 1: //UC Case
+
 					if(nextTile.getSides()[0] != adj[i].getSides()[2])
 						throw new Exception(super.getName() + " failed under condition that the northern tile did not match");
 					break;

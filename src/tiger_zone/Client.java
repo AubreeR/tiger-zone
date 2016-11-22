@@ -4,8 +4,10 @@ import java.io.*;
 import java.net.*;
 
 public class Client {
+
 	protected String serverName;//ip address of server
 	protected int portNumber;//server port
+
 	private Socket echoSocket;//server connection object
 	private PrintWriter output;//used to send data to server
 	private BufferedReader input, stdIn;//reads input from server and user, respectively
@@ -113,7 +115,9 @@ public class Client {
    public String receiveFromServer()
    {
 	   try{
+
 	   return input.readLine().trim();
+
 	   }
 	   catch(IOException io)
 	   {

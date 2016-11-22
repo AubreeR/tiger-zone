@@ -26,9 +26,11 @@ public class Board {
 			}
 		}
 
-		char[] sides = {'T','L','T','J','-'};
+
+		char[] sides = {'t','l','t','j','-'};
 		Tile init = new Tile(sides, 'r', "./src/resources/tile19.png");
-		this.gameGrid[5][5].setTile(init);
+		this.gameGrid[this.getBoardPosX(0)][this.getBoardPosY(0)].setTile(init);
+
 	}
 
 	/**
@@ -62,15 +64,19 @@ public class Board {
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
 	public final boolean validPlacement(final int x, final int y, final Tile tile) {
-		if (x < 0 || y < 0 || x > this.gameGrid.length || y > this.gameGrid.length) {
+
+		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
+
 			return false;
 		}
 
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
-		placementEngine.addRule(new AdjacencyRule(this.gameGrid, x, y));
-		placementEngine.addRule(new SideMatchRule(this.gameGrid, x, y, tile));
+
+		placementEngine.addRule(new AdjacencyRule(this, x, y));
+		placementEngine.addRule(new SideMatchRule(this, x, y, tile));
+
 
 		return placementEngine.evaluateRules();
 	}
@@ -96,6 +102,12 @@ public class Board {
   	}
 
 
+  	public int getBoardLength()
+  	{
+  		return this.gameGrid.length;
+  	}
+
+
 
 	/**
 	 * Returns the tile located at position (x, y).
@@ -105,7 +117,9 @@ public class Board {
 	 * @return the instance of <code>Tile</code> at position (x, y)
 	 */
 	public Tile getTile(final int x, final int y){
-		return this.gameGrid[x][y].getTile();
+
+		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)].getTile();
+
 	}
 
 	/**
