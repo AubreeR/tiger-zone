@@ -105,16 +105,8 @@ public class SideMatchRule extends PlacementRule
 				}
 				
 			}
-			//center ALWAYS HAS TO MATCH
-			//side fields on a face can diverge iff a diagonal side matches the divergent
 			
-			if(true/*check all adjacent tiles*/)
-			{
-				return true;
-				
-			}
-			else
-				testFailure();//if the test condition fails
+			return true;
 			
 		}
 		catch(Exception ex)
@@ -122,7 +114,7 @@ public class SideMatchRule extends PlacementRule
 			System.err.println(ex);//display the error 
 			return false;
 		}
-		return false;
+		
 	}
 	
 	@Override
