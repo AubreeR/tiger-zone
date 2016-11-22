@@ -25,7 +25,7 @@ public class Main {
 		//Protocol p = new Protocol("0.0.0.0",8000,"tpass","user","pass");
 		//p.tournamentProtocol();
 
-		Player p = new Player();
+		Player p = new Player(0);
 		
 		
 		char[] Gsides = {'j','j','l','l','-'};
@@ -36,7 +36,7 @@ public class Main {
 
 		char[] Hsides = {'l','j','j','j','-'};
 		board.addTile(1,-1,new Tile(Hsides, 'e', "./src/resources/tile7.png"));
-		System.out.println(p.scores.scoreLake(board, 1,-1));
+		//System.out.println(p.scores.scoreLake(board, 1,-1));
 		//char[] Dsides = {'T','T','T','T','-'};
 		//board.addTile(4, 4, new Tile(Dsides, 'r', "./src/resources/tile4.png"));
 
