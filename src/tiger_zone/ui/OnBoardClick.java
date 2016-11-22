@@ -34,7 +34,7 @@ public class OnBoardClick extends MouseAdapter {
 		x += Main.board.origin;
 		y =  Main.board.origin - colClick;
 		
-		Main.board.addTile(rowClick, colClick, placedTile);
+		Main.board.addTile(colClick, rowClick, placedTile);
 		System.out.println("Board: " + rowClick + ", " + colClick);
 		System.out.println("Cartesian: " + x + ", " + y);
 		ImageIcon img = new ImageIcon(placedTile.getImagePath());

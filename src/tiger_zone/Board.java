@@ -180,6 +180,11 @@ public class Board {
 		char[] Btigers = {'j','=','=','=','x','=','=','=','='};
 		char[] Ctigers = {'j','=','=','=','x','=','=','t','='};
 		char[] Dtigers = {'j','t','j','t','=','t','j','t','j'};
+		char[] Etigers = {'j','t','j','=','=','=','=','=','='};
+		char[] Ftigers = {'j','t','j','t','=','=','j','t','='};
+		char[] Gtigers = {'l','=','=','=','=','=','=','=','='};
+		char[] Htigers = {'j','=','=','l','=','=','=','=','='};
+		//char[] ITigers =
 		
 		 
 
@@ -190,7 +195,7 @@ public class Board {
 		buildStack(pile, Csides, 'x', "./src/resources/tile3.png",2);
 		buildStack(pile, Dsides, '-', "./src/resources/tile4.png",1);
 		buildStack(pile, Esides, '-', "./src/resources/tile5.png",8);
-		buildStack(pile, Fsides, '-', "./src/resources/tile6.png",8);	// Change 8 to 9
+		buildStack(pile, Fsides, '-', "./src/resources/tile6.png",9);	// Change 8 to 9
 		buildStack(pile, Gsides, '-', "./src/resources/tile7.png",4);
 		buildStack(pile, Hsides, '-', "./src/resources/tile8.png",1);
 		buildStack(pile, Isides, '-', "./src/resources/tile9.png",4);

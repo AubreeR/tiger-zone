@@ -36,8 +36,8 @@ class BoardFrame extends JFrame {
 	public static JPanel tigerPanel = new JPanel();
 
 	public BoardFrame() {
-		final int rows = 20;		// Eventually replace these with BoardFrame size
-		final int cols = 20;
+		final int guiX = 10;		// Eventually replace these with BoardFrame size
+		final int guiY = 10;
 
 		rotateTile.addActionListener(new ActionListener() {
 			@Override
@@ -50,16 +50,18 @@ class BoardFrame extends JFrame {
 
 		MouseAdapter ma = new OnBoardClick();
 
-		this.setLayout(new GridLayout(rows, cols));
+		this.setLayout(new GridLayout(guiX, guiY));
 
-		for (int i = 0; i < rows; i++) {
-			for (int j = 0; j < cols; j++) {
+		for (int i = 0; i < guiX; i++) {
+			for (int j = 0; j < guiY; j++) {
 				// By default, all panels are "blank" with a transparent image
 				TilePanel panel = new TilePanel();
 
 				Tile current = Main.board.getTile(i, j);
-				panel.putClientProperty("row", i);
-				panel.putClientProperty("col", j); 
+				
+				panel.putClientProperty("row", (-guiX/2)+j);
+				panel.putClientProperty("col", (guiY/2)-i);
+				
 				// A tile exists at the position, so get its image and rotation and apply them to this panel
 				if (current != null) {
 					panel.setImg(new ImageIcon(current.getImagePath()));
