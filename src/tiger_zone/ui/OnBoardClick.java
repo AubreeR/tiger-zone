@@ -28,10 +28,12 @@ public class OnBoardClick extends MouseAdapter {
 		rowClick = (int) j.getClientProperty("row");
 		colClick = (int) j.getClientProperty("col");
 				
-		Main.board.addTile(colClick, rowClick, placedTile);
-		System.out.println("Board: " + rowClick + ", " + colClick);
-		ImageIcon img = new ImageIcon(placedTile.getImagePath());
-		j.setImg(img);
-		j.setRotation(placedTile.getRotation());
+		if(Main.board.addTile(colClick, rowClick, placedTile))
+		{
+			System.out.println("Board: " + rowClick + ", " + colClick);
+			ImageIcon img = new ImageIcon(placedTile.getImagePath());
+			j.setImg(img);
+			j.setRotation(placedTile.getRotation());
+		}
 	}
 }

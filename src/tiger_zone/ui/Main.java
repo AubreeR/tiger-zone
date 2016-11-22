@@ -28,17 +28,7 @@ public class Main {
 		Player p = new Player(0);
 		
 		
-		char[] Gsides = {'j','j','l','l'};
-
-
-		board.addTile(1,0,new Tile(Gsides, '-', "./src/resources/tile7.png"));
-		//System.out.println(p.scores.scoreLake(board, 1,0));
-
-		char[] Hsides = {'l','j','j','j'};
-		board.addTile(1,-1,new Tile(Hsides, '-', "./src/resources/tile7.png"));
-		//System.out.println(p.scores.scoreLake(board, 1,-1));
-		//char[] Dsides = {'T','T','T','T','-'};
-		//board.addTile(4, 4, new Tile(Dsides, 'r', "./src/resources/tile4.png"));
+	
 
 
 		BoardFrame bf = new BoardFrame();
