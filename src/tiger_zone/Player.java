@@ -49,6 +49,10 @@ public class Player {
 	public final void setPoints(final int points) {
 		this.points = points;
 	}
+	
+	public final List<Tiger> getTigers(){
+		return this.tigers;
+	}
 
 	static class Scoring {
 		private int player1Score;
@@ -67,7 +71,7 @@ public class Player {
 
 		public int[] updateScore(int lastTileX, int lastTileY) {
 			int[] updatedScores = new int[2]; //used to return the final values
-			updatedScores[0] = getplayer1Score(); //set up scores already calculated
+			updatedScores[0] = getplayer1Score(); //get player scores
 			updatedScores[1] = getplayer2Score();
 
 			Tile lastTile = boardState.getTile(lastTileX, lastTileY); //get the last updated tile
@@ -93,18 +97,9 @@ public class Player {
 			updatedScores = checkForLake(lastTileX, lastTileY, updatedScores);
 
 			//check if road complete, one issue where intersection loops scored twice
-			if(lastTileSides[0] == 'j'){
-				updatedScores = scoreRoad(boardState, lastTileX, lastTileY, 2);
-			}
-			else if(lastTileSides[1] == 'j'){
-				updatedScores = scoreRoad(boardState, lastTileX, lastTileY, 3);
-			}
-			else if(lastTileSides[2] == 'j'){
-				updatedScores = scoreRoad(boardState, lastTileX, lastTileY, 0);
-			}
-			else if(lastTileSides[3] == 'j'){
-				updatedScores = scoreRoad(boardState, lastTileX, lastTileY, 1);
-			}
+			
+			updatedScores = scoreRoad(boardState, lastTileX, lastTileY);
+			
 		
 
 			return updatedScores;
@@ -114,21 +109,27 @@ public class Player {
 			int[] foundScores = new int[2];
 			foundScores[0] = 0;
 			foundScores[0] = 0;
-			Tile checkTile = boardState.getTile(x, y);
-			if(checkTile.getCenter() == 'd'){ //check if tile has a den
-				if((boardState.getTile(x+1,y) != null) //check if den is complete
-						&& (boardState.getTile(x-1,y) != null)
-						&& (boardState.getTile(x,y+1) != null)
-						&& (boardState.getTile(x,y-1) != null)
-						&& (boardState.getTile(x+1,y+1) != null)
-						&& (boardState.getTile(x+1,y-1) != null)
-						&& (boardState.getTile(x-1,y+1) != null)
-						&& (boardState.getTile(x-1,y-1) != null)){
-					//assign score values based on which player's tiger is there if any
-					//NOT IMPLEMENTED BECAUSE OF UNKNOWN HOW TIGERS ARE IMPLEMENTED
+			if(boardState.getTile(x, y) != null) {
+				Tile checkTile = boardState.getTile(x, y);
+				if(checkTile.getCenter() == 'x'){ //check if tile has a den
+					if((boardState.getTile(x+1,y) != null) //check if den is complete
+							&& (boardState.getTile(x-1,y) != null)
+							&& (boardState.getTile(x,y+1) != null)
+							&& (boardState.getTile(x,y-1) != null)
+							&& (boardState.getTile(x+1,y+1) != null)
+							&& (boardState.getTile(x+1,y-1) != null)
+							&& (boardState.getTile(x-1,y+1) != null)
+							&& (boardState.getTile(x-1,y-1) != null)){
+						//assign score values based on which player's tiger is there if any
+						//NOT IMPLEMENTED BECAUSE OF UNKNOWN HOW TIGERS ARE IMPLEMENTED
+					}
+					scores[0] += foundScores[0];
+					scores[1] += foundScores[1];
 				}
-				scores[0] += foundScores[0];
-				scores[1] += foundScores[1];
+			}
+			else {
+				scores[0] = 0;
+				scores[1] = 0;
 			}
 			return scores;
 		}
@@ -314,12 +315,10 @@ public class Player {
 		}
 		
 		
-		public int[] scoreRoad(Board boardState, int cartX, int cartY, int side){
+		public int[] scoreRoad(Board boardState, int cartX, int cartY){
 			this.boardState = boardState;
 			boolean[][] testedTiles = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
 			int[] scores = new int[2];
-			Tile checkTile;
-			char[] tileSides;
 			int p1Tigers = 0;
 			int p2Tigers = 0;
 			int croc = 0;
@@ -329,81 +328,107 @@ public class Player {
 			int roadcount = 0;
 			int scoreCount = 0;
 			Boolean Error = false;
+			int side = -1;
 			
-			if(side == 0){ //if statement sets the tile you came from as already checked
-				testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY+1)] = true;
+			Tile checkTile = boardState.getTile(tileX, tileY);
+			char[] tileSides = checkTile.getSides();
+			testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
+			scoreCount++;
+			
+			
+			//check if tile has any roads
+			for(int i = 0; i < 4; i++){
+				if(tileSides[i] == 't'){
+					roadcount++;
+				}
 			}
-			else if(side == 1){
-				testedTiles[boardState.getBoardPosX(tileX-1)][boardState.getBoardPosY(tileY)] = true;
-			}
-			else if(side == 2){
-				testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY-1)] = true;
-			}
-			else if(side == 3){
-				testedTiles[boardState.getBoardPosX(tileX+1)][boardState.getBoardPosY(tileY)] = true;
+			if(roadcount == 0){
+				return scores;
 			}
 			
-			while(true){
-				if(boardState.getTile(tileX, tileY) == null) { //if tile is there
-					Error = true;
-					break;
-				}
-				//check if tile has been flagged, if it has, a loop has been made/finished
-				if(testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] == true){
-					break;
-				}
-				scoreCount++;
-				checkTile = boardState.getTile(tileX, tileY);
-				tileSides = checkTile.getSides();
-				
-				for(int i = 0; i < 4; i++){ //find how many sides have a road
-					if(tileSides[i] == 't') {
-						roadcount++;
+			//loop through all sides
+			for(int k = 0; k < 4; k++){
+				if(tileSides[k] == 't'){
+					if(k == 0){
+						side = 2;
+						tileY--;
+					}
+					else if(k == 1){
+						side = 3;
+						tileX++;
+					}
+					else if(k == 2){
+						side = 0;
+						tileY++;
+					}
+					else if(k == 3){
+						side = 1;
+						tileX--;
 					}
 				}
 				
-				if(roadcount == 0){
-					System.err.println("Road Scoring Error: Tile has no roads");
-					Error = true;
-					break;
-				}
-				else if (roadcount == 1 || roadcount == 3 || roadcount == 4){
-					//came to end of road, score up points
-					break;
-				}
-				
-				//road has two sides, so need to find the other side to continue path
-				testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
-				for(int i = 0; i < 4; i++){ //find the other side with road
-					if(tileSides[i] == 't' && side != i) {
-						if(i == 0){
-							tileY--;
-							side = 2;
-						}
-						else if(i == 1){
-							tileX++;
-							side = 3;
-						}
-						else if(i == 2){
-							tileY++;
-							side = 0;
-						}
-						else if(i == 3){
-							tileX--;
-							side = 1;
+				while(true){
+					if(boardState.getTile(tileX, tileY) == null) { //if tile is there
+						Error = true;
+						break;
+					}
+					//check if tile has been flagged, if it has, a loop has been made/finished
+					if(testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] == true){
+						break;
+					}
+					scoreCount++;
+					checkTile = boardState.getTile(tileX, tileY);
+					tileSides = checkTile.getSides();
+					
+					for(int i = 0; i < 4; i++){ //find how many sides have a road
+						if(tileSides[i] == 't') {
+							roadcount++;
 						}
 					}
+					
+					if(roadcount == 0){
+						System.err.println("Road Scoring Error: Tile has no roads");
+						Error = true;
+						break;
+					}
+					else if (roadcount == 1 || roadcount == 3 || roadcount == 4){
+						//came to end of road, score up points
+						break;
+					}
+					
+					//road has two sides, so need to find the other side to continue path
+					testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
+					for(int i = 0; i < 4; i++){ //find the other side with road
+						if(tileSides[i] == 't' && side != i) {
+							if(i == 0){
+								tileY--;
+								side = 2;
+							}
+							else if(i == 1){
+								tileX++;
+								side = 3;
+							}
+							else if(i == 2){
+								tileY++;
+								side = 0;
+							}
+							else if(i == 3){
+								tileX--;
+								side = 1;
+							}
+						}
+					}	
 				}
-				
 			}
+			
 			//score up points
 			if(Error == true){
 				scores[0] = 0;
 				scores[1] = 0;
 			}
 			return scores;
-			
 		}
+		
 		
 		
 		/*public int scoreLake(Board boardState, int cartX, int cartY)
