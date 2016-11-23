@@ -28,7 +28,7 @@ import tiger_zone.Tile;
  */
 class BoardFrame extends JFrame {
 	private static final long serialVersionUID = 575149023846295616L;
-	public static JFrame preview = new JFrame();
+	public static SideFrame preview = new SideFrame();
 	public static TilePanel tilePreview = new TilePanel();
 	public static JButton rotateTile = new JButton("Rotate");
 	public static JButton placeTiger = new JButton("Add Tiger");
@@ -61,9 +61,9 @@ class BoardFrame extends JFrame {
 				int tmpY = (guiY/2)-i;
 				panel.putClientProperty("row", tmpX);
 				panel.putClientProperty("col", tmpY);
-				
+
 				Tile current = Main.board.getTile(tmpX, tmpY);
-				
+
 				// A tile exists at the position, so get its image and rotation and apply them to this panel
 				if (current != null) {
 					panel.setImg(new ImageIcon(current.getImagePath()));
@@ -77,7 +77,7 @@ class BoardFrame extends JFrame {
 		}
 
 		Tile nextTile = Main.board.getPile().peek();
-				
+
 		tilePreview.setImg(new ImageIcon(nextTile.getImagePath()));
 		preview.add(tilePreview, BorderLayout.SOUTH);
 
