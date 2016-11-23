@@ -201,11 +201,31 @@ public class Board {
 		char[] Ctigers = {'j','=','=','=','x','=','=','t','='};
 		char[] Dtigers = {'j','t','j','t','=','t','j','t','j'};
 		char[] Etigers = {'j','t','j','=','=','=','=','=','='};
-		char[] Ftigers = {'j','t','j','t','=','=','j','t','='};
-		char[] Gtigers = {'l','=','=','=','=','=','=','=','='};
-		char[] Htigers = {'j','=','=','l','=','=','=','=','='};
-		//char[] ITigers =
-		
+		char[] Ftigers = {'j','t','j','=','=','=','=','=','='};
+		char[] Gtigers = {'j','t','j','t','=','=','j','t','='};
+		char[] Htigers = {'l','=','=','=','=','=','=','=','='};
+		char[] Itigers = {'j','=','=','l','=','=','=','=','='};
+		char[] Jtigers = {'j','l','=','=','=','=','=','=','='};
+		char[] Ktigers = {'j','=','=','l','=','=','j','=','='}; 
+		char[] Ltigers = {'j','l','=','=','=','=','=','l','='};
+		char[] Mtigers = {'j','l','=','=','=','=','=','=','='};
+		char[] Ntigers = {'j','=','=','=','=','l','=','l','='};
+		char[] Otigers = {'j','t','j','t','=','l','=','=','='};
+		char[] Ptigers = {'j','t','j','t','=','l','=','=','='};
+		char[] Qtigers = {'j','=','=','t','=','l','j','=','='};
+		char[] Rtigers = {'j','=','=','t','=','l','j','=','='};
+		char[] Stigers = {'j','t','j','=','=','l','=','=','='};
+		char[] Ttigers = {'j','t','j','=','=','l','=','=','='};
+		char[] Utigers = {'j','t','j','l','=','=','=','=','='};
+		char[] Vtigers = {'j','t','j','t','=','l','j','t','='};
+		char[] Wtigers = {'j','t','j','t','=','l','j','t','='};
+		char[] Xtigers = {'j','t','j','=','=','l','=','=','='};
+		char[] Ytigers = {'j','t','j','=','=','l','=','=','='};
+		char[] Ztgiers = {'j','l','j','=','t','=','=','=','='};	//Check this one
+		char[] AAtgiers = {'j','l','j','=','t','=','=','=','='};//And this one
+		char[] ABtigers = {'j','t','j','l','=','=','=','=','='};
+
+
 		 
 
 		Stack<Tile> pile = new Stack<Tile>();
