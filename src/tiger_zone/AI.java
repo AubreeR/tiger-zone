@@ -1,42 +1,46 @@
 package tiger_zone;
+
 import java.util.Stack;
 
-import tiger_zone.ui.Main;
+import tiger_zone.Game;
 //tempmove[] consists of coordinates, rotation, tiger placement, evaluation number(default set to 0)--0 won't work need other
 //move[] consists of coordinates: (x,y), rotation, tiger placement
 
 
 public class AI extends Player
 {
-	public AI(int index){
+	private final Game game;
+
+	public AI(int index, Game game){
 		super(index);
+		this.game = game;
 	}
 
 	/**
-	 * makeMove takes in an array containing 3 tile paramters: x position, 
+	 * makeMove takes in an array containing 3 tile paramters: x position,
 	 * y position, and rotation. maveMove applies the rotation to the tile
-	 * and adds it to the board at the x and y locations specified 
+	 * and adds it to the board at the x and y locations specified
 	 *
 	 */
 	public int makeMove(int[] tileParams)//Board=current state of board + tigers + stack of remaining tiles
 	{
-		
-		Stack<Tile> currStack = Main.board.getPile(); 
+
+		Stack<Tile> currStack = this.game.getBoard().getPile();
 		Tile currTile = currStack.pop();
 		int x = tileParams[0];
 		int y = tileParams[1];
 		int rot = tileParams[2];
-		
+
 		for(int i = 0; i < (rot/90); i++){
 			currTile.rotate();
 		}
-		
-		Main.board.addTile(x, y, currTile); 
-		return 0; 
+
+		this.game.getBoard().addTile(x, y, currTile);
+		return 0;
 	}
-	
+
 }
-		
+
 /*
 		Board temp=new Board(brd.getPile());
 		temp=brd;
@@ -74,7 +78,7 @@ public class AI extends Player
 					evalmax=newevalmax;//set max
 					move=possiblemoves[i];//set move
 				}
-				
+
 			}
 			return move;
 		}
@@ -90,7 +94,7 @@ public class AI extends Player
 					evalmax=newevalmin;//set min
 					move=possiblemoves[i];//set move
 				}
-				
+
 			}
 		}
 		if(loop==2)
@@ -105,7 +109,7 @@ public class AI extends Player
 					evalmax=newevalmax;//set max
 					move=possiblemoves[i];//set move
 				}
-				
+
 			}
 			return move;
 		}
@@ -153,7 +157,7 @@ public class AI extends Player
 		return eval;
 	}
 	public int[][] GetPossibleMoves(Board brd)
-	{	
+	{
 		int[][] allpossiblemoves; //size?
 		//iterate through board and find all legal moves
 		return allpossiblemoves;
