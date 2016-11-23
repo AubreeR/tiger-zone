@@ -60,21 +60,18 @@ public class SideMatchRule extends PlacementRule
 					System.out.println("NextTile Sides: "+nextTile.getSides()[0]+","+nextTile.getSides()[1]+","+nextTile.getSides()[2]+","+nextTile.getSides()[3]);
 					System.out.println("adj north Sides: "+adj[i].getSides()[0]+","+adj[i].getSides()[1]+","+adj[i].getSides()[2]+","+adj[i].getSides()[3]);
 					if(nextTile.getSide(0) != adj[i].getSide(2))
-						
 						throw new Exception(super.getName() + " failed under condition that the northern tile did not match");
 				break;
 				case 1: //left
 					System.out.println("NextTile Sides: "+nextTile.getSides()[0]+","+nextTile.getSides()[1]+","+nextTile.getSides()[2]+","+nextTile.getSides()[3]);
 					System.out.println("adj east Sides: "+adj[i].getSides()[0]+","+adj[i].getSides()[1]+","+adj[i].getSides()[2]+","+adj[i].getSides()[3]);
 					if(nextTile.getSide(1) != adj[i].getSide(3))
-						
 						throw new Exception(super.getName() + " failed under condition that the Easter tile did not match");
 					break;
 				case 2://down
 					System.out.println("NextTile Sides: "+nextTile.getSides()[0]+","+nextTile.getSides()[1]+","+nextTile.getSides()[2]+","+nextTile.getSides()[3]);
 					System.out.println("adj south Sides: "+adj[i].getSides()[0]+","+adj[i].getSides()[1]+","+adj[i].getSides()[2]+","+adj[i].getSides()[3]);
 					if(nextTile.getSide(2) != adj[i].getSide(0))
-						
 						throw new Exception(super.getName() + " failed under condition that the southern tile did not match");
 					break;
 					
@@ -82,7 +79,6 @@ public class SideMatchRule extends PlacementRule
 					System.out.println("NextTile Sides: "+nextTile.getSides()[0]+","+nextTile.getSides()[1]+","+nextTile.getSides()[2]+","+nextTile.getSides()[3]);
 					System.out.println("adj west Sides: "+adj[i].getSides()[0]+","+adj[i].getSides()[1]+","+adj[i].getSides()[2]+","+adj[i].getSides()[3]);
 					if(nextTile.getSide(3) != adj[i].getSide(1))
-						
 						throw new Exception(super.getName() + " failed under condition that the western tile did not match");
 					break;
 				default:
@@ -97,7 +93,9 @@ public class SideMatchRule extends PlacementRule
 		catch(Exception ex)
 		{
 			if(super.trace)
-			System.err.println(ex);//display the error 
+			{
+				System.err.println(ex);//display the error 
+			}
 			return false;
 		}
 		
