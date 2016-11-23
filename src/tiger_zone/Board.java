@@ -8,7 +8,7 @@ import java.util.Stack;
  */
 public class Board {
 	private final BoardCell[][] gameGrid = new BoardCell[152][152];
-	private Stack<Tile> pile;
+	private final Stack<Tile> pile;
 	private final int origin; // center of the gameGrid cartesian view
 	private final RuleEngine placementEngine = new RuleEngine();
 
