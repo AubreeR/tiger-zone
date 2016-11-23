@@ -25,6 +25,13 @@
   </dependencies>
 
   <build>
+    <sourceDirectory>src/tiger_zone</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/resources</directory>
+      </resource>
+    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
