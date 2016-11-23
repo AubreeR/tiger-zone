@@ -21,7 +21,7 @@ public class Tile {
 	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
 	 */
 	public Tile(char[] sides, char center, String imagePath) {
-		this.sides = sides;
+		this.sides = sides.clone();
 		this.center = center;
 		this.imagePath = imagePath;
 	}
@@ -65,8 +65,8 @@ public class Tile {
 	 * Rotates this tile 90 degrees counterclockwise.
 	 */
 	public final void rotate() {
-		this.rotation -= 90;
-		if (this.rotation == -360) {
+		this.rotation += 90;
+		if (this.rotation == 360) {
 			this.rotation = 0;
 		}
 		for(char c : this.sides)
