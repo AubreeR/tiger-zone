@@ -78,12 +78,12 @@ public class Player {
 			char[] lastTileSides = lastTile.getSides(); //get sides of last updated tile
 
 			//check if last tile placed finishes a/some den(s)
-			//ISSUES: not checking if lastTileX-1 < 0 or lastTileX+1 > MaxBoardX
 			//it is possible it make this more efficient such as, only checking sides with jungles for completed dens instead of all sides
 			//
 			if(lastTileSides[0] == 'j' || lastTileSides[1] == 'j' || lastTileSides[2] == 'j' || lastTileSides[3] == 'j')
 			{
-				updatedScores = checkForDen(lastTileX+1, lastTileY, updatedScores);
+				updatedScores = checkForDen(lastTileX, lastTileY, updatedScores); //check placed tile
+				updatedScores = checkForDen(lastTileX+1, lastTileY, updatedScores); //check all tiles around the placed tile for dens and if they are complete
 				updatedScores = checkForDen(lastTileX, lastTileY+1, updatedScores);
 				updatedScores = checkForDen(lastTileX-1, lastTileY, updatedScores);
 				updatedScores = checkForDen(lastTileX+1, lastTileY-1, updatedScores);
@@ -96,12 +96,9 @@ public class Player {
 			//check if any lakes are completed
 			updatedScores = checkForLake(lastTileX, lastTileY, updatedScores);
 
-			//check if road complete, one issue where intersection loops scored twice
-			
+			//check if road complete
 			updatedScores = scoreRoad(boardState, lastTileX, lastTileY);
 			
-		
-
 			return updatedScores;
 		}
 
@@ -111,7 +108,7 @@ public class Player {
 			foundScores[0] = 0;
 			if(boardState.getTile(x, y) != null) {
 				Tile checkTile = boardState.getTile(x, y);
-				if(checkTile.getCenter() == 'x'){ //check if tile has a den
+				if(checkTile.getCenter() == 'x' && checkTile.getTigerPosition() == 5){ //check if tile has a den and has a Tiger on the den
 					if((boardState.getTile(x+1,y) != null) //check if den is complete
 							&& (boardState.getTile(x-1,y) != null)
 							&& (boardState.getTile(x,y+1) != null)
@@ -121,7 +118,6 @@ public class Player {
 							&& (boardState.getTile(x-1,y+1) != null)
 							&& (boardState.getTile(x-1,y-1) != null)){
 						//assign score values based on which player's tiger is there if any
-						//NOT IMPLEMENTED BECAUSE OF UNKNOWN HOW TIGERS ARE IMPLEMENTED
 					}
 					scores[0] += foundScores[0];
 					scores[1] += foundScores[1];
@@ -173,7 +169,7 @@ public class Player {
 			//if special case tile is the placed tile: need to check both sides for completedness
 
 
-			if(sides[1] == 'l' || sides[4] == 'l' || sides[7] == 'l' || sides[10] == 'l'){ //setting up stack: if the first tile has a lake side, add it to stack
+			if(sides[0] == 'l' || sides[1] == 'l' || sides[2] == 'l' || sides[3] == 'l'){ //setting up stack: if the first tile has a lake side, add it to stack
 				tileStack.push(boardState.getTile(x, y)); //set up tile stack
 				XYStack.push(XY); //set up XY cordinate stack
 				flagGrid[x][y] = true; //flag first tile on flaggrid
@@ -187,7 +183,7 @@ public class Player {
 				center = checkTile.getCenter();
 				sides = checkTile.getSides();
 
-				if(sides[1] == 'l') //check top
+				if(sides[0] == 'l') //check top
 				{
 					if(boardState.getTile(XY[0], XY[1]-1) == null) { //check if top has a tile
 						nullFound = true;
@@ -198,12 +194,12 @@ public class Player {
 						temp = boardState.getTile(XY[0], XY[1]-1);
 						tempcenter = temp.getCenter();
 						tempsides = temp.getSides();
-						if((tempcenter != 'l' && tempsides[1] == 'l' && tempsides[7] == 'l') //test for special case tiles ex. Tile N
-								|| (tempcenter != 'l' && tempsides[4] == 'l' && tempsides[10] == 'l')
-								|| (tempcenter != 'l' && tempsides[1] == 'l' && tempsides[4] == 'l')
-								|| (tempcenter != 'l' && tempsides[4] == 'l' && tempsides[7] == 'l')
-								|| (tempcenter != 'l' && tempsides[7] == 'l' && tempsides[10] == 'l')
-								|| (tempcenter != 'l' && tempsides[10] == 'l' && tempsides[1] == 'l')){
+						if((tempsides[0] == 'l' && tempsides[2] == 'l') //test for special case tiles ex. Tile N
+								|| (tempsides[1] == 'l' && tempsides[3] == 'l')
+								|| (tempsides[0] == 'l' && tempsides[1] == 'l')
+								|| (tempsides[1] == 'l' && tempsides[2] == 'l')
+								|| (tempsides[2] == 'l' && tempsides[3] == 'l')
+								|| (tempsides[3] == 'l' && tempsides[0] == 'l')){
 							flagGrid[XY[0]][XY[1]-1] = true; //if true, flag it then add to score, dont push it to stack
 							totalScore += 1;
 						}
@@ -217,7 +213,7 @@ public class Player {
 						}
 					}
 				}
-				if(sides[4] == 'l') //check right
+				if(sides[1] == 'l') //check right
 				{
 					if(boardState.getTile(XY[0]+1, XY[1]) == null) { //check if right has a tile
 						nullFound = true;
@@ -228,13 +224,13 @@ public class Player {
 						temp = boardState.getTile(XY[0]+1, XY[1]);
 						tempcenter = temp.getCenter();
 						tempsides = temp.getSides();
-						if((tempcenter != 'l' && tempsides[1] == 'l' && tempsides[7] == 'l') //test for special case tiles ex. Tile N
-								|| (tempcenter != 'l' && tempsides[4] == 'l' && tempsides[10] == 'l')
-								|| (tempcenter != 'l' && tempsides[1] == 'l' && tempsides[4] == 'l')
-								|| (tempcenter != 'l' && tempsides[4] == 'l' && tempsides[7] == 'l')
-								|| (tempcenter != 'l' && tempsides[7] == 'l' && tempsides[10] == 'l')
-								|| (tempcenter != 'l' && tempsides[10] == 'l' && tempsides[1] == 'l')){
-							flagGrid[XY[0]+1][XY[1]] = true; //if true, flag it then add to score, dont push it to stack
+						if((tempsides[0] == 'l' && tempsides[2] == 'l') //test for special case tiles ex. Tile N
+								|| (tempsides[1] == 'l' && tempsides[3] == 'l')
+								|| (tempsides[0] == 'l' && tempsides[1] == 'l')
+								|| (tempsides[1] == 'l' && tempsides[2] == 'l')
+								|| (tempsides[2] == 'l' && tempsides[3] == 'l')
+								|| (tempsides[3] == 'l' && tempsides[0] == 'l')){
+							flagGrid[XY[0]][XY[1]-1] = true; //if true, flag it then add to score, dont push it to stack
 							totalScore += 1;
 						}
 						else {
@@ -247,7 +243,7 @@ public class Player {
 						}
 					}
 				}
-				if(sides[7] == 'l') //check bottom
+				if(sides[2] == 'l') //check bottom
 				{
 					if(boardState.getTile(XY[0], XY[1]+1) == null) { //check if bottom has a tile
 						nullFound = true;
@@ -258,13 +254,13 @@ public class Player {
 						temp = boardState.getTile(XY[0], XY[1]+1);
 						tempcenter = temp.getCenter();
 						tempsides = temp.getSides();
-						if((tempcenter != 'l' && tempsides[1] == 'l' && tempsides[7] == 'l') //test for special case tiles ex. Tile N
-								|| (tempcenter != 'l' && tempsides[4] == 'l' && tempsides[10] == 'l')
-								|| (tempcenter != 'l' && tempsides[1] == 'l' && tempsides[4] == 'l')
-								|| (tempcenter != 'l' && tempsides[4] == 'l' && tempsides[7] == 'l')
-								|| (tempcenter != 'l' && tempsides[7] == 'l' && tempsides[10] == 'l')
-								|| (tempcenter != 'l' && tempsides[10] == 'l' && tempsides[1] == 'l')){
-							flagGrid[XY[0]][XY[1]+1] = true; //if true, flag it then add to score, dont push it to stack
+						if((tempsides[0] == 'l' && tempsides[2] == 'l') //test for special case tiles ex. Tile N
+								|| (tempsides[1] == 'l' && tempsides[3] == 'l')
+								|| (tempsides[0] == 'l' && tempsides[1] == 'l')
+								|| (tempsides[1] == 'l' && tempsides[2] == 'l')
+								|| (tempsides[2] == 'l' && tempsides[3] == 'l')
+								|| (tempsides[3] == 'l' && tempsides[0] == 'l')){
+							flagGrid[XY[0]][XY[1]-1] = true; //if true, flag it then add to score, dont push it to stack
 							totalScore += 1;
 						}
 						else {
@@ -277,7 +273,7 @@ public class Player {
 						}
 					}
 				}
-				if(sides[10] == 'l') //check left
+				if(sides[3] == 'l') //check left
 				{
 					if(boardState.getTile(XY[0]-1, XY[1]) == null) { //check if left has a tile
 						nullFound = true;
@@ -288,13 +284,13 @@ public class Player {
 						temp = boardState.getTile(XY[0]-1, XY[1]);
 						tempcenter = temp.getCenter();
 						tempsides = temp.getSides();
-						if((tempcenter != 'l' && tempsides[1] == 'l' && tempsides[7] == 'l') //test for special case tiles ex. Tile N
-								|| (tempcenter != 'l' && tempsides[4] == 'l' && tempsides[10] == 'l')
-								|| (tempcenter != 'l' && tempsides[1] == 'l' && tempsides[4] == 'l')
-								|| (tempcenter != 'l' && tempsides[4] == 'l' && tempsides[7] == 'l')
-								|| (tempcenter != 'l' && tempsides[7] == 'l' && tempsides[10] == 'l')
-								|| (tempcenter != 'l' && tempsides[10] == 'l' && tempsides[1] == 'l')){
-							flagGrid[XY[0]-1][XY[1]] = true; //if true, flag it then add to score, dont push it to stack
+						if((tempsides[0] == 'l' && tempsides[2] == 'l') //test for special case tiles ex. Tile N
+								|| (tempsides[1] == 'l' && tempsides[3] == 'l')
+								|| (tempsides[0] == 'l' && tempsides[1] == 'l')
+								|| (tempsides[1] == 'l' && tempsides[2] == 'l')
+								|| (tempsides[2] == 'l' && tempsides[3] == 'l')
+								|| (tempsides[3] == 'l' && tempsides[0] == 'l')){
+							flagGrid[XY[0]][XY[1]-1] = true; //if true, flag it then add to score, dont push it to stack
 							totalScore += 1;
 						}
 						else {
@@ -322,7 +318,9 @@ public class Player {
 			int p1Tigers = 0;
 			int p2Tigers = 0;
 			int croc = 0;
-			int unique = 0;
+			int deer = 0;
+			int boar = 0;
+			int buffalo = 0;
 			int tileX = cartX;
 			int tileY = cartY;
 			int roadcount = 0;
@@ -332,9 +330,7 @@ public class Player {
 			
 			Tile checkTile = boardState.getTile(tileX, tileY);
 			char[] tileSides = checkTile.getSides();
-			testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
-			scoreCount++;
-			
+			testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;		
 			
 			//check if tile has any roads
 			for(int i = 0; i < 4; i++){
@@ -348,22 +344,44 @@ public class Player {
 			
 			//loop through all sides
 			for(int k = 0; k < 4; k++){
+				p1Tigers = 0;
+				p2Tigers = 0;
+				croc = 0;
+				deer = 0;
+				boar = 0;
+				buffalo = 0;
+				tileX = cartX;
+				tileY = cartY;
+				roadcount = 0;
+				scoreCount = 0;
 				if(tileSides[k] == 't'){
 					if(k == 0){
-						side = 2;
+						side = 2; //go up
 						tileY--;
+						if(checkTile.getTigerPosition() == 2){//check if there is a tiger down
+							//add to tiger count
+						}
 					}
 					else if(k == 1){
 						side = 3;
 						tileX++;
+						if(checkTile.getTigerPosition() == 6 && roadcount != 2){ //tiles with 2 sides are funky
+							//add to tiger count
+						}
 					}
 					else if(k == 2){
 						side = 0;
 						tileY++;
+						if(checkTile.getTigerPosition() == 8 && roadcount != 2){ //tiles with 2 sides are funky
+							//add to tiger count
+						}
 					}
 					else if(k == 3){
 						side = 1;
 						tileX--;
+						if(checkTile.getTigerPosition() == 4 && roadcount != 2){ //tiles with 2 sides are funky
+							//add to tiger count
+						}
 					}
 				}
 				
@@ -376,10 +394,26 @@ public class Player {
 					if(testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] == true){
 						break;
 					}
-					scoreCount++;
+					
 					checkTile = boardState.getTile(tileX, tileY);
 					tileSides = checkTile.getSides();
+					scoreCount++;
 					
+					if(checkTile.getCenter() == 'p'){ //count up the animals
+						boar++;
+					}
+					else if(checkTile.getCenter() == 'd'){
+						deer++;
+					}
+					else if(checkTile.getCenter() == 'b'){
+						buffalo++;
+					}
+					
+					if(checkTile.getCenter() == 'c'){
+						croc++;
+					}
+					
+					roadcount = 0;
 					for(int i = 0; i < 4; i++){ //find how many sides have a road
 						if(tileSides[i] == 't') {
 							roadcount++;
@@ -391,8 +425,20 @@ public class Player {
 						Error = true;
 						break;
 					}
-					else if (roadcount == 1 || roadcount == 3 || roadcount == 4){
-						//came to end of road, score up points
+					else if (roadcount == 1 || roadcount == 3 || roadcount == 4){//came to end of road, score up points
+						if(checkTile.getTigerPosition() == 2 && side == 0){ 
+							//add to tiger count
+						}
+						else if(checkTile.getTigerPosition() == 6 && side == 1){
+							//add to tiger count
+						}
+						else if(checkTile.getTigerPosition() == 8 && side == 2){
+							//add to tiger count
+						}
+						else if(checkTile.getTigerPosition() == 4 && side == 3){
+							//add to tiger count
+						}
+						
 						break;
 					}
 					
@@ -402,7 +448,7 @@ public class Player {
 						if(tileSides[i] == 't' && side != i) {
 							if(i == 0){
 								tileY--;
-								side = 2;
+								side = 2; //set side for the next tile, telling the next tile that, that is the side we came from
 							}
 							else if(i == 1){
 								tileX++;
@@ -419,9 +465,12 @@ public class Player {
 						}
 					}	
 				}
+				//score up and add to scores
+				scoreCount = scoreCount + buffalo + deer + boar - croc;
+				//decide who gets the points
+				
 			}
 			
-			//score up points
 			if(Error == true){
 				scores[0] = 0;
 				scores[1] = 0;
