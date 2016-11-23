@@ -36,6 +36,6 @@ public class BoardTest {
 
 	@Test
 	public void createDefaultStackTest() {
-		assertEquals(75, Board.createDefaultStack().size());
+		assertEquals(76, Board.createDefaultStack().size());
 	}
 }
