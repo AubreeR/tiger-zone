@@ -20,11 +20,13 @@ class PlacementRule implements Rule
 	private String ruleName = "";
 	protected Board boardState;
 	protected int cartX, cartY;
-	PlacementRule(Board boardState, int cartX, int cartY)
+	protected boolean trace;
+	PlacementRule(Board boardState, int cartX, int cartY, boolean trace)
 	{
 		this.boardState = boardState;
 		this.cartX = cartX;
 		this.cartY = cartY;
+		this.trace = trace;
 	}
 	
 	@Override

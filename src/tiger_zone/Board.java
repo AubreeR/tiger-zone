@@ -43,7 +43,10 @@ public class Board {
 	 */
 	public final boolean addTile(int x, int y, final Tile tile) {
 		if (this.validTilePlacement(x, y, tile)) {
-			 
+			
+			PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
+			p.evaluate();
+			p.output();
 			x += this.origin;
    			y =  this.origin - y;
     			//System.out.println("x = " + x);
@@ -63,23 +66,55 @@ public class Board {
 	 * @param tile The instance of <code>Tile</code> to add
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
+	public final boolean validTilePlacement(final int x, final int y, final Tile tile, boolean trace) {
+
+		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
+
+			return false;
+		}
+		/*boolean testRoad = false;
+		for(int i = 0; i < 4; i++)
+			testRoad = testRoad || tile.getSide(i) == 't';
+		if(testRoad)
+			System.out.println(validTigerPlacement(x,y,tile) ? ("Road completed") : ("Road incomplete"));*/
+		placementEngine.clearRules();
+
+		// Check for adjacent tiles
+
+		placementEngine.addRule(new AdjacencyRule(this, x, y,trace));
+		placementEngine.addRule(new SideMatchRule(this, x, y, tile, trace));
+		
+
+		
+		return placementEngine.evaluateRules();
+	}
+	
+	/**
+	 * Check if the tile can be placed at board position (x, y).
+	 *
+	 * @param x The x coordinate of the tile
+	 * @param y The y coordinate of the tile
+	 * @param tile The instance of <code>Tile</code> to add
+	 * @return true, if the tile can be placed in the location, otherwise false
+	 */
 	public final boolean validTilePlacement(final int x, final int y, final Tile tile) {
 
 		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
 
 			return false;
 		}
-		boolean testRoad = false;
+		/*boolean testRoad = false;
 		for(int i = 0; i < 4; i++)
 			testRoad = testRoad || tile.getSide(i) == 't';
 		if(testRoad)
-			System.out.println(validTigerPlacement(x,y,tile) ? ("Road completed") : ("Road incomplete"));
+			System.out.println(validTigerPlacement(x,y,tile) ? ("Road completed") : ("Road incomplete"));*/
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
 
-		placementEngine.addRule(new AdjacencyRule(this, x, y));
-		placementEngine.addRule(new SideMatchRule(this, x, y, tile));
+		placementEngine.addRule(new AdjacencyRule(this, x, y,true));
+		placementEngine.addRule(new SideMatchRule(this, x, y, tile, true));
+		
 
 		
 		return placementEngine.evaluateRules();

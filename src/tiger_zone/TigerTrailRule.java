@@ -12,7 +12,7 @@ public class TigerTrailRule extends PlacementRule
 	public TigerTrailRule(Board boardState,int cartX, int cartY, Tile tilePlaced)
 	{
 
-		super(boardState,cartX, cartY);
+		super(boardState,cartX, cartY, true);
 		visited = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
 		super.setRuleName("TigerTrail Rule");
 		this.tilePlaced = tilePlaced;
