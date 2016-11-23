@@ -55,24 +55,17 @@ public class Player {
 	}
 
 	static class Scoring {
-		private int player1Score;
-		private int player2Score;
+		private int score;
 		private Board boardState;
 		private int lastTileX;
 		private int lastTileY;
 
-		public int getplayer1Score() {
-			return player1Score;
+		public int getScore() {
+			return score;
 		}
 
-		public int getplayer2Score() {
-			return player2Score;
-		}
-
-		public int[] updateScore(int lastTileX, int lastTileY) {
-			int[] updatedScores = new int[2]; //used to return the final values
-			updatedScores[0] = getplayer1Score(); //get player scores
-			updatedScores[1] = getplayer2Score();
+		public int updateScore(int lastTileX, int lastTileY) {
+			int updatedScores = getScore(); //get player score
 
 			Tile lastTile = boardState.getTile(lastTileX, lastTileY); //get the last updated tile
 			char[] lastTileSides = lastTile.getSides(); //get sides of last updated tile
@@ -102,10 +95,8 @@ public class Player {
 			return updatedScores;
 		}
 
-		public int[] checkForDen(int x, int y, int[] scores) {
-			int[] foundScores = new int[2];
-			foundScores[0] = 0;
-			foundScores[0] = 0;
+		public int[] checkForDen(int x, int y, int scores) {
+			int score = 0;
 			if(boardState.getTile(x, y) != null) {
 				Tile checkTile = boardState.getTile(x, y);
 				if(checkTile.getCenter() == 'x' && checkTile.getTigerPosition() == 5){ //check if tile has a den and has a Tiger on the den
@@ -119,15 +110,13 @@ public class Player {
 							&& (boardState.getTile(x-1,y-1) != null)){
 						//assign score values based on which player's tiger is there if any
 					}
-					scores[0] += foundScores[0];
-					scores[1] += foundScores[1];
+					
 				}
 			}
 			else {
-				scores[0] = 0;
-				scores[1] = 0;
+				score = 0;
 			}
-			return scores;
+			return score;
 		}
 
 
@@ -311,10 +300,10 @@ public class Player {
 		}
 		
 		
-		public int[] scoreRoad(Board boardState, int cartX, int cartY){
+		public int scoreRoad(Board boardState, int cartX, int cartY){
 			this.boardState = boardState;
 			boolean[][] testedTiles = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
-			int[] scores = new int[2];
+			int score = 0;
 			int p1Tigers = 0;
 			int p2Tigers = 0;
 			int croc = 0;
@@ -339,7 +328,7 @@ public class Player {
 				}
 			}
 			if(roadcount == 0){
-				return scores;
+				return score;
 			}
 			
 			//loop through all sides
@@ -358,28 +347,28 @@ public class Player {
 					if(k == 0){
 						side = 2; //go up
 						tileY--;
-						if(checkTile.getTigerPosition() == 2){//check if there is a tiger down
+						if(tigerCheck(tileX, tileY, 2)){//check if there is a tiger down
 							//add to tiger count
 						}
 					}
 					else if(k == 1){
 						side = 3;
 						tileX++;
-						if(checkTile.getTigerPosition() == 6 && roadcount != 2){ //tiles with 2 sides are funky
+						if(tigerCheck(tileX, tileY, 6) && roadcount != 2){ //tiles with 2 sides are funky
 							//add to tiger count
 						}
 					}
 					else if(k == 2){
 						side = 0;
 						tileY++;
-						if(checkTile.getTigerPosition() == 8 && roadcount != 2){ //tiles with 2 sides are funky
+						if(tigerCheck(tileX, tileY, 8) && roadcount != 2){ //tiles with 2 sides are funky
 							//add to tiger count
 						}
 					}
 					else if(k == 3){
 						side = 1;
 						tileX--;
-						if(checkTile.getTigerPosition() == 4 && roadcount != 2){ //tiles with 2 sides are funky
+						if(tigerCheck(tileX, tileY, 4) && roadcount != 2){ //tiles with 2 sides are funky
 							//add to tiger count
 						}
 					}
@@ -426,16 +415,16 @@ public class Player {
 						break;
 					}
 					else if (roadcount == 1 || roadcount == 3 || roadcount == 4){//came to end of road, score up points
-						if(checkTile.getTigerPosition() == 2 && side == 0){ 
+						if(tigerCheck(tileX, tileY, 2) && side == 0){ 
 							//add to tiger count
 						}
-						else if(checkTile.getTigerPosition() == 6 && side == 1){
+						else if(tigerCheck(tileX, tileY, 6) && side == 1){
 							//add to tiger count
 						}
-						else if(checkTile.getTigerPosition() == 8 && side == 2){
+						else if(tigerCheck(tileX, tileY, 8) && side == 2){
 							//add to tiger count
 						}
-						else if(checkTile.getTigerPosition() == 4 && side == 3){
+						else if(tigerCheck(tileX, tileY, 4) && side == 3){
 							//add to tiger count
 						}
 						
@@ -472,10 +461,20 @@ public class Player {
 			}
 			
 			if(Error == true){
-				scores[0] = 0;
-				scores[1] = 0;
+				score = 0;
 			}
-			return scores;
+			return score;
+		}
+		
+		public Boolean tigerCheck(int x, int y, int locationPlaced){
+			Boolean check = false;
+			List<Tiger> tigers = getTigers();
+			for(int i = 0; i < tigers.size(); i++){
+				/*
+				 * if(this.x = tiger.x && this.y = tiger.y && this.locationPlaced == tiger.locationPlaced) { check = true;}
+				*/
+			}
+			return check;
 		}
 		
 		
