@@ -69,16 +69,21 @@ public class Tile {
 		if (this.rotation == 360) {
 			this.rotation = 0;
 		}
-
+		for(char c : sides)
+			System.out.print(c);
+		System.out.println(" :pre-rotate");
 		// char[] rotation, source: http://codereview.stackexchange.com/a/69305
-		final int offset = sides.length + 3 % sides.length;
+		final int offset = sides.length - 1 % sides.length;
 		if (offset > 0) {
 			final char[] copy = sides.clone();
 			for (int i = 0; i < sides.length; i++) {
 				final int j = (i + offset) % sides.length;
-				sides[i] = copy[j];
+				sides[j] = copy[i];
 			}
 		}
+		for(char c : sides)
+			System.out.print(c);
+		System.out.println(" :post-rotate");
 	}
 
 	public char[] getTigerSpots() {
