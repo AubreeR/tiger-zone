@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import tiger_zone.Game;
 import tiger_zone.Tile;
 
 /**
@@ -28,27 +29,27 @@ import tiger_zone.Tile;
  */
 class BoardFrame extends JFrame {
 	private static final long serialVersionUID = 575149023846295616L;
-	public static SideFrame preview = new SideFrame();
+	public static SideFrame preview;
 	public static TilePanel tilePreview = new TilePanel();
 	public static JButton rotateTile = new JButton("Rotate");
 	public static JButton placeTiger = new JButton("Add Tiger");
 	public static JPanel rotatePanel = new JPanel();
 	public static JPanel tigerPanel = new JPanel();
 
-	public BoardFrame() {
+	public BoardFrame(final Game game) {
 		final int guiX = 10;		// Eventually replace these with BoardFrame size
 		final int guiY = 10;
 
 		rotateTile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Tile next = Main.board.getPile().peek();
+				Tile next = game.getBoard().getPile().peek();
 				next.rotate();
 				System.out.println(next.getSide(0) + " " + next.getRotation());
 			}
 		});
 
-		MouseAdapter ma = new OnBoardClick();
+		MouseAdapter ma = new OnBoardClick(game);
 
 		this.setLayout(new GridLayout(guiX, guiY));
 
@@ -62,7 +63,7 @@ class BoardFrame extends JFrame {
 				panel.putClientProperty("row", tmpX);
 				panel.putClientProperty("col", tmpY);
 
-				Tile current = Main.board.getTile(tmpX, tmpY);
+				Tile current = game.getBoard().getTile(tmpX, tmpY);
 
 				// A tile exists at the position, so get its image and rotation and apply them to this panel
 				if (current != null) {
@@ -76,7 +77,9 @@ class BoardFrame extends JFrame {
 			}
 		}
 
-		Tile nextTile = Main.board.getPile().peek();
+		preview = new SideFrame(game);
+
+		Tile nextTile = game.getBoard().getPile().peek();
 
 		tilePreview.setImg(new ImageIcon(nextTile.getImagePath()));
 		preview.add(tilePreview, BorderLayout.SOUTH);

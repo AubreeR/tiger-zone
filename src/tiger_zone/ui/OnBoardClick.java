@@ -7,15 +7,21 @@ import java.awt.event.MouseEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import tiger_zone.Game;
 import tiger_zone.Tile;
 
 public class OnBoardClick extends MouseAdapter {
 	private int rowClick;
-	private int colClick; 
-	
+	private int colClick;
+	private final Game game;
+
+	public OnBoardClick(final Game game) {
+		this.game = game;
+	}
+
 	public void mouseClicked(MouseEvent event) {
-		Tile placedTile = Main.board.getPile().pop();
-		Tile nextTile = Main.board.getPile().peek();
+		Tile placedTile = this.game.getBoard().getPile().pop();
+		Tile nextTile = this.game.getBoard().getPile().peek();
 
 		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
 		BoardFrame.tilePreview.setImg(previewImg);
@@ -27,8 +33,8 @@ public class OnBoardClick extends MouseAdapter {
 		TilePanel j = (TilePanel)event.getSource();
 		rowClick = (int) j.getClientProperty("row");
 		colClick = (int) j.getClientProperty("col");
-				
-		if(Main.board.addTile(rowClick, colClick, placedTile))
+
+		if(this.game.getBoard().addTile(rowClick, colClick, placedTile))
 		{
 			System.out.println("Board: " + rowClick + ", " + colClick);
 			ImageIcon img = new ImageIcon(placedTile.getImagePath());
@@ -37,11 +43,11 @@ public class OnBoardClick extends MouseAdapter {
 		}
 		else
 		{
-			Main.board.getPile().push(placedTile);
+			this.game.getBoard().getPile().push(placedTile);
 			previewImg = new ImageIcon(placedTile.getImagePath());
 			BoardFrame.tilePreview.setImg(previewImg);
 		}
-		
-			
+
+
 	}
 }
