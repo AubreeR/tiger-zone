@@ -8,10 +8,10 @@ import org.junit.Test;
 
 public class TileTest {
 	private static Tile tile;
+	private static char[] sides = {'t', 'l', 't', 'j'};
 
 	@BeforeClass
 	public static void setup() {
-		char[] sides = {'t', 'l', 't', 'j'};
 		tile = new Tile(sides, '-', "./src/resources/tile20.png");
 	}
 
@@ -37,21 +37,26 @@ public class TileTest {
 		tile.rotate();
 		assertEquals(90, tile.getRotation());
 		assertArrayEquals(rotatedSides1, tile.getSides());
+		assertArrayEquals(originalSides, sides);
 
 		tile.rotate();
 		assertEquals(180, tile.getRotation());
 		assertArrayEquals(rotatedSides2, tile.getSides());
+		assertArrayEquals(originalSides, sides);
 
 		tile.rotate();
 		assertEquals(270, tile.getRotation());
 		assertArrayEquals(rotatedSides3, tile.getSides());
+		assertArrayEquals(originalSides, sides);
 
 		tile.rotate();
 		assertEquals(0, tile.getRotation());
 		assertArrayEquals(originalSides, tile.getSides());
+		assertArrayEquals(originalSides, sides);
 
 		tile.rotate();
 		assertEquals(90, tile.getRotation());
 		assertArrayEquals(rotatedSides1, tile.getSides());
+		assertArrayEquals(originalSides, sides);
 	}
 }
