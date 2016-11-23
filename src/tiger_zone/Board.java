@@ -42,13 +42,13 @@ public class Board {
 	 * @return if tile was successfully placed
 	 */
 	public final boolean addTile(int x, int y, final Tile tile) {
-		if (this.validPlacement(x, y, tile)) {
-			  x += this.origin;
-   			  y =  this.origin - y;
+		if (this.validTilePlacement(x, y, tile)) {
+			 
+			x += this.origin;
+   			y =  this.origin - y;
     			//System.out.println("x = " + x);
     			//System.out.println("y = " + y);
-
-
+   			  
 			this.gameGrid[x][y].setTile(tile);
 			return true;
 		}
@@ -63,7 +63,7 @@ public class Board {
 	 * @param tile The instance of <code>Tile</code> to add
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
-	public final boolean validPlacement(final int x, final int y, final Tile tile) {
+	public final boolean validTilePlacement(final int x, final int y, final Tile tile) {
 
 		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
 
@@ -78,6 +78,26 @@ public class Board {
 		placementEngine.addRule(new SideMatchRule(this, x, y, tile));
 
 
+		return placementEngine.evaluateRules();
+	}
+	
+	/**
+	 * Check if the tiger can be placed at board position (x, y).
+	 *
+	 * @param x The x coordinate of the tile
+	 * @param y The y coordinate of the tile
+	 * @param tile The instance of <code>Tile</code> to add
+	 * @return true, if the tile can be placed in the location, otherwise false
+	 */
+	public final boolean validTigerPlacement(final int x, final int y, final Tile tile)
+	{
+		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
+
+			return false;
+		}
+		placementEngine.clearRules();
+		placementEngine.addRule(new TigerTrailRule(this,x,y,tile));
+	
 		return placementEngine.evaluateRules();
 	}
 	/**

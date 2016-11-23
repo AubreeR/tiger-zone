@@ -9,6 +9,7 @@ public class Tile {
 	private String imagePath;
 	private int rotation = 0;
 	private char[] tigerSpots; 
+	private int tigerPosition = -1;
 	
 
 	/**
@@ -82,6 +83,14 @@ public class Tile {
 
 	public char[] getTigerSpots() {
 		return tigerSpots;
+	}
+
+	public int getTigerPosition() {
+		return tigerPosition;
+	}
+
+	public void setTigerPosition(int tigerPosition) {
+		this.tigerPosition = tigerPosition;
 	}
 
 }

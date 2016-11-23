@@ -1,11 +1,13 @@
 package tiger_zone;
 
-
+import java.util.ArrayList;
 
 public class TigerTrailRule extends PlacementRule
 {
 	private Tile tilePlaced;//we must know the next tile to be placed in order to match sides
 	private boolean[][] visited;
+	private ArrayList<Tile> usedTiles;
+	
 	
 	public TigerTrailRule(Board boardState,int cartX, int cartY, Tile tilePlaced)
 	{
@@ -14,6 +16,7 @@ public class TigerTrailRule extends PlacementRule
 		visited = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
 		super.setRuleName("TigerTrail Rule");
 		this.tilePlaced = tilePlaced;
+		usedTiles = new ArrayList<Tile>();
 		
 		
 	}
@@ -22,8 +25,8 @@ public class TigerTrailRule extends PlacementRule
 	public boolean evaluate()
 	{
 		try{
-		
-		if(true/*check all adjacent tiles*/)
+		System.err.println("HELP I AM NOT DONE. I ONLY GET THE COMPLETION OF A TRAIL. CANNOT BE FINISHED UNTIL TIGERS ARE DONE");
+		if(checkChildren(this.cartX, this.cartY, this.tilePlaced))
 		{
 			return true;
 			
@@ -52,11 +55,47 @@ public class TigerTrailRule extends PlacementRule
 		return count > 2 || count == 1;
 	}
 	
-	private boolean recurse(int x, int y, Tile tile, Tile startTile)
+	private boolean checkChildren(int x, int y, Tile tile)
+	{
+		boolean ret = true;
+		int countTrails = 0;
+		for(int i = 0; i < 4; i++)
+		{
+			if(tile.getSide(i)=='t')
+			{
+				countTrails++;
+				switch(i)
+				{
+				case 0:
+					if(boardState.getTile(x, y+1)!= null)
+						ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), tile, 2);
+					break;
+				case 1:
+					if(boardState.getTile(x+1, y)!= null)
+						ret = ret && recurse(x+1,y,boardState.getTile(x+1, y), tile,3);
+					break;
+				case 2:
+					if(boardState.getTile(x, y-1)!= null)
+						ret = ret && recurse(x,y-1,boardState.getTile(x, y-1), tile, 0);
+					break;
+				case 3:
+					if(boardState.getTile(x-1, y)!= null)
+						ret = ret && recurse(x-1,y,boardState.getTile(x-1, y), tile,1);
+					break;
+				default:
+				}
+			}
+		}
+		if(countTrails == 0)
+			return false;
+		return ret;
+	}
+	
+	private boolean recurse(int x, int y, Tile tile, Tile startTile, int dir)
 	{
 		if(tile == null)
 			return false;
-		boolean ret = false;
+		boolean ret = true;
 		
 		if(isCrossroad(tile) ||(tile == startTile) || visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
 		{
@@ -68,17 +107,19 @@ public class TigerTrailRule extends PlacementRule
 			//find all adj tiles that have not already been visited
 			for(int i = 0; i < 4; i++)
 			{
+				if(i == dir)
+					continue;
 				if(tile.getSide(i)=='t')
 				{
 					switch(i)
 					{
-					case 0:ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), startTile);
+					case 0:ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), startTile,2);
 						break;
-					case 1:ret = ret && recurse(x,y+1,boardState.getTile(x+1, y), startTile);
+					case 1:ret = ret && recurse(x,y+1,boardState.getTile(x+1, y), startTile,3);
 						break;
-					case 2:ret = ret && recurse(x,y+1,boardState.getTile(x, y-1), startTile);
+					case 2:ret = ret && recurse(x,y+1,boardState.getTile(x, y-1), startTile,0);
 						break;
-					case 3:ret = ret && recurse(x,y+1,boardState.getTile(x-1, y), startTile);
+					case 3:ret = ret && recurse(x,y+1,boardState.getTile(x-1, y), startTile,1);
 						break;
 					default:
 					}
@@ -91,7 +132,7 @@ public class TigerTrailRule extends PlacementRule
 	@Override
 	public void testFailure() throws Exception
 	{
-		throw new Exception(super.getName() + " failed under condition input: ");
+		throw new Exception(super.getName() + " failed under condition input road is not complete");
 	}
 	
 }
