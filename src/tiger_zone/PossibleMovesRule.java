@@ -89,87 +89,87 @@ public class PossibleMovesRule extends PlacementRule
 	@Override
 	public boolean evaluate()
 	{
-	
-			boolean ret = false;
-			try{
-				if(Math.abs(cartX) > length || (Math.abs(cartY) > length ))
-					throw new Exception(super.getName() + " failed under condition: tile tile desired palcement out of bounds.");
-			}
-			catch(Exception ex)
-			{
-				if(super.trace)
-					System.err.println(ex);
-				return false;
-			}
-			boolean eval = false;
-			while(this.nextTile.getRotation() != 0)
-			{
-				this.nextTile.rotate();
-			}
-			//iterate through each rotation
-			for(int r = 0; r < 4; r++)
-			{
+		int rotationInit = this.nextTile.getRotation();
+		boolean ret = false;
+		try{
+			if(Math.abs(cartX) > length || (Math.abs(cartY) > length ))
+				throw new Exception(super.getName() + " failed under condition: tile tile desired palcement out of bounds.");
+		}
+		catch(Exception ex)
+		{
+			if(super.trace)
+				System.err.println(ex);
+			return false;
+		}
+		boolean eval = false;
+		while(this.nextTile.getRotation() != 0)
+		{
+			this.nextTile.rotate();
+		}
+		//iterate through each rotation
+		for(int r = 0; r < 4; r++)
+		{
+		
 			
-				
-				//go through all the tiles
-				for(int i = -((length -1)/ 2); i < length/2; i++)
+			//go through all the tiles
+			for(int i = -((length -1)/ 2); i < length/2; i++)
+			{
+				for(int j = -((length-1) / 2); j < length/2; j++)
 				{
-					for(int j = -((length-1) / 2); j < length/2; j++)
+					switch(r)
 					{
-						switch(r)
+					case 0: eval= boardState.validTilePlacement(i, j, this.nextTile, false);
+						north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
+						if(!ret && eval)//the first true value
 						{
-						case 0: eval= boardState.validTilePlacement(i, j, this.nextTile, false);
-							north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-							if(!ret && eval)//the first true value
-							{
-								firstMove[0] = i;
-								firstMove[1] = j;
-								firstMove[2] = this.nextTile.getRotation();
-							}
-							ret = ret || north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
-							break;
-						case 1:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
-							west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-							if(!ret && eval)//the first true value
-							{
-								firstMove[0] = i;
-								firstMove[1] = j;
-								firstMove[2] = this.nextTile.getRotation();
-							}
-							ret = ret || west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
-							break;
-						case 2:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
-							south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-							if(!ret && eval )//the first true value
-							{
-								firstMove[0] = i;
-								firstMove[1] = j;
-								firstMove[2] = this.nextTile.getRotation();
-							}
-						ret = ret || south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
-							break;
-						case 3:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
-							east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-							if(!ret && eval)//the first true value
-							{
-								firstMove[0] = i;
-								firstMove[1] = j;
-								firstMove[2] = this.nextTile.getRotation();
-							}
-							ret = ret || east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
-							break;
-						default:
-							System.err.println(super.getName() + "failed under condition: unexpected rotation");
+							firstMove[0] = i;
+							firstMove[1] = j;
+							firstMove[2] = this.nextTile.getRotation();
 						}
+						ret = ret || north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
+						break;
+					case 1:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
+						west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
+						if(!ret && eval)//the first true value
+						{
+							firstMove[0] = i;
+							firstMove[1] = j;
+							firstMove[2] = this.nextTile.getRotation();
+						}
+						ret = ret || west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
+						break;
+					case 2:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
+						south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
+						if(!ret && eval )//the first true value
+						{
+							firstMove[0] = i;
+							firstMove[1] = j;
+							firstMove[2] = this.nextTile.getRotation();
+						}
+					ret = ret || south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
+						break;
+					case 3:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
+						east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
+						if(!ret && eval)//the first true value
+						{
+							firstMove[0] = i;
+							firstMove[1] = j;
+							firstMove[2] = this.nextTile.getRotation();
+						}
+						ret = ret || east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
+						break;
+					default:
+						System.err.println(super.getName() + "failed under condition: unexpected rotation");
 					}
 				}
-				this.nextTile.rotate();
 			}
-			while(this.nextTile.getRotation() != 0)
-			{
-				this.nextTile.rotate();
-			}
-			return ret;
+			this.nextTile.rotate();
+		}
+		while(this.nextTile.getRotation() != rotationInit)
+		{
+			this.nextTile.rotate();
+		}
+		return ret;
 
 	}
 	

@@ -43,11 +43,12 @@ public class Board {
 	 */
 	public final boolean addTile(int x, int y, final Tile tile) {
 		if (this.validTilePlacement(x, y, tile)) {
-			
+			//long millis = System.currentTimeMillis();
 			PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
 			p.evaluate();
 			p.output();
-
+			//millis = System.currentTimeMillis() - millis;
+			//System.out.println("Possible moves elapsed Time: " + millis);
 			x += this.origin;
    			y =  this.origin - y;
     			//System.out.println("x = " + x);
@@ -266,7 +267,7 @@ public class Board {
 		char[] ABtigers = {'j','t','j','l','=','=','=','=','='};
 
 
-
+		
 
 		Stack<Tile> pile = new Stack<Tile>();
 		// One Tile1
