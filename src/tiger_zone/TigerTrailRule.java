@@ -25,7 +25,7 @@ public class TigerTrailRule extends PlacementRule
 	public boolean evaluate()
 	{
 		try{
-		System.err.println("HELP I AM NOT DONE. I ONLY GET THE COMPLETION OF A TRAIL. CANNOT BE FINISHED UNTIL TIGERS ARE DONE");
+		//System.err.println("HELP I AM NOT DONE. I ONLY GET THE COMPLETION OF A TRAIL. CANNOT BE FINISHED UNTIL TIGERS ARE DONE");
 		if(checkChildren(this.cartX, this.cartY, this.tilePlaced))
 		{
 			return true;
@@ -52,41 +52,56 @@ public class TigerTrailRule extends PlacementRule
 		{
 			count += ((t.getSide(i) == 't') ? 1:0);
 		}
-		return count > 2 || count == 1;
+		return count == 3|| count == 4 || count == 1;
 	}
 	
 	private boolean checkChildren(int x, int y, Tile tile)
 	{
 		boolean ret = true;
 		int countTrails = 0;
+		boolean nullSide = false;
 		for(int i = 0; i < 4; i++)
 		{
 			if(tile.getSide(i)=='t')
 			{
-				countTrails++;
+				
 				switch(i)
 				{
 				case 0:
-					if(boardState.getTile(x, y+1)!= null)
+					if(boardState.getTile(x, y+1)!= null){
+						countTrails++;
 						ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), tile, 2);
+					}
+					else nullSide = true;
 					break;
 				case 1:
-					if(boardState.getTile(x+1, y)!= null)
+					if(boardState.getTile(x+1, y)!= null){
+						countTrails++;
 						ret = ret && recurse(x+1,y,boardState.getTile(x+1, y), tile,3);
+					}
+					else nullSide = true;
 					break;
 				case 2:
-					if(boardState.getTile(x, y-1)!= null)
+					if(boardState.getTile(x, y-1)!= null){
+						countTrails++;
 						ret = ret && recurse(x,y-1,boardState.getTile(x, y-1), tile, 0);
+					}
+					else nullSide = true;
 					break;
 				case 3:
-					if(boardState.getTile(x-1, y)!= null)
+					if(boardState.getTile(x-1, y)!= null){
+						countTrails++;
 						ret = ret && recurse(x-1,y,boardState.getTile(x-1, y), tile,1);
+					}
+					else nullSide = true;
 					break;
 				default:
 				}
 			}
 		}
 		if(countTrails == 0)
+			return false;
+		if(!isCrossroad(tile) && nullSide)
 			return false;
 		return ret;
 	}
@@ -96,7 +111,7 @@ public class TigerTrailRule extends PlacementRule
 		if(tile == null)
 			return false;
 		boolean ret = true;
-		
+		int countTrails = 0;
 		if(isCrossroad(tile) ||(tile == startTile) || visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
 		{
 			return true;
@@ -113,18 +128,36 @@ public class TigerTrailRule extends PlacementRule
 				{
 					switch(i)
 					{
-					case 0:ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), startTile,2);
+					case 0:
+						if(boardState.getTile(x, y+1)!= null){
+							countTrails++;
+							ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), tile, 2);
+						}
 						break;
-					case 1:ret = ret && recurse(x,y+1,boardState.getTile(x+1, y), startTile,3);
+					case 1:
+						if(boardState.getTile(x+1, y)!= null){
+							countTrails++;
+							ret = ret && recurse(x+1,y,boardState.getTile(x+1, y), tile,3);
+						}
 						break;
-					case 2:ret = ret && recurse(x,y+1,boardState.getTile(x, y-1), startTile,0);
+					case 2:
+						if(boardState.getTile(x, y-1)!= null){
+							countTrails++;
+							ret = ret && recurse(x,y-1,boardState.getTile(x, y-1), tile, 0);
+						}
 						break;
-					case 3:ret = ret && recurse(x,y+1,boardState.getTile(x-1, y), startTile,1);
+					case 3:
+						if(boardState.getTile(x-1, y)!= null){
+							countTrails++;
+							ret = ret && recurse(x-1,y,boardState.getTile(x-1, y), tile,1);
+						}
 						break;
 					default:
 					}
 				}
 			}
+			if(countTrails == 0)
+				return false;
 			return ret;
 		}
 	}

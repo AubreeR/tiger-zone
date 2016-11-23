@@ -79,7 +79,7 @@ public class SideMatchRule extends PlacementRule
 				case 1: //UC Case
 					System.out.println("NextTile Sides: "+nextTile.getSides()[0]+","+nextTile.getSides()[1]+","+nextTile.getSides()[2]+","+nextTile.getSides()[3]);
 					System.out.println("adj north Sides: "+adj[i].getSides()[0]+","+adj[i].getSides()[1]+","+adj[i].getSides()[2]+","+adj[i].getSides()[3]);
-					if(nextTile.getSides()[0] != adj[i].getSides()[2])
+					if(nextTile.getSide(0) != adj[i].getSide(2))
 						throw new Exception(super.getName() + " failed under condition that the northern tile did not match");
 					break;
 				case 2:
@@ -87,7 +87,7 @@ public class SideMatchRule extends PlacementRule
 				case 3://center right
 					System.out.println("NextTile Sides: "+nextTile.getSides()[0]+","+nextTile.getSides()[1]+","+nextTile.getSides()[2]+","+nextTile.getSides()[3]);
 					System.out.println("adj east Sides: "+adj[i].getSides()[0]+","+adj[i].getSides()[1]+","+adj[i].getSides()[2]+","+adj[i].getSides()[3]);
-					if(nextTile.getSides()[1] != adj[i].getSides()[3])
+					if(nextTile.getSide(1) != adj[i].getSide(3))
 						throw new Exception(super.getName() + " failed under condition that the Easter tile did not match");
 					break;
 				case 4:
@@ -96,7 +96,7 @@ public class SideMatchRule extends PlacementRule
 				case 5://center down
 					System.out.println("NextTile Sides: "+nextTile.getSides()[0]+","+nextTile.getSides()[1]+","+nextTile.getSides()[2]+","+nextTile.getSides()[3]);
 					System.out.println("adj south Sides: "+adj[i].getSides()[0]+","+adj[i].getSides()[1]+","+adj[i].getSides()[2]+","+adj[i].getSides()[3]);
-					if(nextTile.getSides()[2] != adj[i].getSides()[0])
+					if(nextTile.getSide(2) != adj[i].getSide(0))
 						throw new Exception(super.getName() + " failed under condition that the southern tile did not match");
 					break;
 				case 6:
@@ -104,7 +104,7 @@ public class SideMatchRule extends PlacementRule
 				case 7:
 					System.out.println("NextTile Sides: "+nextTile.getSides()[0]+","+nextTile.getSides()[1]+","+nextTile.getSides()[2]+","+nextTile.getSides()[3]);
 					System.out.println("adj west Sides: "+adj[i].getSides()[0]+","+adj[i].getSides()[1]+","+adj[i].getSides()[2]+","+adj[i].getSides()[3]);
-					if(nextTile.getSides()[3] != adj[i].getSides()[1])
+					if(nextTile.getSide(3) != adj[i].getSide(1))
 						throw new Exception(super.getName() + " failed under condition that the western tile did not match");
 					break;
 				default:

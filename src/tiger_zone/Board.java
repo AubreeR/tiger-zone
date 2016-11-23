@@ -69,7 +69,11 @@ public class Board {
 
 			return false;
 		}
-
+		boolean testRoad = false;
+		for(int i = 0; i < 4; i++)
+			testRoad = testRoad || tile.getSide(i) == 't';
+		if(testRoad)
+			System.out.println(validTigerPlacement(x,y,tile) ? ("Road completed") : ("Road incomplete"));
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
@@ -77,7 +81,7 @@ public class Board {
 		placementEngine.addRule(new AdjacencyRule(this, x, y));
 		placementEngine.addRule(new SideMatchRule(this, x, y, tile));
 
-
+		
 		return placementEngine.evaluateRules();
 	}
 	
