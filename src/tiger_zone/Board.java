@@ -8,8 +8,8 @@ import java.util.Stack;
  */
 public class Board {
 	private final BoardCell[][] gameGrid = new BoardCell[152][152];
-	private Stack<Tile> pile;
-	public int origin; // center of the gameGrid cartesian view
+	private final Stack<Tile> pile;
+	private final int origin; // center of the gameGrid cartesian view
 	private final RuleEngine placementEngine = new RuleEngine();
 
 	/**
@@ -47,11 +47,12 @@ public class Board {
 			PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
 			p.evaluate();
 			p.output();
+
 			x += this.origin;
    			y =  this.origin - y;
     			//System.out.println("x = " + x);
     			//System.out.println("y = " + y);
-   			  
+
 			this.gameGrid[x][y].setTile(tile);
 			return true;
 		}
@@ -116,10 +117,10 @@ public class Board {
 		placementEngine.addRule(new SideMatchRule(this, x, y, tile, true));
 		
 
-		
+
 		return placementEngine.evaluateRules();
 	}
-	
+
 	/**
 	 * Check if the tiger can be placed at board position (x, y).
 	 *
@@ -136,27 +137,27 @@ public class Board {
 		}
 		placementEngine.clearRules();
 		placementEngine.addRule(new TigerTrailRule(this,x,y,tile));
-	
+
 		return placementEngine.evaluateRules();
 	}
 	/**
 	 * Translates: Cartesian-> 2D Matrix position
 	 * @param type int coordinate point
-	 * @return value from cartesian points to matrix gameGrid[x][?] index 
+	 * @return value from cartesian points to matrix gameGrid[x][?] index
 	 *
 	 */
 	 public int  getBoardPosX(int x) {
     		return x + this.origin;
  	}
-	
+
 	/**
 	 * Translates: Cartesian-> 2D Matrix position
 	 * @param type int coordinate point
-	 * @return value from cartesian points to matrix gameGrid[?][y] index 
+	 * @return value from cartesian points to matrix gameGrid[?][y] index
 	 *
 	 */
   	public int getBoardPosY(int y) {
-		
+
     		return this.origin - y;
   	}
 
@@ -189,10 +190,10 @@ public class Board {
 	public Stack<Tile> getPile() {
 		return this.pile;
 	}
-	
+
 	public static void buildStack(Stack<Tile> pile, char[] edges, char center, String file, int tileCount){
 		for(int i = 0; i < tileCount; i++){
-			pile.push(new Tile(edges, center, file)); 
+			pile.push(new Tile(edges, center, file));
 		}
 	}
 
@@ -233,8 +234,8 @@ public class Board {
 		char[] Ysides = {'t','l','l','t'};
 		char[] Zsides = {'l','j','t','j'};
 		char[] AAsides = {'l','j','t','j'};
-		char[] ABsides = {'t','l','l','l'}; 
-		
+		char[] ABsides = {'t','l','l','l'};
+
 		char[] Atigers = {'j','=','=','=','=','=','=','=','='};
 		char[] Btigers = {'j','=','=','=','x','=','=','=','='};
 		char[] Ctigers = {'j','=','=','=','x','=','=','t','='};
@@ -245,7 +246,7 @@ public class Board {
 		char[] Htigers = {'l','=','=','=','=','=','=','=','='};
 		char[] Itigers = {'j','=','=','l','=','=','=','=','='};
 		char[] Jtigers = {'j','l','=','=','=','=','=','=','='};
-		char[] Ktigers = {'j','=','=','l','=','=','j','=','='}; 
+		char[] Ktigers = {'j','=','=','l','=','=','j','=','='};
 		char[] Ltigers = {'j','l','=','=','=','=','=','l','='};
 		char[] Mtigers = {'j','l','=','=','=','=','=','=','='};
 		char[] Ntigers = {'j','=','=','=','=','l','=','l','='};
@@ -265,7 +266,7 @@ public class Board {
 		char[] ABtigers = {'j','t','j','l','=','=','=','=','='};
 
 
-		 
+
 
 		Stack<Tile> pile = new Stack<Tile>();
 		// One Tile1

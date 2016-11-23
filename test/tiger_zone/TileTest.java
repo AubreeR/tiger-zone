@@ -12,12 +12,17 @@ public class TileTest {
 	@BeforeClass
 	public static void setup() {
 		char[] sides = {'t', 'l', 't', 'j'};
-		tile = new Tile(sides, 'r', "./src/resources/tile20.png");
+		tile = new Tile(sides, '-', "./src/resources/tile20.png");
 	}
 
 	@Test
-	public void getImagePath() {
+	public void getImagePathTest() {
 		assertEquals("./src/resources/tile20.png", tile.getImagePath());
+	}
+
+	@Test
+	public void getCenterTest() {
+		assertEquals('-', tile.getCenter());
 	}
 
 	@Test
