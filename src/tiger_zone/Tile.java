@@ -65,8 +65,8 @@ public class Tile {
 	 * Rotates this tile 90 degrees counterclockwise.
 	 */
 	public final void rotate() {
-		this.rotation += 90;
-		if (this.rotation == 360) {
+		this.rotation -= 90;
+		if (this.rotation == -360) {
 			this.rotation = 0;
 		}
 		for(char c : this.sides)

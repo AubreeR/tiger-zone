@@ -22,6 +22,9 @@ public class PossibleMovesRule extends PlacementRule
 		south = new boolean[length][length];
 		east  = new boolean[length][length];
 		firstMove = new int[3];
+		firstMove[0] = Integer.MAX_VALUE;
+		firstMove[1] = Integer.MAX_VALUE;
+		firstMove[2] = Integer.MAX_VALUE;
 
 	}
 	public void output()
@@ -86,16 +89,28 @@ public class PossibleMovesRule extends PlacementRule
 	@Override
 	public boolean evaluate()
 	{
-		
-		try
-		{
+	
 			boolean ret = false;
-			if(Math.abs(cartX) > length || (Math.abs(cartY) > length ))
-				throw new Exception(super.getName() + " failed under condition: tile tile desired palcement out of bounds.");
+			try{
+				if(Math.abs(cartX) > length || (Math.abs(cartY) > length ))
+					throw new Exception(super.getName() + " failed under condition: tile tile desired palcement out of bounds.");
+			}
+			catch(Exception ex)
+			{
+				if(super.trace)
+					System.err.println(ex);
+				return false;
+			}
 			boolean eval = false;
+			while(this.nextTile.getRotation() != 0)
+			{
+				this.nextTile.rotate();
+			}
 			//iterate through each rotation
 			for(int r = 0; r < 4; r++)
 			{
+			
+				
 				//go through all the tiles
 				for(int i = -((length -1)/ 2); i < length/2; i++)
 				{
@@ -103,43 +118,43 @@ public class PossibleMovesRule extends PlacementRule
 					{
 						switch(r)
 						{
-						case 0: eval= boardState.validTilePlacement(i, j, nextTile, false);
+						case 0: eval= boardState.validTilePlacement(i, j, this.nextTile, false);
 							north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-							if(eval && !ret)//the first true value
+							if(!ret && eval)//the first true value
 							{
 								firstMove[0] = i;
 								firstMove[1] = j;
-								firstMove[2] = 0;
+								firstMove[2] = this.nextTile.getRotation();
 							}
 							ret = ret || north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
 							break;
-						case 1:eval = boardState.validTilePlacement(i, j, nextTile, false);
+						case 1:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 							west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-							if(eval && !ret)//the first true value
+							if(!ret && eval)//the first true value
 							{
 								firstMove[0] = i;
 								firstMove[1] = j;
-								firstMove[2] = -90;
+								firstMove[2] = this.nextTile.getRotation();
 							}
 							ret = ret || west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
 							break;
-						case 2:eval = boardState.validTilePlacement(i, j, nextTile, false);
+						case 2:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 							south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-							if(eval && !ret)//the first true value
+							if(!ret && eval )//the first true value
 							{
 								firstMove[0] = i;
 								firstMove[1] = j;
-								firstMove[2] = -180;
+								firstMove[2] = this.nextTile.getRotation();
 							}
 						ret = ret || south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
 							break;
-						case 3:eval = boardState.validTilePlacement(i, j, nextTile, false);
+						case 3:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 							east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-							if(eval && !ret)//the first true value
+							if(!ret && eval)//the first true value
 							{
 								firstMove[0] = i;
 								firstMove[1] = j;
-								firstMove[2] = -270;
+								firstMove[2] = this.nextTile.getRotation();
 							}
 							ret = ret || east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
 							break;
@@ -150,20 +165,12 @@ public class PossibleMovesRule extends PlacementRule
 				}
 				this.nextTile.rotate();
 			}
-			
-			
-			
-			
+			while(this.nextTile.getRotation() != 0)
+			{
+				this.nextTile.rotate();
+			}
 			return ret;
-			
-		}
-		catch(Exception ex)
-		{
-			if(super.trace)
-				System.err.println(ex);//display the error 
-			return false;
-		}
-		
+
 	}
 	
 	public int[] getFirstPossibleMove(){ return this.firstMove; }
