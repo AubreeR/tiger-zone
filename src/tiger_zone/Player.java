@@ -95,7 +95,7 @@ public class Player {
 			return updatedScores;
 		}
 
-		public int[] checkForDen(int x, int y, int scores) {
+		public int checkForDen(int x, int y, int scores) {
 			int score = 0;
 			if(boardState.getTile(x, y) != null) {
 				Tile checkTile = boardState.getTile(x, y);
@@ -127,7 +127,7 @@ public class Player {
 		 * if special case: then flag the special cases cordinates and add one to total
 		 * if normal tile: put that tile in the stack, add one to total
 		 */
-		public int[] checkForLake(int x, int y, int[] scores) {
+		public int checkForLake(int x, int y, int scores) {
 			Boolean nullFound = false;
 			int totalScore = 0;
 			int[] XY = new int[2]; //used for the cordinate stack
@@ -296,7 +296,7 @@ public class Player {
 			}
 
 
-			return scores;
+			return totalScore;
 		}
 		
 		
@@ -468,12 +468,10 @@ public class Player {
 		
 		public Boolean tigerCheck(int x, int y, int locationPlaced){
 			Boolean check = false;
-			List<Tiger> tigers = getTigers();
+			/*List<Tiger> tigers = getTigers();
 			for(int i = 0; i < tigers.size(); i++){
-				/*
-				 * if(this.x = tiger.x && this.y = tiger.y && this.locationPlaced == tiger.locationPlaced) { check = true;}
-				*/
-			}
+				if(this.x = tiger.x && this.y = tiger.y && this.locationPlaced == tiger.locationPlaced) { check = true;}
+			}*/
 			return check;
 		}
 		
