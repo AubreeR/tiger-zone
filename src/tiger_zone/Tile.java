@@ -149,10 +149,8 @@ public class Tile {
 			else if (this.getCenter() == 'x')
 				return 'x';
 			else
-			{
-				System.err.println("Center isn't done yet");
 				return 'E';
-			}
+			
 		case 6: //middle right
 			return this.getSide(1);
 		case 7: //bottom left

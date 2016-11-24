@@ -42,7 +42,7 @@ public class Board {
 	 * @return if tile was successfully placed
 	 */
 	public final boolean addTile(int x, int y, final Tile tile) {
-		if (this.validTilePlacement(x, y, tile)) {
+		if (this.validTilePlacement(x, y, tile, false)) {
 			//long millis = System.currentTimeMillis();
 			//PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
 			//p.evaluate();
@@ -80,20 +80,13 @@ public class Board {
 
 			return false;
 		}
-		/*boolean testRoad = false;
-		for(int i = 0; i < 4; i++)
-			testRoad = testRoad || tile.getSide(i) == 't';
-		if(testRoad)
-			System.out.println(validTigerPlacement(x,y,tile) ? ("Road completed") : ("Road incomplete"));*/
+		
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
-
 		placementEngine.addRule(new AdjacencyRule(this, x, y,trace));
 		placementEngine.addRule(new SideMatchRule(this, x, y, tile, trace));
-		
 
-		
 		return placementEngine.evaluateRules();
 	}
 	
@@ -111,19 +104,12 @@ public class Board {
 
 			return false;
 		}
-		/*boolean testRoad = false;
-		for(int i = 0; i < 4; i++)
-			testRoad = testRoad || tile.getSide(i) == 't';
-		if(testRoad)
-			System.out.println(validTigerPlacement(x,y,tile) ? ("Road completed") : ("Road incomplete"));*/
+
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
-
 		placementEngine.addRule(new AdjacencyRule(this, x, y,true));
 		placementEngine.addRule(new SideMatchRule(this, x, y, tile, true));
-		
-
 
 		return placementEngine.evaluateRules();
 	}
