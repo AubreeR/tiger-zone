@@ -7,15 +7,17 @@ public class TigerTrailRule extends PlacementRule
 	private Tile tilePlaced;//we must know the next tile to be placed in order to match sides
 	private boolean[][] visited;
 	private ArrayList<Tile> usedTiles;
+	private int zone;
 	
 	
-	public TigerTrailRule(Board boardState,int cartX, int cartY, Tile tilePlaced)
+	public TigerTrailRule(Board boardState,int cartX, int cartY, Tile tilePlaced, int zone)
 	{
 
 		super(boardState,cartX, cartY, true);
 		visited = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
 		super.setRuleName("TigerTrail Rule");
 		this.tilePlaced = tilePlaced;
+		this.zone = zone;
 		usedTiles = new ArrayList<Tile>();
 		
 		
@@ -44,16 +46,7 @@ public class TigerTrailRule extends PlacementRule
 		
 	}
 	
-	private boolean isCrossroad(Tile t)
-	{
-		int count  = 0;
-		//go through all sides
-		for(int i = 0; i < 4; i++)
-		{
-			count += ((t.getSide(i) == 't') ? 1:0);
-		}
-		return count == 3|| count == 4 || count == 1;
-	}
+
 	
 	private boolean checkChildren(int x, int y, Tile tile)
 	{
@@ -101,7 +94,7 @@ public class TigerTrailRule extends PlacementRule
 		}
 		if(countTrails == 0)
 			return false;
-		if(!isCrossroad(tile) && nullSide)
+		if(!tile.isCrossroad() && nullSide)
 			return false;
 		return ret;
 	}
@@ -112,7 +105,7 @@ public class TigerTrailRule extends PlacementRule
 			return false;
 		boolean ret = true;
 		int countTrails = 0;
-		if(isCrossroad(tile) ||(tile == startTile) || visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
+		if(!tile.isCrossroad() ||(tile == startTile) || visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
 		{
 			return true;
 		}

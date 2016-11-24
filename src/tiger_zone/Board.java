@@ -44,9 +44,15 @@ public class Board {
 	public final boolean addTile(int x, int y, final Tile tile) {
 		if (this.validTilePlacement(x, y, tile)) {
 			//long millis = System.currentTimeMillis();
-			PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
-			p.evaluate();
-			p.output();
+			//PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
+			//p.evaluate();
+			//p.output();
+			for(int i = 1; i <= 9; i++)
+			{
+				System.out.print(tile.getZone(i));
+				if(i%3 == 0)
+					System.out.println("");
+			}
 			//millis = System.currentTimeMillis() - millis;
 			//System.out.println("Possible moves elapsed Time: " + millis);
 			x += this.origin;
@@ -137,7 +143,7 @@ public class Board {
 			return false;
 		}
 		placementEngine.clearRules();
-		placementEngine.addRule(new TigerTrailRule(this,x,y,tile));
+		placementEngine.addRule(new TigerTrailRule(this,x,y,tile, 0));
 
 		return placementEngine.evaluateRules();
 	}
@@ -265,6 +271,7 @@ public class Board {
 		char[] Ztgiers = {'j','l','j','=','t','=','=','=','='};	//Check this one
 		char[] AAtgiers = {'j','l','j','=','t','=','=','=','='};//And this one
 		char[] ABtigers = {'j','t','j','l','=','=','=','=','='};
+
 
 
 		
