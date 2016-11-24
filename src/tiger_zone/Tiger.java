@@ -60,13 +60,13 @@ public class Tiger {
 	{
 		switch(tile.getSides()[this.locationPlaced])
 		{
-		case 'j':
+		case 'j':	// j = jungle
 			return TigerPlacement.JUNGLE;
-		case 'l':
+		case 'l':	// l = lake
 			return TigerPlacement.LAKE;
-		case 'r' :
+		case 't' :	// t = game trail
 			return TigerPlacement.GAME;
-		case 'd':
+		case 'x':	// x = den
 			return TigerPlacement.DEN;
 		case 'e'://cannot place a tiger on e
 		default:

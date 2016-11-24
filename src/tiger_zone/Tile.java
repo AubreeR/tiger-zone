@@ -8,6 +8,9 @@ public class Tile {
 	private char center;
 	private String imagePath;
 	private int rotation = 0;
+	private char[] tigerSpots; 
+	private int tigerPosition = -1;
+	
 
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
@@ -18,7 +21,7 @@ public class Tile {
 	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
 	 */
 	public Tile(char[] sides, char center, String imagePath) {
-		this.sides = sides;
+		this.sides = sides.clone();
 		this.center = center;
 		this.imagePath = imagePath;
 	}
@@ -66,15 +69,33 @@ public class Tile {
 		if (this.rotation == 360) {
 			this.rotation = 0;
 		}
-
+		for(char c : this.sides)
+			System.out.print(c);
+		System.out.println(" :pre-rotate");
 		// char[] rotation, source: http://codereview.stackexchange.com/a/69305
-		final int offset = sides.length + 3 % sides.length;
+		final int offset = sides.length - 1 % sides.length;
 		if (offset > 0) {
-			final char[] copy = sides.clone();
+			final char[] copy = this.sides.clone();
 			for (int i = 0; i < sides.length; i++) {
 				final int j = (i + offset) % sides.length;
-				sides[i] = copy[j];
+				this.sides[j] = copy[i];
 			}
 		}
+		for(char c : this.sides)
+			System.out.print(c);
+		System.out.println(" :post-rotate");
 	}
+
+	public char[] getTigerSpots() {
+		return tigerSpots;
+	}
+
+	public int getTigerPosition() {
+		return tigerPosition;
+	}
+
+	public void setTigerPosition(int tigerPosition) {
+		this.tigerPosition = tigerPosition;
+	}
+
 }
