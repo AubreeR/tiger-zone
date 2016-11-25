@@ -128,30 +128,29 @@ public class PossibleMovesRule extends PlacementRule
 						north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
 						if(eval)
 							possibleMoves.add(new int[]{i,j,0});
-						
 						setArray(eval, i, j);
-						ret = ret || north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
+						ret = ret || eval;
 						break;
 					case 1:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
 						if(eval)
 							possibleMoves.add(new int[]{i,j,90});
 						setArray(eval, i, j);
-						ret = ret || west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
+						ret = ret || eval;
 						break;
 					case 2:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
 						if(eval)
 							possibleMoves.add(new int[]{i,j,180});
 						setArray(eval, i, j);
-					ret = ret || south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
+						ret = ret || eval;;
 						break;
 					case 3:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
 						if(eval)
 							possibleMoves.add(new int[]{i,j,270});
 						setArray(eval, i, j);
-						ret = ret || east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
+						ret = ret || eval;
 						break;
 					default:
 						System.err.println(super.getName() + "failed under condition: unexpected rotation");
@@ -204,18 +203,15 @@ public class PossibleMovesRule extends PlacementRule
 	
 	public int[] getFirstPossibleMove()
 	{ 
-		int index = (int)Math.random()*4;
-		int[] ret = this.firstMove[index]; 
-		int i = 0;
-		while(ret[0] == Integer.MAX_VALUE && i <4)
+		int ind = (int)Math.random() * 4;
+		for(int i = 0; i <4; i++)
 		{
-			if(index == 3)
-				index = -1;
-			ret = this.firstMove[++index]; 
-			
-			i++;
+			if(ind == 4)
+				ind = 0;
+			if(this.firstMove[ind++][0] != Integer.MAX_VALUE)
+				return this.firstMove[ind++]; 
 		}
-		return ret;
+		return new int[]{Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE};
 	}
 	
 	public int[] getClosestToOriginEstimateMove()
