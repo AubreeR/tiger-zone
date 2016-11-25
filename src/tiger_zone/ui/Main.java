@@ -42,7 +42,7 @@ public class Main {
 		Collections.shuffle(pile);
 		Game game = new Game(pile);
 
-
+		System.err.println(pile.size());
 		//Protocol p = new Protocol("0.0.0.0",8000,"tpass","user","pass");
 		//p.tournamentProtocol();
 
