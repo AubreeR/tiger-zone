@@ -14,6 +14,7 @@ import tiger_zone.Client;
 import tiger_zone.Game;
 import tiger_zone.Player;
 import tiger_zone.Tile;
+import tiger_zone.ai.PoorAiPlayer;
 import tiger_zone.Protocol;
 
 public class Main {
@@ -30,6 +31,11 @@ public class Main {
 		players.add(new Player(0));
 		players.add(new Player(1));
 		game.setPlayers(players);
+
+		PoorAiPlayer skynet = new PoorAiPlayer(game);
+		while (game.getBoard().getPile().size() > 1) {
+			skynet.makeMove();
+		}
 
 		BoardFrame bf = new BoardFrame(game);
 		bf.setSize(900, 900);
