@@ -21,14 +21,20 @@ public class OnBoardClick extends MouseAdapter {
 
 	public void mouseClicked(MouseEvent event) {
 		Tile placedTile = this.game.getBoard().getPile().pop();
-		Tile nextTile = this.game.getBoard().getPile().peek();
+		
+		Tile nextTile = null;
+		ImageIcon previewImg;
+		if(!this.game.getBoard().getPile().isEmpty())
+		{
+		nextTile = this.game.getBoard().getPile().peek();
 
-		ImageIcon previewImg = new ImageIcon(nextTile.getImagePath());
+		previewImg = new ImageIcon(nextTile.getImagePath());
 		BoardFrame.tilePreview.setImg(previewImg);
 		BoardFrame.preview.add(BoardFrame.tilePreview, BorderLayout.SOUTH);
 		BoardFrame.preview.setSize(250, 250);
 		BoardFrame.preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		BoardFrame.preview.setVisible(true);
+		}
 
 		TilePanel j = (TilePanel)event.getSource();
 		rowClick = (int) j.getClientProperty("row");

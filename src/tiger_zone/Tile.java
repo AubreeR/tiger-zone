@@ -116,6 +116,11 @@ public class Tile {
 	public int getTigerPosition() {
 		return tigerPosition;
 	}
+	
+	public boolean hasTiger()
+	{
+		return this.tigerPosition > 0;
+	}
 	public char getZone(int index)
 	{
 		//look at all the zones
