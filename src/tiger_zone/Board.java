@@ -184,9 +184,10 @@ public class Board {
 		return this.pile;
 	}
 
-	public static void buildStack(Stack<Tile> pile, char[] edges, char center, String file, int tileCount){
+	public static void buildStack(Stack<Tile> pile, char[] edges, char center, char[] tigerSpots,
+			String file, int tileCount){
 		for(int i = 0; i < tileCount; i++){
-			pile.push(new Tile(edges, center, file));
+			pile.push(new Tile(edges, center, tigerSpots, file));
 		}
 	}
 
@@ -254,8 +255,8 @@ public class Board {
 		char[] Wtigers = {'j','t','j','t','=','l','j','t','='};
 		char[] Xtigers = {'j','t','j','=','=','l','=','=','='};
 		char[] Ytigers = {'j','t','j','=','=','l','=','=','='};
-		char[] Ztgiers = {'j','l','j','=','t','=','=','=','='};	//Check this one
-		char[] AAtgiers = {'j','l','j','=','t','=','=','=','='};//And this one
+		char[] Ztigers = {'j','l','j','=','t','=','=','=','='};	//Check this one
+		char[] AAtigers = {'j','l','j','=','t','=','=','=','='};//And this one
 		char[] ABtigers = {'j','t','j','l','=','=','=','=','='};
 
 
@@ -264,34 +265,34 @@ public class Board {
 
 		Stack<Tile> pile = new Stack<Tile>();
 		// One Tile1
-		buildStack(pile, Asides, '-', "./src/resources/tile1.png", 1);
-		buildStack(pile, Bsides, 'x', "./src/resources/tile2.png",4);
-		buildStack(pile, Csides, 'x', "./src/resources/tile3.png",2);
-		buildStack(pile, Dsides, '-', "./src/resources/tile4.png",1);
-		buildStack(pile, Esides, '-', "./src/resources/tile5.png",8);
-		buildStack(pile, Fsides, '-', "./src/resources/tile6.png",9);	// Change 8 to 9
-		buildStack(pile, Gsides, '-', "./src/resources/tile7.png",4);
-		buildStack(pile, Hsides, '-', "./src/resources/tile8.png",1);
-		buildStack(pile, Isides, '-', "./src/resources/tile9.png",4);
-		buildStack(pile, Jsides, '-', "./src/resources/tile10.png",5);
-		buildStack(pile, Ksides, '-', "./src/resources/tile11.png",3);
-		buildStack(pile, Lsides, '-', "./src/resources/tile12.png",3);
-		buildStack(pile, Msides, '-', "./src/resources/tile13.png",5);
-		buildStack(pile, Nsides, '-', "./src/resources/tile14.png",2);
-		buildStack(pile, Osides, '-', "./src/resources/tile15.png",1);
-		buildStack(pile, Psides, 'p', "./src/resources/tile16.png",2);
-		buildStack(pile, Qsides, '-', "./src/resources/tile17.png",1);
-		buildStack(pile, Rsides, 'b', "./src/resources/tile18.png",2);
-		buildStack(pile, Ssides, '-', "./src/resources/tile19.png",2);
-		buildStack(pile, Tsides, 'd', "./src/resources/tile20.png",2);
-		buildStack(pile, Usides, '-', "./src/resources/tile21.png",1);
-		buildStack(pile, Vsides, '-', "./src/resources/tile22.png",1);
-		buildStack(pile, Wsides, 'p', "./src/resources/tile23.png",2);
-		buildStack(pile, Xsides, '-', "./src/resources/tile24.png",3);
-		buildStack(pile, Ysides, 'b', "./src/resources/tile25.png",2);
-		buildStack(pile, Zsides, '-', "./src/resources/tile26.png",1);
-		buildStack(pile, AAsides, 'd', "./src/resources/tile27.png",2);
-		buildStack(pile, ABsides, 'c', "./src/resources/tile28.png",2);
+		buildStack(pile, Asides, '-', Atigers,"./src/resources/tile1.png", 1);
+		buildStack(pile, Bsides, 'x', Btigers,"./src/resources/tile2.png",4);
+		buildStack(pile, Csides, 'x', Ctigers,"./src/resources/tile3.png",2);
+		buildStack(pile, Dsides, '-', Dtigers,"./src/resources/tile4.png",1);
+		buildStack(pile, Esides, '-', Etigers,"./src/resources/tile5.png",8);
+		buildStack(pile, Fsides, '-', Ftigers,"./src/resources/tile6.png",9);	// Change 8 to 9
+		buildStack(pile, Gsides, '-', Gtigers,"./src/resources/tile7.png",4);
+		buildStack(pile, Hsides, '-', Htigers,"./src/resources/tile8.png",1);
+		buildStack(pile, Isides, '-', Itigers,"./src/resources/tile9.png",4);
+		buildStack(pile, Jsides, '-', Jtigers,"./src/resources/tile10.png",5);
+		buildStack(pile, Ksides, '-', Ktigers,"./src/resources/tile11.png",3);
+		buildStack(pile, Lsides, '-', Ltigers,"./src/resources/tile12.png",3);
+		buildStack(pile, Msides, '-', Mtigers,"./src/resources/tile13.png",5);
+		buildStack(pile, Nsides, '-', Ntigers,"./src/resources/tile14.png",2);
+		buildStack(pile, Osides, '-', Otigers,"./src/resources/tile15.png",1);
+		buildStack(pile, Psides, 'p', Ptigers,"./src/resources/tile16.png",2);
+		buildStack(pile, Qsides, '-', Qtigers,"./src/resources/tile17.png",1);
+		buildStack(pile, Rsides, 'b', Rtigers,"./src/resources/tile18.png",2);
+		buildStack(pile, Ssides, '-', Stigers,"./src/resources/tile19.png",2);
+		buildStack(pile, Tsides, 'd', Ttigers,"./src/resources/tile20.png",2);
+		buildStack(pile, Usides, '-', Utigers,"./src/resources/tile21.png",1);
+		buildStack(pile, Vsides, '-', Vtigers,"./src/resources/tile22.png",1);
+		buildStack(pile, Wsides, 'p', Wtigers,"./src/resources/tile23.png",2);
+		buildStack(pile, Xsides, '-', Xtigers,"./src/resources/tile24.png",3);
+		buildStack(pile, Ysides, 'b', Ytigers,"./src/resources/tile25.png",2);
+		buildStack(pile, Zsides, '-', Ztigers,"./src/resources/tile26.png",1);
+		buildStack(pile, AAsides, 'd', AAtigers, "./src/resources/tile27.png",2);
+		buildStack(pile, ABsides, 'c', ABtigers, "./src/resources/tile28.png",2);
 		return pile;
 	}
 }

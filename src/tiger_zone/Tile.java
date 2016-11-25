@@ -54,6 +54,11 @@ public class Tile {
 		return this.sides[index];
 	}
 
+	/**
+	 * Returns the center (special attribute) of a tile.
+	 *
+	 * @return center char
+	 */
 	public final char getCenter() {
 		return this.center;
 	}
@@ -117,10 +122,31 @@ public class Tile {
 		return tigerPosition;
 	}
 	
-	public boolean hasTiger()
-	{
-		return this.tigerPosition > 0;
+	public void addTiger(Tile curr, int gridPos){
+		if(curr.getTigerSpots()[gridPos] != '='){
+			curr.getTigerSpots()[gridPos] = 'q';
+		}
+		
+		else{
+			System.err.println("Invalid tiger placement!");
+		}
+		
 	}
+	
+	public boolean hasTiger(Tile curr)
+	{
+		
+		for(char ch : curr.getTigerSpots()){
+			if(ch == 'q'){
+				System.out.println("Tile has a tiger!");
+				return true;
+			}
+		}
+		
+		System.out.println("Tiger not found!");
+		return false;
+	}
+	
 	public char getZone(int index)
 	{
 		//look at all the zones
