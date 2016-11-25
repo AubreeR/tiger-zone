@@ -7,7 +7,7 @@ public class PossibleMovesRule extends PlacementRule
 	private Tile nextTile;//we must know the next tile to be placed in order to match sides
 	private boolean[][] north,west,south,east;//relative to all the different rotations
 	private int length;
-	private int firstMove[];
+	private int firstMove[][];
 	
 	public PossibleMovesRule(Board boardState,int cartX, int cartY, Tile nextTile, boolean trace)
 	{
@@ -21,11 +21,13 @@ public class PossibleMovesRule extends PlacementRule
 		west  = new boolean[length][length];
 		south = new boolean[length][length];
 		east  = new boolean[length][length];
-		firstMove = new int[3];
-		firstMove[0] = Integer.MAX_VALUE;
-		firstMove[1] = Integer.MAX_VALUE;
-		firstMove[2] = Integer.MAX_VALUE;
-
+		firstMove = new int[4][3];
+		for(int i = 0; i < 4; i++)
+		{
+			firstMove[i][0] = Integer.MAX_VALUE;
+			firstMove[i][1] = Integer.MAX_VALUE;
+			firstMove[i][2] = Integer.MAX_VALUE;
+		}
 	}
 	public void output()
 	{
@@ -120,42 +122,22 @@ public class PossibleMovesRule extends PlacementRule
 					{
 					case 0: eval= boardState.validTilePlacement(i, j, this.nextTile, false);
 						north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-						if(!ret && eval)//the first true value
-						{
-							firstMove[0] = i;
-							firstMove[1] = j;
-							firstMove[2] = this.nextTile.getRotation();
-						}
+						setArray(eval, i, j);
 						ret = ret || north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
 						break;
 					case 1:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-						if(!ret && eval)//the first true value
-						{
-							firstMove[0] = i;
-							firstMove[1] = j;
-							firstMove[2] = this.nextTile.getRotation();
-						}
+						setArray(eval, i, j);
 						ret = ret || west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
 						break;
 					case 2:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-						if(!ret && eval )//the first true value
-						{
-							firstMove[0] = i;
-							firstMove[1] = j;
-							firstMove[2] = this.nextTile.getRotation();
-						}
+						setArray(eval, i, j);
 					ret = ret || south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
 						break;
 					case 3:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-						if(!ret && eval)//the first true value
-						{
-							firstMove[0] = i;
-							firstMove[1] = j;
-							firstMove[2] = this.nextTile.getRotation();
-						}
+						setArray(eval, i, j);
 						ret = ret || east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)];
 						break;
 					default:
@@ -173,7 +155,42 @@ public class PossibleMovesRule extends PlacementRule
 
 	}
 	
-	public int[] getFirstPossibleMove(){ return this.firstMove; }
+	public void setArray(boolean eval, int x, int y)
+	{
+		if(eval)//the first true value
+		{
+		int i = -1;
+		if(x >= 0 && y >= 0)
+			i = 0;
+		else if(x <= 0 && y >= 0)
+			i = 1;
+		else if( x <= 0 && y <= 0)
+			i = 2;
+		else if( x >= 0 && y <= 0)
+			i = 3;
+		
+			firstMove[i][0] = x;
+			firstMove[i][1] = y;
+			firstMove[i][2] = this.nextTile.getRotation();
+		}
+	}
+	
+	public int[] getFirstPossibleMove()
+	{ 
+		int index = (int)Math.random()*4;
+		int[] ret = this.firstMove[index]; 
+		int i = 0;
+		while(ret[0] == Integer.MAX_VALUE && i <4)
+		{
+			if(index == 3)
+				index = -1;
+			ret = this.firstMove[++index]; 
+			
+			i++;
+		}
+		return ret;
+	}
+	
 	public boolean[][] get0Rotation() { return this.north; }
 	public boolean[][] get_90Rotation(){ return this.west; }
 	public boolean[][] get_180Rotation(){return this.south; }
