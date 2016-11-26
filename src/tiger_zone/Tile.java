@@ -12,6 +12,7 @@ public class Tile {
 	private char[] tigerSpots; 
 	private char[] crocSpots;
 	private int tigerPosition = -1;
+	private String tigerOwner; 
 	
 
 	/**
@@ -28,6 +29,7 @@ public class Tile {
 		this.tigerSpots = null;
 		this.center = center;
 		this.imagePath = imagePath;
+		this.setTigerOwner("none");
 	}
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
@@ -137,9 +139,10 @@ public class Tile {
 	*
 	*@param grisPos the position 1-9 at which the tiger is added
 	*/
-	public void addTiger(int gridPos){
+	public void addTiger(int gridPos, String player){
 		if(this.getTigerSpots()[gridPos-1] != '=' && gridPos >= 1 && gridPos <= 9){
 			this.getTigerSpots()[gridPos-1] = 'q';
+			setTigerOwner(player); 
 			tigerPosition = gridPos; 
 			System.out.println("Tiger placed!");
 		}
@@ -286,9 +289,20 @@ public class Tile {
 		return '=';
 	}
 	
-	public boolean hasSpecial(){
+	public boolean hasDen(){
 		char ch = this.getCenter();
-		if(ch == 'b' || ch == 'd' || ch == 'p' || ch == 'x'){
+		if(ch == 'x'){
+			return true;
+		}
+		
+		else{
+			return false;
+		}
+	}
+	
+	public boolean hasAnimal(){
+		char ch = this.getCenter();
+		if(ch == 'b' || ch == 'd' || ch == 'p'){
 			return true;
 		}
 		
@@ -317,6 +331,12 @@ public class Tile {
 		}
 		if(this.tigerSpots[tigerPosition] != '=')
 			this.tigerPosition = tigerPosition;
+	}
+	public String getTigerOwner() {
+		return tigerOwner;
+	}
+	public void setTigerOwner(String tigerOwner) {
+		this.tigerOwner = tigerOwner;
 	}
 
 }

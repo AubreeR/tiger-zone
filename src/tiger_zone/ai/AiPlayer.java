@@ -26,4 +26,8 @@ public abstract class AiPlayer {
 	public void makeMove() {
 		// TODO: figure out if an implementation should be here?
 	}
+	
+	public String getPid(){
+		return pid; 
+	}
 }
