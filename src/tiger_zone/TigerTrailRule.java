@@ -42,7 +42,7 @@ public class TigerTrailRule extends PlacementRule
 		}
 		catch(Exception ex)
 		{
-			//System.err.println(ex);
+			System.err.println(ex);
 			return false;
 		}
 		return false;
@@ -50,35 +50,44 @@ public class TigerTrailRule extends PlacementRule
 		
 	}
 	
-	private boolean check(int x, int y, Tile tile)
+	private boolean check(int x, int y, Tile tile) throws Exception
 	{
+		int count = 0;
 		boolean ret = true;
-		if(tile.hasTiger())
+		if(tile != null && tile.hasTiger())
 			return false;
-		if(visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] || tile == null || tile.isCrossroad())
+		if(visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] || tile == null || (tile.isCrossroad() && tile != this.tilePlaced))
 			return true;
 		for(int i = 0; i < 4; i++)
 		{
 			if(tile.getSide(i) != 't')
 				continue;
+			if(!visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
+				this.usedCells.add(boardState.getBoardCell(x,y));
 			visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
 			switch(i)
 			{
 			case 0: 
+				count++;
 				ret = ret && check(x, y+1, boardState.getTile(x, y+1));
 				break;
 			case 1:
-					ret = ret && check(x+1, y, boardState.getTile(x+1, y));
+				count++;
+				ret = ret && check(x+1, y, boardState.getTile(x+1, y));
 				break;
 			case 2:
-					ret = ret && check(x, y-1, boardState.getTile(x,  y-1));
+				count++;
+				ret = ret && check(x, y-1, boardState.getTile(x,  y-1));
 				break;
 			case 3:
+				count++;
 				if(boardState.getTile(x-1, y) != null)
 					ret = ret && check(x-1, y, boardState.getTile(x-1, y));
 				break;
 			}
 		}
+		if(count == 0)
+			throw new Exception(super.getName() + " failed under condition, tile had no trails");
 		return ret;
 	}
 	private boolean recurseTrail(int x, int y, Tile tile)

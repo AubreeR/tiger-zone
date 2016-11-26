@@ -43,23 +43,7 @@ public class Main {
 		}
 		System.out.println("");
 		
-//		Stack<Tile> pile = Board.createDefaultStack();
-//		Collections.shuffle(pile);
-//		Game game = new Game(pile);
-//
-//
-//		//Protocol p = new Protocol("0.0.0.0",8000,"tpass","user","pass");
-//		//p.tournamentProtocol();
-//
-//		List<Player> players = new ArrayList<Player>(2);
-//		players.add(new Player(0));
-//		players.add(new Player(1));
-//		game.setPlayers(players);
-//
-//		BoardFrame bf = new BoardFrame(game);
-//		bf.setSize(900, 900);
-//		bf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		bf.setVisible(true);
+
 		
 		Stack<Tile> pile = Board.createDefaultStack();
 		Collections.shuffle(pile);

@@ -50,7 +50,7 @@ public class PoorAiPlayer extends AiPlayer {
 
 		game.getBoard().addTile(move[0], move[1], current);
 
-		if (current.hasDen()) {
+		if (current.hasDen() /*||this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  5)*/) {
 			System.out.println("Player " + currentPlayer + " has placed a tiger!");
 			current.addTiger(5, currentPlayer);
 		}
@@ -67,23 +67,9 @@ public class PoorAiPlayer extends AiPlayer {
 				+ "\tTiger Locations: "  + (-1)
 				+ "\tElapsed Time: " + millis);
 
-		UnionFind uf = new UnionFind(current);
-		TigerTrailRule tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 2);
-		tlr.evaluate();
-		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 3);
-		tlr.evaluate();
-		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 4);
-		tlr.evaluate();
-		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 5);
-		tlr.evaluate();
-		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 6);
-		tlr.evaluate();
-		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 7);
-		tlr.evaluate();
-		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 8);
-		tlr.evaluate();
-		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 9);
-		tlr.evaluate();
+		
+		
+
 
 
 	}
