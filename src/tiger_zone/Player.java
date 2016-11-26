@@ -143,6 +143,7 @@ public class Player {
 		 * if there is a tile thats not flagged then check if that tile is a special case
 		 * if special case: then flag the special cases cordinates and add one to total
 		 * if normal tile: put that tile in the stack, add one to total
+		 * checking special lake tiles for tigers will just check if either lake has a tiger and then adds it to either player tiger count
 		 */
 		public int checkForLake(int x, int y, int scores) {
 			Boolean nullFound = false;
@@ -165,6 +166,7 @@ public class Player {
 			char[] tempsides;
 			String originalSides;
 			String tigerOwner;
+			int[] tigerCheck;
 
 
 			Tile checkTile = boardState.getTile(x, y);
@@ -203,16 +205,9 @@ public class Player {
 					}
 					
 					//tiger check here
-					if(checkTile.hasTiger()){
-						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){
-							p1Tigers++;
-						}
-						else
-						{
-							p2Tigers++;
-						}
-					}
+					tigerCheck = checkLake4Tigers(checkTile);
+					p1Tigers += tigerCheck[0];
+					p2Tigers += tigerCheck[1];
 	
 					if(sides[0] == 'l') //check top
 					{
@@ -230,22 +225,15 @@ public class Player {
 								flagGrid[XY[0]][XY[1]+1] = true; //if true, flag it then add to score, dont push it to stack
 								totalScore += 1;
 								// add tiger check for special case tiles
-								if(checkTile.hasTiger()){
-									tigerOwner = checkTile.getTigerOwner();
-									if(tigerOwner.equals(getPid())){
-										p1Tigers++;
-									}
-									else
-									{
-										p2Tigers++;
-									}
-								}
+								tigerCheck = checkLake4Tigers(checkTile);
+								p1Tigers += tigerCheck[0];
+								p2Tigers += tigerCheck[1];
 							}
 							else {
 								tempXY = XY;
 								tempXY[1] = XY[1] + 1;
-								tileStack.push(temp); //set up tile stack
-								XYStack.push(tempXY); //set up XY cordinate stack
+								tileStack.push(temp); //push to tile stack
+								XYStack.push(tempXY); //push to XY cordinate stack
 								flagGrid[XY[0]][XY[1]-1] = true; //flag first tile on flaggrid
 								totalScore += 1; //add 1 to total score
 							}
@@ -267,16 +255,9 @@ public class Player {
 								flagGrid[XY[0]][XY[1]-1] = true; //if true, flag it then add to score, dont push it to stack
 								totalScore += 1;
 								//tiger scoring
-								if(checkTile.hasTiger()){
-									tigerOwner = checkTile.getTigerOwner();
-									if(tigerOwner.equals(getPid())){
-										p1Tigers++;
-									}
-									else
-									{
-										p2Tigers++;
-									}
-								}
+								tigerCheck = checkLake4Tigers(checkTile);
+								p1Tigers += tigerCheck[0];
+								p2Tigers += tigerCheck[1];
 							}
 							else {
 								tempXY = XY;
@@ -303,16 +284,9 @@ public class Player {
 							if(originalSides == "ljlj" || originalSides == "jllj"){
 								flagGrid[XY[0]][XY[1]-1] = true; //if true, flag it then add to score, dont push it to stack
 								totalScore += 1;
-								if(checkTile.hasTiger()){
-									tigerOwner = checkTile.getTigerOwner();
-									if(tigerOwner.equals(getPid())){
-										p1Tigers++;
-									}
-									else
-									{
-										p2Tigers++;
-									}
-								}
+								tigerCheck = checkLake4Tigers(checkTile);
+								p1Tigers += tigerCheck[0];
+								p2Tigers += tigerCheck[1];
 							}
 							else {
 								tempXY = XY;
@@ -339,16 +313,9 @@ public class Player {
 							if(originalSides == "ljlj" || originalSides == "jllj"){
 								flagGrid[XY[0]-1][XY[1]] = true; //if true, flag it then add to score, dont push it to stack
 								totalScore += 1;
-								if(checkTile.hasTiger()){
-									tigerOwner = checkTile.getTigerOwner();
-									if(tigerOwner.equals(getPid())){
-										p1Tigers++;
-									}
-									else
-									{
-										p2Tigers++;
-									}
-								}
+								tigerCheck = checkLake4Tigers(checkTile);
+								p1Tigers += tigerCheck[0];
+								p2Tigers += tigerCheck[1];
 							}
 							else {
 								tempXY = XY;
@@ -383,7 +350,6 @@ public class Player {
 				}
 				return ((2*totalScore)*(1+uniques));
 			}
-			
 		}
 		
 		
@@ -654,6 +620,29 @@ public class Player {
 				score = totalScoreSide[0] + totalScoreSide[1] + totalScoreSide[2] + totalScoreSide[3];
 			}
 			return score;
+		}
+		
+		public int[] checkLake4Tigers(Tile tile){
+			int[] playersTigerCount = {0,0};
+			char[] sides = tile.getSides();
+			int tigerPos = tile.getTigerPosition();
+			if(tile.hasTiger() == true){
+				if((tigerPos == 1 && sides[0] == 'l')
+					|| (tigerPos == 2 && sides[0] == 'l')
+					|| (tigerPos == 3 && sides[0] == 'l')
+					|| (tigerPos == 4 && sides[3] == 'l')
+					|| (tigerPos == 6 && sides[1] == 'l')
+					|| (tigerPos == 8 && sides[2] == 'l'))
+				{
+					if(tile.getTigerOwner().equals(getPid())){
+						playersTigerCount[0]++;
+					}
+					else{
+						playersTigerCount[1]++;
+					}
+				}
+			}
+			return playersTigerCount;
 		}
 	
 		

@@ -15,6 +15,7 @@ import tiger_zone.Game;
 import tiger_zone.Player;
 import tiger_zone.Tile;
 import tiger_zone.UnionFind;
+import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.PoorAiPlayer;
 import tiger_zone.Protocol;
 
@@ -76,11 +77,11 @@ public class Main {
 		PoorAiPlayer skynet1 = new PoorAiPlayer(game, "s1");
 		PoorAiPlayer skynet2 = new PoorAiPlayer(game, "s2");
 		
-		while (game.getBoard().getPile().size() >= 1) {
-			skynet1.makeMove();
-			skynet2.makeMove();
-			System.out.println(game.getBoard().getPile().size());
-		}
+		List<AiPlayer> ai = new ArrayList<AiPlayer>();
+		ai.add(skynet1);
+		ai.add(skynet2);
+		game.setAiPlayers(ai);
+		game.conductTurn();
 
 		BoardFrame bf = new BoardFrame(game);
 		bf.setSize(900, 900);
