@@ -19,14 +19,14 @@ public class PoorAiPlayer extends AiPlayer {
 	 * @param game The game instance.
 	 */
 	public PoorAiPlayer(Game game, String pid){
-		super(game, pid);
+		super(game, pid);		
 	}
 
 	/**
 	 * Have this AI player place a tile on the board.
 	 */
 	public final void makeMove() {
-		currentPlayer = this.getPid(); 
+		currentPlayer = getPid(); 
 		
 		long millis = System.currentTimeMillis();
 		Tile current = this.game.getBoard().getPile().pop();
@@ -51,22 +51,7 @@ public class PoorAiPlayer extends AiPlayer {
 			System.out.println("Player " + currentPlayer + " has placed a tiger!");
 			current.addTiger(5,currentPlayer);
 		}
-		TigerLakeRule tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 2);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 3);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 4);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 5);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 6);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 7);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 8);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 9);
-		tlr.evaluate();
+
 		
 //		if(current.hasSpecial()){
 //			System.out.println("Tile has special attribute!");
@@ -82,11 +67,4 @@ public class PoorAiPlayer extends AiPlayer {
 
 	}
 
-	public String getPid() {
-		return pid;
-	}
-
-	public void setPid(String pid) {
-		this.pid = pid;
-	}
 }
