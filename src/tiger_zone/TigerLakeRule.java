@@ -69,7 +69,7 @@ public class TigerLakeRule extends PlacementRule
 	public boolean checkChildren( int cartX, int cartY)
 	{
 		boolean[][] testedTiles = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
-		 if(this.tilePlaced.getZone(this.zone) != 'l')
+		 if(this.tilePlaced.getZone(this.zone) != 'l'|| this.tilePlaced.hasTiger())
 			 return false;
 		return recursiveLake(testedTiles, cartX, cartY);
 	}
@@ -80,14 +80,13 @@ public class TigerLakeRule extends PlacementRule
 	{
 		//mark adjacent tiles with lakes
 		//check if 
-		if(this.tilePlaced.hasTiger())
+		if(boardState.getTile(X, Y).hasTiger())
 			return false;
 		//already visited this tile or no more tiles to check
 		if(testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] || boardState.getTile(X, Y) == null)
 			return true;
 		
 		boolean ret = true;
-		int visitCount = 0;
 		for(int i = 0; i < 4; i++)
 		{
 			if( boardState.getTile(X, Y).getSide(i) == 'l')
@@ -99,25 +98,21 @@ public class TigerLakeRule extends PlacementRule
 							usedTiles.add(this.boardState.getBoardCell(X, Y));
 						testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
 						ret = ret && recursiveLake(testedTiles, X,Y+1);
-						visitCount++;
 					break;
 				case 1: if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
 							usedTiles.add(this.boardState.getBoardCell(X, Y));
 						testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
 						ret = ret && recursiveLake(testedTiles, X+1,Y);
-						visitCount++;
 					break;
 				case 2: if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
 							usedTiles.add(this.boardState.getBoardCell(X, Y));
 						testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
 						ret = ret && recursiveLake(testedTiles, X,Y-1);
-						visitCount++;
 					break;
 				case 3: if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
 							usedTiles.add(this.boardState.getBoardCell(X, Y));
 						testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
 						ret = ret && recursiveLake(testedTiles, X-1,Y);
-						visitCount++;
 					break;
 				default:
 					break;
@@ -125,7 +120,7 @@ public class TigerLakeRule extends PlacementRule
 				}
 				
 			}
-		}	
+		}
 		
 		return ret;
 	}
