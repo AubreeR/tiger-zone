@@ -28,7 +28,7 @@ public class TigerTrailRule extends PlacementRule
 	{
 		try{
 		//System.err.println("HELP I AM NOT DONE. I ONLY GET THE COMPLETION OF A TRAIL. CANNOT BE FINISHED UNTIL TIGERS ARE DONE");
-		if(checkChildren(this.cartX, this.cartY, this.tilePlaced))
+		if(check(this.cartX, this.cartY, this.tilePlaced))
 		{
 			for(BoardCell t : this.usedCells)
 			{
@@ -50,7 +50,43 @@ public class TigerTrailRule extends PlacementRule
 		
 	}
 	
-
+	private boolean check(int x, int y, Tile tile)
+	{
+		boolean ret = true;
+		if(tile.hasTiger())
+			return false;
+		if(visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] || tile == null || tile.isCrossroad())
+			return true;
+		for(int i = 0; i < 4; i++)
+		{
+			if(tile.getSide(i) != 't')
+				continue;
+			visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
+			switch(i)
+			{
+			case 0: 
+				ret = ret && check(x, y+1, boardState.getTile(x, y+1));
+				break;
+			case 1:
+					ret = ret && check(x+1, y, boardState.getTile(x+1, y));
+				break;
+			case 2:
+					ret = ret && check(x, y-1, boardState.getTile(x,  y-1));
+				break;
+			case 3:
+				if(boardState.getTile(x-1, y) != null)
+					ret = ret && check(x-1, y, boardState.getTile(x-1, y));
+				break;
+			}
+		}
+		return ret;
+	}
+	private boolean recurseTrail(int x, int y, Tile tile)
+	{
+		boolean ret  = true;
+		
+		return ret;
+	}
 	
 	private boolean checkChildren(int x, int y, Tile tile)
 	{

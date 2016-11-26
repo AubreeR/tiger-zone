@@ -57,22 +57,6 @@ public class PoorAiPlayer extends AiPlayer {
 
 		
 
-		/*TigerLakeRule tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 2);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 3);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 4);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 5);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 6);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 7);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 8);
-		tlr.evaluate();
-		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 9);
-		tlr.evaluate();*/
 		
 		
 
