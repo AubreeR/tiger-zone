@@ -39,5 +39,10 @@ public class PoorAiPlayer extends AiPlayer {
 			current.rotate();
 		}
 		game.getBoard().addTile(move[0], move[1], current);
+		
+		if(current.hasSpecial()){
+			System.out.println("Tile has special attribute!");
+			current.addTiger(1);
+		}
 	}
 }

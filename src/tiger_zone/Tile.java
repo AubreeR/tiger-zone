@@ -122,9 +122,11 @@ public class Tile {
 		return tigerPosition;
 	}
 	
-	public void addTiger(Tile curr, int gridPos){
-		if(curr.getTigerSpots()[gridPos] != '='){
-			curr.getTigerSpots()[gridPos] = 'q';
+	public void addTiger(int gridPos){
+		if(this.getTigerSpots()[gridPos-1] != '='){
+			this.getTigerSpots()[gridPos-1] = 'q';
+			tigerPosition = gridPos; 
+			System.out.println("Tiger placed!");
 		}
 		
 		else{
@@ -133,17 +135,17 @@ public class Tile {
 		
 	}
 	
-	public boolean hasTiger(Tile curr)
+	public boolean hasTiger()
 	{
 		
-		for(char ch : curr.getTigerSpots()){
+		for(char ch : this.getTigerSpots()){
 			if(ch == 'q'){
 				System.out.println("Tile has a tiger!");
 				return true;
 			}
 		}
 		
-		System.out.println("Tiger not found!");
+		System.out.println("Tiger not found on tile!");
 		return false;
 	}
 	
@@ -207,6 +209,17 @@ public class Tile {
 		
 		
 		return '=';
+	}
+	
+	public boolean hasSpecial(){
+		char ch = this.getCenter();
+		if(ch == 'b' || ch == 'd' || ch == 'p' || ch == 'x'){
+			return true;
+		}
+		
+		else{
+			return false;
+		}
 	}
 	
 	public boolean isCrossroad()

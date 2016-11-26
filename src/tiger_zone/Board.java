@@ -47,12 +47,12 @@ public class Board {
 			//PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
 			//p.evaluate();
 			//p.output();
-			for(int i = 1; i <= 9; i++)
-			{
-				System.out.print(tile.getZone(i));
-				if(i%3 == 0)
-					System.out.println("");
-			}
+//			for(int i = 1; i <= 9; i++)
+//			{
+//				System.out.print(tile.getZone(i));
+//				if(i%3 == 0)
+//					System.out.println("");
+//			}
 			//millis = System.currentTimeMillis() - millis;
 			//System.out.println("Possible moves elapsed Time: " + millis);
 			x += this.origin;

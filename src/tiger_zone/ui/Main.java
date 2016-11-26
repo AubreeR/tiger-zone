@@ -54,8 +54,7 @@ public class Main {
 		PoorAiPlayer skynet = new PoorAiPlayer(game);
 		while (game.getBoard().getPile().size() > 1) {
 			skynet.makeMove();
-			System.out.println(pile.size());
-
+			
 		}
 
 		BoardFrame bf = new BoardFrame(game);
