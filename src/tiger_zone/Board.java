@@ -121,7 +121,7 @@ public class Board {
 		switch(tile.getZone(zone))
 		{
 		case 'j': return false;
-		case 't': placementEngine.addRule(new TigerTrailRule(this,x,y,tile, zone));
+		//case 't': placementEngine.addRule(new TigerTrailRule(this,x,y,tile, zone));
 		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone));
 		case 'x': return true;
 		}

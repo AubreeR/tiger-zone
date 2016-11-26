@@ -105,7 +105,10 @@ public class UnionFind//used to find what areas on a tile are connected adn the 
 		else
 			return findRoot(parent[index]);
 	}
-	
+	public int getLowestZone(int zone)
+	{
+		return findRoot(zone - 1) + 1;
+	}
 	public void union(int a, int b)
 	{
 		int aRoot = findRoot(a);
