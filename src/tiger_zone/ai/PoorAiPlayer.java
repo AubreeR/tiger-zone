@@ -53,11 +53,6 @@ public class PoorAiPlayer extends AiPlayer {
 		}
 
 		
-//		if(current.hasSpecial()){
-//			System.out.println("Tile has special attribute!");
-//			current.addTiger(1);
-//		}
-		
 		millis = System.currentTimeMillis() - millis;
 		System.out.println("Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: " 
 				+ current.getSide(0)+current.getSide(1)+current.getSide(2)+current.getSide(3) 

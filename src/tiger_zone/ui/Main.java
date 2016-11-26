@@ -42,6 +42,12 @@ public class Main {
 		}
 		System.out.println("");
 		
+		/**
+		 * GUI Implementation. 
+		 * @Uncomment this and comment the rest to enable a 
+		 * human player to play the game and interact with the UI
+		 */
+		
 //		Stack<Tile> pile = Board.createDefaultStack();
 //		Collections.shuffle(pile);
 //		Game game = new Game(pile);
@@ -59,6 +65,8 @@ public class Main {
 //		bf.setSize(900, 900);
 //		bf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //		bf.setVisible(true);
+		
+
 		
 		Stack<Tile> pile = Board.createDefaultStack();
 		Collections.shuffle(pile);
