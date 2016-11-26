@@ -78,12 +78,14 @@ public class TigerLakeRule extends PlacementRule
 		
 	public boolean recursiveLake(boolean[][] testedTiles, int X, int Y)
 	{
+		if(boardState.getTile(X, Y) == null)
+			return true;
 		//mark adjacent tiles with lakes
 		//check if 
 		if(boardState.getTile(X, Y).hasTiger())
 			return false;
 		//already visited this tile or no more tiles to check
-		if(testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] || boardState.getTile(X, Y) == null)
+		if(testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] )
 			return true;
 		
 		boolean ret = true;
@@ -91,27 +93,22 @@ public class TigerLakeRule extends PlacementRule
 		{
 			if( boardState.getTile(X, Y).getSide(i) == 'l')
 			{
+				if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
+					usedTiles.add(this.boardState.getBoardCell(X, Y));
+				testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
 				
 				switch(i)
 				{
-				case 0:	if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
-							usedTiles.add(this.boardState.getBoardCell(X, Y));
-						testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
-						ret = ret && recursiveLake(testedTiles, X,Y+1);
+				case 0:	
+					ret = ret && recursiveLake(testedTiles, X,Y+1);
 					break;
-				case 1: if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
-							usedTiles.add(this.boardState.getBoardCell(X, Y));
-						testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
-						ret = ret && recursiveLake(testedTiles, X+1,Y);
+				case 1: 
+					ret = ret && recursiveLake(testedTiles, X+1,Y);
 					break;
-				case 2: if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
-							usedTiles.add(this.boardState.getBoardCell(X, Y));
-						testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
-						ret = ret && recursiveLake(testedTiles, X,Y-1);
+				case 2: 
+					ret = ret && recursiveLake(testedTiles, X,Y-1);
 					break;
-				case 3: if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
-							usedTiles.add(this.boardState.getBoardCell(X, Y));
-						testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
+				case 3: 
 						ret = ret && recursiveLake(testedTiles, X-1,Y);
 					break;
 				default:
@@ -128,7 +125,7 @@ public class TigerLakeRule extends PlacementRule
 	@Override
 	public void testFailure() throws Exception
 	{
-		throw new Exception(super.getName() + " failed under condition input road is not complete");
+		throw new Exception(super.getName() + " failed under condition lake is not complete");
 	}
 	
 }

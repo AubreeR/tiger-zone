@@ -111,7 +111,7 @@ public class Board {
 	 * @param tile The instance of <code>Tile</code> to add
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
-	public final boolean validTigerPlacement(final int x, final int y, final Tile tile, final int zone)
+	public final boolean validTigerPlacement(final int x, final int y, final Tile tile, final int zone, boolean trace)
 	{
 		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length || zone < 1 || zone >9) {
 
@@ -123,6 +123,7 @@ public class Board {
 		case 'j': return false;
 		//case 't': placementEngine.addRule(new TigerTrailRule(this,x,y,tile, zone));
 		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone));
+			break;
 		case 'x': return true;
 		}
 		
