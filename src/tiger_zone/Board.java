@@ -43,22 +43,10 @@ public class Board {
 	 */
 	public final boolean addTile(int x, int y, final Tile tile) {
 		if (this.validTilePlacement(x, y, tile, false)) {
-			//long millis = System.currentTimeMillis();
-			//PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
-			//p.evaluate();
-			//p.output();
-//			for(int i = 1; i <= 9; i++)
-//			{
-//				System.out.print(tile.getZone(i));
-//				if(i%3 == 0)
-//					System.out.println("");
-//			}
-			//millis = System.currentTimeMillis() - millis;
-			//System.out.println("Possible moves elapsed Time: " + millis);
+
 			x += this.origin;
    			y =  this.origin - y;
-    			//System.out.println("x = " + x);
-    			//System.out.println("y = " + y);
+
 
 			this.gameGrid[x][y].setTile(tile);
 			return true;

@@ -9,7 +9,7 @@ import tiger_zone.Tile;
  * player should function.
  */
 public class PoorAiPlayer extends AiPlayer {
-
+	private int move_num = 1;
 	/**
 	 * Create a new instance of <code>PoorAiPlayer</code>.
 	 * 
@@ -23,6 +23,7 @@ public class PoorAiPlayer extends AiPlayer {
 	 * Have this AI player place a tile on the board.
 	 */
 	public final void makeMove() {
+		long millis = System.currentTimeMillis();
 		Tile current = this.game.getBoard().getPile().pop();
 		PossibleMovesRule pmr = new PossibleMovesRule(this.game.getBoard(), 0, 0, current, false);
 		
@@ -44,5 +45,13 @@ public class PoorAiPlayer extends AiPlayer {
 			System.out.println("Tile has special attribute!");
 			current.addTiger(1);
 		}
+		
+		millis = System.currentTimeMillis() - millis;
+		System.out.println("Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: " 
+				+ current.getSide(0)+current.getSide(1)+current.getSide(2)+current.getSide(3) 
+				+ "\tTiger Locations: "  + (-1)
+				+ "\tElapsed Time: " + millis);
+		
+
 	}
 }
