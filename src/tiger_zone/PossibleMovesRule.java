@@ -163,6 +163,7 @@ public class PossibleMovesRule extends PlacementRule
 		{
 			this.nextTile.rotate();
 		}
+		//if(this.firstMove[0][0] == Integer.MAX_VALUE &&this.firstMove[1][0] == Integer.MAX_VALUE &&this.firstMove[2][0] == Integer.MAX_VALUE &&this.firstMove[3][0] == Integer.MAX_VALUE )
 		return ret;
 
 	}
@@ -208,8 +209,9 @@ public class PossibleMovesRule extends PlacementRule
 		{
 			if(ind == 4)
 				ind = 0;
-			if(this.firstMove[ind++][0] != Integer.MAX_VALUE)
-				return this.firstMove[ind++]; 
+			if(this.firstMove[ind][0] != Integer.MAX_VALUE)
+				return this.firstMove[ind]; 
+			ind++;
 		}
 		return new int[]{Integer.MAX_VALUE,Integer.MAX_VALUE,Integer.MAX_VALUE};
 	}

@@ -5,6 +5,7 @@ package tiger_zone;
  */
 public class Tile {
 	private char[] sides;
+	private char[] originalSides;
 	private char center;
 	private String imagePath;
 	private int rotation = 0;
@@ -22,6 +23,7 @@ public class Tile {
 	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
 	 */
 	public Tile(char[] sides, char center,  String imagePath) {
+		this.originalSides = sides.clone();
 		this.sides = sides.clone();
 		this.tigerSpots = null;
 		this.center = center;
@@ -36,6 +38,7 @@ public class Tile {
 	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
 	 */
 	public Tile(char[] sides, char center, char[] tigerSpots, char[] crocSpots, String imagePath) {
+		this.originalSides = sides.clone();
 		this.sides = sides.clone();
 		this.tigerSpots = tigerSpots.clone();
 		this.crocSpots = crocSpots.clone();
@@ -54,6 +57,11 @@ public class Tile {
 
 	public final char getSide(int index) {
 		return this.sides[index];
+	}
+	
+	public final String getOriginalSides()
+	{
+		return ("" + this.originalSides[0] + this.originalSides[1] + this.originalSides[2] + this.originalSides[3]).trim();
 	}
 
 	/**
