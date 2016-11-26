@@ -122,8 +122,13 @@ public class Tile {
 		return tigerPosition;
 	}
 	
+	/**
+	* Adds a tiger to a tile location if such placement is valid
+	*
+	*@param grisPos the position 1-9 at which the tiger is added
+	*/
 	public void addTiger(int gridPos){
-		if(this.getTigerSpots()[gridPos-1] != '='){
+		if(this.getTigerSpots()[gridPos-1] != '=' && gridPos >= 1 && gridPos <= 9){
 			this.getTigerSpots()[gridPos-1] = 'q';
 			tigerPosition = gridPos; 
 			System.out.println("Tiger placed!");
