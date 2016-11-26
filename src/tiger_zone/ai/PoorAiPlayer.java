@@ -56,7 +56,7 @@ public class PoorAiPlayer extends AiPlayer {
 				System.out.println("Tiger placed at index 5 at location " + move[0] + ", " + move[1]);
 			}
 		}
-		//else if(current.hasAnimal() ){
+		else if(current.hasAnimal() ){
 		
 			for(int i = 1; i < 10; i++){
 				boolean check = this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  i, false);
@@ -68,7 +68,7 @@ public class PoorAiPlayer extends AiPlayer {
 				}
 			}
 
-		//}
+		}
 
 		
 
