@@ -10,7 +10,7 @@ public class PlayerTest {
 
 	@BeforeClass
 	public static void test() {
-		player = new Player(0);
+		player = new Player(0, "0");
 	}
 
 	@Test

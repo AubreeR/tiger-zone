@@ -8,7 +8,7 @@ public class CrocodileTest {
 
 	@Test
 	public void getOwnerTest() {
-		Player player = new Player(0);
+		Player player = new Player(0, "0");
 		Crocodile crocodile = new Crocodile(player);
 		assertSame(player, crocodile.getOwner());
 	}

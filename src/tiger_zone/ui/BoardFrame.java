@@ -79,18 +79,21 @@ class BoardFrame extends JFrame {
 
 		preview = new SideFrame(game);
 
-		Tile nextTile = game.getBoard().getPile().peek();
+		Tile nextTile;
+		if(game.getBoard().getPile().size() != 0){
+			nextTile= game.getBoard().getPile().peek();
+	
+			tilePreview.setImg(new ImageIcon(nextTile.getImagePath()));
+			preview.add(tilePreview, BorderLayout.SOUTH);
+	
+			rotatePanel.add(rotateTile);
+			tigerPanel.add(placeTiger);
+	
+			preview.add(rotatePanel, BorderLayout.EAST);
+			preview.add(tigerPanel, BorderLayout.WEST);
+		}
 
-		tilePreview.setImg(new ImageIcon(nextTile.getImagePath()));
-		preview.add(tilePreview, BorderLayout.SOUTH);
-
-		rotatePanel.add(rotateTile);
-		tigerPanel.add(placeTiger);
-
-		preview.add(rotatePanel, BorderLayout.EAST);
-		preview.add(tigerPanel, BorderLayout.WEST);
-
-		preview.setSize(250, 250);
+		preview.setSize(400, 300);
 		preview.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		preview.setVisible(true);
 	}

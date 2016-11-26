@@ -42,17 +42,11 @@ public class Board {
 	 * @return if tile was successfully placed
 	 */
 	public final boolean addTile(int x, int y, final Tile tile) {
-		if (this.validTilePlacement(x, y, tile)) {
-			//long millis = System.currentTimeMillis();
-			PossibleMovesRule p = new PossibleMovesRule(this,0,0,tile, false);
-			p.evaluate();
-			p.output();
-			//millis = System.currentTimeMillis() - millis;
-			//System.out.println("Possible moves elapsed Time: " + millis);
-			x += this.origin;
-   			y =  this.origin - y;
-    			//System.out.println("x = " + x);
-    			//System.out.println("y = " + y);
+		if (this.validTilePlacement(x, y, tile, false)) {
+
+			x += this.getOrigin();
+   			y =  this.getOrigin() - y;
+
 
 			this.gameGrid[x][y].setTile(tile);
 			return true;
@@ -74,20 +68,13 @@ public class Board {
 
 			return false;
 		}
-		/*boolean testRoad = false;
-		for(int i = 0; i < 4; i++)
-			testRoad = testRoad || tile.getSide(i) == 't';
-		if(testRoad)
-			System.out.println(validTigerPlacement(x,y,tile) ? ("Road completed") : ("Road incomplete"));*/
+		
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
-
 		placementEngine.addRule(new AdjacencyRule(this, x, y,trace));
 		placementEngine.addRule(new SideMatchRule(this, x, y, tile, trace));
-		
 
-		
 		return placementEngine.evaluateRules();
 	}
 	
@@ -105,19 +92,12 @@ public class Board {
 
 			return false;
 		}
-		/*boolean testRoad = false;
-		for(int i = 0; i < 4; i++)
-			testRoad = testRoad || tile.getSide(i) == 't';
-		if(testRoad)
-			System.out.println(validTigerPlacement(x,y,tile) ? ("Road completed") : ("Road incomplete"));*/
+
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
-
 		placementEngine.addRule(new AdjacencyRule(this, x, y,true));
 		placementEngine.addRule(new SideMatchRule(this, x, y, tile, true));
-		
-
 
 		return placementEngine.evaluateRules();
 	}
@@ -137,7 +117,7 @@ public class Board {
 			return false;
 		}
 		placementEngine.clearRules();
-		placementEngine.addRule(new TigerTrailRule(this,x,y,tile));
+		placementEngine.addRule(new TigerTrailRule(this,x,y,tile, 0));
 
 		return placementEngine.evaluateRules();
 	}
@@ -148,7 +128,7 @@ public class Board {
 	 *
 	 */
 	 public int  getBoardPosX(int x) {
-    		return x + this.origin;
+    		return x + this.getOrigin();
  	}
 
 	/**
@@ -159,7 +139,7 @@ public class Board {
 	 */
   	public int getBoardPosY(int y) {
 
-    		return this.origin - y;
+    		return this.getOrigin() - y;
   	}
 
 
@@ -182,6 +162,11 @@ public class Board {
 		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)].getTile();
 
 	}
+	
+	public BoardCell getBoardCell(final int x, final int y)
+	{
+		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)];
+	}
 
 	/**
 	 * Returns this board's stack of unplaced tiles.
@@ -192,9 +177,10 @@ public class Board {
 		return this.pile;
 	}
 
-	public static void buildStack(Stack<Tile> pile, char[] edges, char center, String file, int tileCount){
+	public static void buildStack(Stack<Tile> pile, char[] edges, char center, char[] tigerSpots,
+			char[] crocSpots, String file, int tileCount){
 		for(int i = 0; i < tileCount; i++){
-			pile.push(new Tile(edges, center, file));
+			pile.push(new Tile(edges, center, tigerSpots, crocSpots, file));
 		}
 	}
 
@@ -262,43 +248,75 @@ public class Board {
 		char[] Wtigers = {'j','t','j','t','=','l','j','t','='};
 		char[] Xtigers = {'j','t','j','=','=','l','=','=','='};
 		char[] Ytigers = {'j','t','j','=','=','l','=','=','='};
-		char[] Ztgiers = {'j','l','j','=','t','=','=','=','='};	//Check this one
-		char[] AAtgiers = {'j','l','j','=','t','=','=','=','='};//And this one
+		char[] Ztigers = {'j','l','j','=','t','=','=','=','='};	//Check this one
+		char[] AAtigers = {'j','l','j','=','t','=','=','=','='};//And this one
 		char[] ABtigers = {'j','t','j','l','=','=','=','=','='};
-
-
+		
+		
+		char[] Acrocs = {'=','=','=','=','=','=','=','=','='};
+		char[] Bcrocs = {'=','=','=','=','=','=','=','=','='};
+		char[] Ccrocs = {'=','=','=','=','=','=','=','t','='};
+		char[] Dcrocs = {'=','t','=','=','=','=','=','=','='};
+		char[] Ecrocs = {'=','t','=','=','=','=','=','=','='};
+		char[] Fcrocs = {'=','t','=','=','=','=','=','=','='};
+		char[] Gcrocs = {'=','t','=','=','=','=','=','=','='};
+		char[] Hcrocs = {'=','=','=','=','=','=','=','=','='};
+		char[] Icrocs = {'j','=','=','=','=','=','=','=','='};
+		char[] Jcrocs = {'j','=','=','=','=','=','=','=','='};
+		char[] Kcrocs = {'j','=','=','=','=','=','j','=','='};
+		char[] Lcrocs = {'j','=','=','=','=','=','j','=','='};
+		char[] Mcrocs = {'j','=','=','=','=','=','=','=','='};
+		char[] Ncrocs = {'=','=','j','=','=','=','j','=','='};
+		char[] Ocrocs = {'=','t','j','=','=','=','=','=','='};
+		char[] Pcrocs = {'=','t','j','=','=','=','=','=','='};
+		char[] Qcrocs = {'=','=','j','t','=','=','=','=','='};
+		char[] Rcrocs = {'=','=','j','t','=','=','=','=','='};
+		char[] Scrocs = {'=','t','j','=','=','=','=','=','='};
+		char[] Tcrocs = {'=','t','j','=','=','=','=','=','='};
+		char[] Ucrocs = {'j','t','j','=','=','=','=','=','='};
+		char[] Vcrocs = {'=','t','j','=','=','=','=','=','='};
+		char[] Wcrocs = {'=','t','j','=','=','=','=','=','='};
+		char[] Xcrocs = {'=','t','j','=','=','=','=','=','='};
+		char[] Ycrocs = {'=','t','j','=','=','=','=','=','='};
+		char[] Zcrocs = {'j','=','j','=','t','=','=','=','='};
+		char[] AAcrocs = {'j','=','j','=','t','=','=','=','='};
+		char[] ABcrocs = {'j','t','j','=','=','=','=','=','='};
 		
 
 		Stack<Tile> pile = new Stack<Tile>();
 		// One Tile1
-		buildStack(pile, Asides, '-', "./src/resources/tile1.png", 1);
-		buildStack(pile, Bsides, 'x', "./src/resources/tile2.png",4);
-		buildStack(pile, Csides, 'x', "./src/resources/tile3.png",2);
-		buildStack(pile, Dsides, '-', "./src/resources/tile4.png",1);
-		buildStack(pile, Esides, '-', "./src/resources/tile5.png",8);
-		buildStack(pile, Fsides, '-', "./src/resources/tile6.png",9);	// Change 8 to 9
-		buildStack(pile, Gsides, '-', "./src/resources/tile7.png",4);
-		buildStack(pile, Hsides, '-', "./src/resources/tile8.png",1);
-		buildStack(pile, Isides, '-', "./src/resources/tile9.png",4);
-		buildStack(pile, Jsides, '-', "./src/resources/tile10.png",5);
-		buildStack(pile, Ksides, '-', "./src/resources/tile11.png",3);
-		buildStack(pile, Lsides, '-', "./src/resources/tile12.png",3);
-		buildStack(pile, Msides, '-', "./src/resources/tile13.png",5);
-		buildStack(pile, Nsides, '-', "./src/resources/tile14.png",2);
-		buildStack(pile, Osides, '-', "./src/resources/tile15.png",1);
-		buildStack(pile, Psides, 'p', "./src/resources/tile16.png",2);
-		buildStack(pile, Qsides, '-', "./src/resources/tile17.png",1);
-		buildStack(pile, Rsides, 'b', "./src/resources/tile18.png",2);
-		buildStack(pile, Ssides, '-', "./src/resources/tile19.png",2);
-		buildStack(pile, Tsides, 'd', "./src/resources/tile20.png",2);
-		buildStack(pile, Usides, '-', "./src/resources/tile21.png",1);
-		buildStack(pile, Vsides, '-', "./src/resources/tile22.png",1);
-		buildStack(pile, Wsides, 'p', "./src/resources/tile23.png",2);
-		buildStack(pile, Xsides, '-', "./src/resources/tile24.png",3);
-		buildStack(pile, Ysides, 'b', "./src/resources/tile25.png",2);
-		buildStack(pile, Zsides, '-', "./src/resources/tile26.png",1);
-		buildStack(pile, AAsides, 'd', "./src/resources/tile27.png",2);
-		buildStack(pile, ABsides, 'c', "./src/resources/tile28.png",2);
+		buildStack(pile, Asides, '-', Atigers, Acrocs, "./src/resources/tile1.png", 1);
+		buildStack(pile, Bsides, 'x', Btigers, Bcrocs, "./src/resources/tile2.png",4);
+		buildStack(pile, Csides, 'x', Ctigers, Ccrocs, "./src/resources/tile3.png",2);
+		buildStack(pile, Dsides, '-', Dtigers, Dcrocs, "./src/resources/tile4.png",1);
+		buildStack(pile, Esides, '-', Etigers, Ecrocs, "./src/resources/tile5.png",8);
+		buildStack(pile, Fsides, '-', Ftigers, Fcrocs, "./src/resources/tile6.png",9);	// Change 8 to 9
+		buildStack(pile, Gsides, '-', Gtigers, Gcrocs, "./src/resources/tile7.png",4);
+		buildStack(pile, Hsides, '-', Htigers, Hcrocs, "./src/resources/tile8.png",1);
+		buildStack(pile, Isides, '-', Itigers, Icrocs, "./src/resources/tile9.png",4);
+		buildStack(pile, Jsides, '-', Jtigers, Jcrocs, "./src/resources/tile10.png",5);
+		buildStack(pile, Ksides, '-', Ktigers, Kcrocs, "./src/resources/tile11.png",3);
+		buildStack(pile, Lsides, '-', Ltigers, Lcrocs, "./src/resources/tile12.png",3);
+		buildStack(pile, Msides, '-', Mtigers, Mcrocs, "./src/resources/tile13.png",5);
+		buildStack(pile, Nsides, '-', Ntigers, Ncrocs, "./src/resources/tile14.png",2);
+		buildStack(pile, Osides, '-', Otigers, Ocrocs, "./src/resources/tile15.png",1);
+		buildStack(pile, Psides, 'p', Ptigers, Pcrocs, "./src/resources/tile16.png",2);
+		buildStack(pile, Qsides, '-', Qtigers, Qcrocs, "./src/resources/tile17.png",1);
+		buildStack(pile, Rsides, 'b', Rtigers, Rcrocs, "./src/resources/tile18.png",2);
+		buildStack(pile, Ssides, '-', Stigers, Scrocs, "./src/resources/tile19.png",2);
+		buildStack(pile, Tsides, 'd', Ttigers, Tcrocs, "./src/resources/tile20.png",2);
+		buildStack(pile, Usides, '-', Utigers, Ucrocs, "./src/resources/tile21.png",1);
+		buildStack(pile, Vsides, '-', Vtigers, Vcrocs, "./src/resources/tile22.png",1);
+		buildStack(pile, Wsides, 'p', Wtigers, Wcrocs, "./src/resources/tile23.png",2);
+		buildStack(pile, Xsides, '-', Xtigers, Xcrocs, "./src/resources/tile24.png",3);
+		buildStack(pile, Ysides, 'b', Ytigers, Ycrocs, "./src/resources/tile25.png",2);
+		buildStack(pile, Zsides, '-', Ztigers, Zcrocs, "./src/resources/tile26.png",1);
+		buildStack(pile, AAsides, 'd', AAtigers, AAcrocs, "./src/resources/tile27.png",2);
+		buildStack(pile, ABsides, 'c', ABtigers, ABcrocs, "./src/resources/tile28.png",2);
 		return pile;
+	}
+
+	public int getOrigin() {
+		return origin;
 	}
 }
