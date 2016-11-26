@@ -29,7 +29,7 @@ public class Tile {
 		this.tigerSpots = null;
 		this.center = center;
 		this.imagePath = imagePath;
-		this.tigerOwner = "none";
+		this.setTigerOwner("none");
 	}
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
@@ -142,7 +142,7 @@ public class Tile {
 	public void addTiger(int gridPos, String player){
 		if(this.getTigerSpots()[gridPos-1] != '=' && gridPos >= 1 && gridPos <= 9){
 			this.getTigerSpots()[gridPos-1] = 'q';
-			tigerOwner = player; 
+			setTigerOwner(player); 
 			tigerPosition = gridPos; 
 			System.out.println("Tiger placed!");
 		}
@@ -271,6 +271,12 @@ public class Tile {
 		}
 		if(this.tigerSpots[tigerPosition] != '=')
 			this.tigerPosition = tigerPosition;
+	}
+	public String getTigerOwner() {
+		return tigerOwner;
+	}
+	public void setTigerOwner(String tigerOwner) {
+		this.tigerOwner = tigerOwner;
 	}
 
 }
