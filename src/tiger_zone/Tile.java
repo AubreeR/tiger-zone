@@ -158,12 +158,12 @@ public class Tile {
 		
 		for(char ch : this.getTigerSpots()){
 			if(ch == 'q'){
-				System.out.println("Tile has a tiger!");
+				//System.out.println("Tile has a tiger!");
 				return true;
 			}
 		}
 		
-		System.out.println("Tiger not found on tile!");
+		//System.out.println("Tiger not found on tile!");
 		return false;
 	}
 	

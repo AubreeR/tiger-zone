@@ -2,6 +2,7 @@ package tiger_zone.ai;
 
 import tiger_zone.Game;
 import tiger_zone.PossibleMovesRule;
+import tiger_zone.TigerLakeRule;
 import tiger_zone.Tile;
 
 /**
@@ -43,12 +44,34 @@ public class PoorAiPlayer extends AiPlayer {
 		while (current.getRotation() != move[2]) {
 			current.rotate();
 		}
+		
 		game.getBoard().addTile(move[0], move[1], current);
 		
 		if(current.hasDen()){
 			System.out.println("Player " + currentPlayer + " has placed a tiger!");
 			current.addTiger(5,currentPlayer);
 		}
+		TigerLakeRule tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 2);
+		tlr.evaluate();
+		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 3);
+		tlr.evaluate();
+		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 4);
+		tlr.evaluate();
+		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 5);
+		tlr.evaluate();
+		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 6);
+		tlr.evaluate();
+		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 7);
+		tlr.evaluate();
+		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 8);
+		tlr.evaluate();
+		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 9);
+		tlr.evaluate();
+		
+//		if(current.hasSpecial()){
+//			System.out.println("Tile has special attribute!");
+//			current.addTiger(1);
+//		}
 		
 		millis = System.currentTimeMillis() - millis;
 		System.out.println("Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: " 
