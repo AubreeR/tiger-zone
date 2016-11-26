@@ -228,6 +228,16 @@ public class Tile {
 				}
 			}
 		}
+		else if(this.originalSides[0] == 'j' &&this.originalSides[1] == 'l' &&this.originalSides[2] == 'j' &&this.originalSides[3] == 'l')
+		{
+			if(index == 5)
+				return 'l';
+		}
+		else if(this.originalSides[0] == 'l' &&this.originalSides[1] == 'j' &&this.originalSides[2] == 'l' &&this.originalSides[3] == 'j')
+		{
+			if(index == 5)
+				return 'j';
+		}
 		
 		//look at all the zones
 		switch(index)
