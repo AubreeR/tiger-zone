@@ -52,7 +52,21 @@ public class PoorAiPlayer extends AiPlayer {
 
 		if (current.hasDen() /*||this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  5)*/) {
 			System.out.println("Player " + currentPlayer + " has placed a tiger!");
-			current.addTiger(5, currentPlayer);
+			if(current.addTiger(5, currentPlayer)){
+				System.out.println("Tiger placed at index 5 at location " + move[0] + ", " + move[1]);
+			}
+		}
+		
+		if(current.hasAnimal()){
+			int i = 1;
+			for(char ch : current.getTigerSpots()){
+				if(ch == 'l'){
+					if(current.addTiger(i, currentPlayer)){
+						System.out.println("Tiger placed at index " + i + " at location " + move[0] + ", " + move[1]);
+					}
+				}
+				i++;				
+			}
 		}
 
 		

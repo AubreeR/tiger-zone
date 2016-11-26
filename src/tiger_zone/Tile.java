@@ -139,16 +139,18 @@ public class Tile {
 	*
 	*@param grisPos the position 1-9 at which the tiger is added
 	*/
-	public void addTiger(int gridPos, String player){
+	public boolean addTiger(int gridPos, String player){
 		if(/*this.getTigerSpots()[gridPos-1] != '=' && */gridPos >= 1 && gridPos <= 9){
 			this.getTigerSpots()[gridPos-1] = 'q';
 			setTigerOwner(player); 
 			tigerPosition = gridPos; 
 			System.out.println("Tiger placed!");
+			return true;
 		}
 		
 		else{
 			System.err.println("Invalid tiger placement!");
+			return false;
 		}
 		
 	}
