@@ -47,14 +47,17 @@ public class Main {
 		//p.tournamentProtocol();
 
 		List<Player> players = new ArrayList<Player>(2);
-		players.add(new Player(0));
-		players.add(new Player(1));
+		players.add(new Player(0, "p1"));
+		players.add(new Player(1, "p2"));
 		game.setPlayers(players);
 
-		PoorAiPlayer skynet = new PoorAiPlayer(game);
-		while (game.getBoard().getPile().size() > 1) {
-			skynet.makeMove();
-			
+		PoorAiPlayer skynet1 = new PoorAiPlayer(game, "s1");
+		PoorAiPlayer skynet2 = new PoorAiPlayer(game, "s2");
+		
+		while (game.getBoard().getPile().size() >= 1) {
+			skynet1.makeMove();
+			skynet2.makeMove();
+			System.out.println(game.getBoard().getPile().size());
 		}
 
 		BoardFrame bf = new BoardFrame(game);

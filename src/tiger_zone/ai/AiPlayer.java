@@ -7,14 +7,17 @@ import tiger_zone.Game;
  */
 public abstract class AiPlayer {
 	protected final Game game;
+	protected final String pid;
 	
 	/**
 	 * Creates a new instance of <code>AiPlayer</code>.
 	 * 
 	 * @param game The game instance.
 	 */
-	public AiPlayer(Game game) {
+	public AiPlayer(Game game, String pid) {
+		
 		this.game = game;
+		this.pid = pid;
 	}
 	
 	/**

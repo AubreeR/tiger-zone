@@ -9,6 +9,7 @@ public class Tile {
 	private String imagePath;
 	private int rotation = 0;
 	private char[] tigerSpots; 
+	private char[] crocSpots;
 	private int tigerPosition = -1;
 	
 
@@ -34,9 +35,10 @@ public class Tile {
 	 * @param center Describes the center of this <code>Tile</code>.
 	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
 	 */
-	public Tile(char[] sides, char center, char[] tigerSpots,  String imagePath) {
+	public Tile(char[] sides, char center, char[] tigerSpots, char[] crocSpots, String imagePath) {
 		this.sides = sides.clone();
 		this.tigerSpots = tigerSpots.clone();
+		this.crocSpots = crocSpots.clone();
 		this.center = center;
 		this.imagePath = imagePath;
 	}

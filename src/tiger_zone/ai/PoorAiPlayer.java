@@ -15,8 +15,8 @@ public class PoorAiPlayer extends AiPlayer {
 	 * 
 	 * @param game The game instance.
 	 */
-	public PoorAiPlayer(Game game) {
-		super(game);
+	public PoorAiPlayer(Game game, String pid){
+		super(game, pid);
 	}
 
 	/**
@@ -41,10 +41,10 @@ public class PoorAiPlayer extends AiPlayer {
 		}
 		game.getBoard().addTile(move[0], move[1], current);
 		
-		if(current.hasSpecial()){
-			System.out.println("Tile has special attribute!");
-			current.addTiger(1);
-		}
+//		if(current.hasSpecial()){
+//			System.out.println("Tile has special attribute!");
+//			current.addTiger(1);
+//		}
 		
 		millis = System.currentTimeMillis() - millis;
 		System.out.println("Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: " 

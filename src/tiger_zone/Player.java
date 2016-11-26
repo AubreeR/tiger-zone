@@ -13,14 +13,16 @@ public class Player {
 	private final List<Tiger> tigers = new ArrayList<Tiger>(7);
 	private final List<Crocodile> crocodiles = new ArrayList<Crocodile>(2);
 	private final int index;
+	private final String pid;
 
 	/**
 	 * Creates a new instance of <code>Player</code> with the specified index.
 	 *
 	 * @param index The player's index.
 	 */
-	public Player(int index) {
+	public Player(int index, String pid) {
 		this.index = index;
+		this.pid = pid;
 	}
 
 	/**
