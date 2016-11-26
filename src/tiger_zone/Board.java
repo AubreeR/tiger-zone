@@ -26,9 +26,10 @@ public class Board {
 			}
 		}
 
-
-		char[] sides = {'t','l','t','j'};
-		Tile init = new Tile(sides, '-', "./src/resources/tile19.png");
+		char[] Ssides = {'t','l','t','j'};
+		char[] Stigers = {'j','t','j','=','=','l','=','=','='};
+		char[] Scrocs = {'=','t','j','=','=','=','=','=','='};
+		Tile init = new Tile( Ssides, '-', Stigers, Scrocs, "./src/resources/tile19.png");
 		this.gameGrid[this.getBoardPosX(0)][this.getBoardPosY(0)].setTile(init);
 
 	}
@@ -110,14 +111,22 @@ public class Board {
 	 * @param tile The instance of <code>Tile</code> to add
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
-	public final boolean validTigerPlacement(final int x, final int y, final Tile tile)
+	public final boolean validTigerPlacement(final int x, final int y, final Tile tile, final int zone)
 	{
-		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
+		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length || zone < 1 || zone >9) {
 
 			return false;
 		}
 		placementEngine.clearRules();
-		placementEngine.addRule(new TigerTrailRule(this,x,y,tile, 0));
+		switch(tile.getZone(zone))
+		{
+		case 'j': return false;
+		case 't': placementEngine.addRule(new TigerTrailRule(this,x,y,tile, zone));
+		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone));
+		case 'x': return true;
+		}
+		
+		
 
 		return placementEngine.evaluateRules();
 	}

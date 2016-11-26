@@ -140,7 +140,7 @@ public class Tile {
 	*@param grisPos the position 1-9 at which the tiger is added
 	*/
 	public void addTiger(int gridPos, String player){
-		if(this.getTigerSpots()[gridPos-1] != '=' && gridPos >= 1 && gridPos <= 9){
+		if(/*this.getTigerSpots()[gridPos-1] != '=' && */gridPos >= 1 && gridPos <= 9){
 			this.getTigerSpots()[gridPos-1] = 'q';
 			setTigerOwner(player); 
 			tigerPosition = gridPos; 
@@ -162,6 +162,8 @@ public class Tile {
 				return true;
 			}
 		}
+		if(tigerPosition != -1)
+			return true;
 		
 		//System.out.println("Tiger not found on tile!");
 		return false;
