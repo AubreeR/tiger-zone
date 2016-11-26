@@ -166,6 +166,66 @@ public class Tile {
 	
 	public char getZone(int index)
 	{
+		
+		if(this.originalSides[0] == 'j' &&this.originalSides[1] == 'l' &&this.originalSides[2] == 'l' &&this.originalSides[3] == 'j')
+		{
+			if(index == 5)
+				return 'j';
+			for(int i = 0; i < 4; i++)
+			{
+				if(this.getSide(i) == 'l')
+				{
+					int j = (i != 3) ? i+1 : 0;
+					int k = (i != 0) ? i-1 : 3;
+					int min = Math.min(j, k);
+					if(this.getSide(j) == 'l')
+					{
+						switch(j)
+						{
+						case 0:
+							if(index == 1)
+								return 'j';
+							break;
+						case 1:
+							if(index == 3)
+								return 'j';
+							break;
+						case 2:
+							if(index == 9)
+								return 'j';
+							break;
+						case 3:
+							if(index == 7)
+								return 'j';
+							
+						}
+					}
+					else if(this.getSide(k) == 'l')
+					{
+						switch(k)
+						{
+						case 0:
+							if(index == 3)
+								return 'j';
+							break;
+						case 1:
+							if(index == 9)
+								return 'j';
+							break;
+						case 2:
+							if(index == 7)
+								return 'j';
+							break;
+						case 3:
+							if(index == 1)
+								return 'j';
+						}
+						
+					}
+				}
+			}
+		}
+		
 		//look at all the zones
 		switch(index)
 		{

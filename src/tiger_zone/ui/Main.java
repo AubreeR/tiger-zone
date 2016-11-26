@@ -20,10 +20,10 @@ import tiger_zone.Protocol;
 
 public class Main {
 	public static void main(String[] args) {
-		char[] Qsides = {'j','l','t','t'};
-		char[] Qtigers = {'j','=','=','t','=','l','j','=','='};
-		char[] Qcrocs = {'=','=','j','t','=','=','=','=','='};
-		Tile t = new Tile( Qsides, '-', Qtigers, Qcrocs, "./src/resources/tile17.png");
+		char[] Nsides = {'j','l','l','j'};
+		char[] Ntigers = {'j','=','=','=','=','l','=','l','='};
+		char[] Ncrocs = {'=','=','j','=','=','=','j','=','='};
+		Tile t = new Tile( Nsides, '-', Ntigers, Ncrocs, "./src/resources/tile14.png");
 		t.rotate();
 		t.rotate();
 		UnionFind uf = new UnionFind(t);

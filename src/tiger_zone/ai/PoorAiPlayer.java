@@ -2,8 +2,9 @@ package tiger_zone.ai;
 
 import tiger_zone.Game;
 import tiger_zone.PossibleMovesRule;
-import tiger_zone.TigerLakeRule;
+import tiger_zone.TigerTrailRule;
 import tiger_zone.Tile;
+import tiger_zone.UnionFind;
 
 /**
  * A pretty bad AI player which simply makes the first possible move found. This exists simply to demonstrate how an AI
@@ -43,7 +44,7 @@ public class PoorAiPlayer extends AiPlayer {
 		
 		game.getBoard().addTile(move[0], move[1], current);
 		
-		TigerLakeRule tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 2);
+		/*TigerLakeRule tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 2);
 		tlr.evaluate();
 		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 3);
 		tlr.evaluate();
@@ -58,7 +59,9 @@ public class PoorAiPlayer extends AiPlayer {
 		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 8);
 		tlr.evaluate();
 		tlr = new TigerLakeRule(this.game.getBoard(), move[0], move[1], current, 9);
-		tlr.evaluate();
+		tlr.evaluate();*/
+		
+		
 		
 //		if(current.hasSpecial()){
 //			System.out.println("Tile has special attribute!");
@@ -70,7 +73,23 @@ public class PoorAiPlayer extends AiPlayer {
 				+ current.getSide(0)+current.getSide(1)+current.getSide(2)+current.getSide(3) 
 				+ "\tTiger Locations: "  + (-1)
 				+ "\tElapsed Time: " + millis);
-		
+		UnionFind uf = new UnionFind(current);
+		TigerTrailRule tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 2);
+		tlr.evaluate();
+		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 3);
+		tlr.evaluate();
+		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 4);
+		tlr.evaluate();
+		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 5);
+		tlr.evaluate();
+		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 6);
+		tlr.evaluate();
+		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 7);
+		tlr.evaluate();
+		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 8);
+		tlr.evaluate();
+		tlr = new TigerTrailRule(this.game.getBoard(), move[0], move[1], current, 9);
+		tlr.evaluate();
 
 	}
 }

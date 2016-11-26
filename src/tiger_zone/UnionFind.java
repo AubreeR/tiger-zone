@@ -42,7 +42,7 @@ public class UnionFind//used to find what areas on a tile are connected adn the 
 		//	0	1	2
 		//	3	4	5
 		//	6	7	8
-		if(tile.getOriginalSides().equals("tllt"))
+		if(tile.getOriginalSides().equals("jllj"))
 		{
 			for(int i = 0; i < 4; i++)
 			{
@@ -50,7 +50,26 @@ public class UnionFind//used to find what areas on a tile are connected adn the 
 				{
 					int j = (i != 3) ? i+1 : 0;
 					int k = (i != 0) ? i-1 : 3;
-					
+					int min = Math.min(j, k);
+					if(tile.getSide(j) == 'l')
+					{
+						switch(j)
+						{
+						case 0:		// 1  5 shifted for array
+							this.union(0, 4);
+							break;
+						case 1:
+							this.union(2, 4);
+							break;
+						case 2:
+							this.union(8, 4);
+							break;
+						case 3:
+							this.union(6, 4);
+							
+						}
+						evaluateAdjacentCase();
+					}
 				}
 			}
 		}
@@ -68,12 +87,10 @@ public class UnionFind//used to find what areas on a tile are connected adn the 
 					int two   = (i < 2) ? 2 : 0;
 					int one   = 0;
 					int tot = eight + four + two + one;
-					
+					if(tot+1 >9 || tot -1 <1)break;
 					if(i % 2 == 0 && tile.getZone(tot + 1) == 'j' && tile.getZone(tot - 1) == 'j')
 						this.union(tot +1 - 1, tot - 1 - 1);
-					char up = tile.getZone(tot + 3);
-					char down = tile.getZone(tot - 3);
-					if(i % 2 == 1 && tile.getZone(tot + 3) == 'j' && tile.getZone(tot - 3) == 'j')
+					else if(i % 2 == 1 && tile.getZone(tot + 3) == 'j' && tile.getZone(tot - 3) == 'j')
 						this.union(tot + 3 - 1,  tot - 3- 1);
 				}
 				

@@ -6,7 +6,7 @@ public class TigerTrailRule extends PlacementRule
 {
 	private Tile tilePlaced;//we must know the next tile to be placed in order to match sides
 	private boolean[][] visited;
-	private ArrayList<Tile> usedTiles;
+	private ArrayList<BoardCell> usedCells;
 	private int zone;
 	
 	
@@ -18,7 +18,7 @@ public class TigerTrailRule extends PlacementRule
 		super.setRuleName("TigerTrail Rule");
 		this.tilePlaced = tilePlaced;
 		this.zone = zone;
-		usedTiles = new ArrayList<Tile>();
+		usedCells = new ArrayList<BoardCell>();
 		
 		
 	}
@@ -30,6 +30,10 @@ public class TigerTrailRule extends PlacementRule
 		//System.err.println("HELP I AM NOT DONE. I ONLY GET THE COMPLETION OF A TRAIL. CANNOT BE FINISHED UNTIL TIGERS ARE DONE");
 		if(checkChildren(this.cartX, this.cartY, this.tilePlaced))
 		{
+			for(BoardCell t : this.usedCells)
+			{
+				System.err.println("tile: (" + (t.getXCoord() - boardState.getOrigin()) +"," + ( boardState.getOrigin() -t.getYCoord()) + ") Zone: " + this.zone+" Has Tiger: " + (t.getTile().hasTiger() ? "true":"false"));
+			}
 			return true;
 			
 		}
@@ -38,7 +42,7 @@ public class TigerTrailRule extends PlacementRule
 		}
 		catch(Exception ex)
 		{
-			System.err.println(ex);
+			//System.err.println(ex);
 			return false;
 		}
 		return false;
@@ -50,111 +54,123 @@ public class TigerTrailRule extends PlacementRule
 	
 	private boolean checkChildren(int x, int y, Tile tile)
 	{
+		
+		if(tile.getZone(this.zone) != 't')
+			return false;
+		
 		boolean ret = true;
-		int countTrails = 0;
-		boolean nullSide = false;
+		boolean notFirst  = false;
 		if(tile.hasTiger())
 			return false;
 		for(int i = 0; i < 4; i++)
 		{
 			if(tile.getSide(i)=='t')
 			{
-				
+				if(!notFirst){
+					this.usedCells.add(boardState.getBoardCell(x, y));
+					notFirst = true;
+				}
+				visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
 				switch(i)
 				{
 				case 0:
 					if(boardState.getTile(x, y+1)!= null){
-						countTrails++;
 						ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), tile, 2);
 					}
-					else nullSide = true;
 					break;
 				case 1:
 					if(boardState.getTile(x+1, y)!= null){
-						countTrails++;
 						ret = ret && recurse(x+1,y,boardState.getTile(x+1, y), tile,3);
 					}
-					else nullSide = true;
 					break;
 				case 2:
 					if(boardState.getTile(x, y-1)!= null){
-						countTrails++;
 						ret = ret && recurse(x,y-1,boardState.getTile(x, y-1), tile, 0);
 					}
-					else nullSide = true;
 					break;
 				case 3:
 					if(boardState.getTile(x-1, y)!= null){
-						countTrails++;
 						ret = ret && recurse(x-1,y,boardState.getTile(x-1, y), tile,1);
 					}
-					else nullSide = true;
 					break;
 				default:
 				}
 			}
 		}
-		if(countTrails == 0)
-			return false;
-		if(!tile.isCrossroad() && nullSide)
-			return false;
+		
 		return ret;
 	}
 	
 	private boolean recurse(int x, int y, Tile tile, Tile startTile, int dir)
 	{
-		if(tile == null || tile.hasTiger())
+		if(tile.hasTiger())
 			return false;
 		boolean ret = true;
-		int countTrails = 0;
-		if(!tile.isCrossroad() ||(tile == startTile) || visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
+	
+		if((tile == startTile) || visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
 		{
 			return true;
 		}
-		else
-		{	
-			visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
-			//find all adj tiles that have not already been visited
-			for(int i = 0; i < 4; i++)
+		if(tile.isCrossroad())
+		{
+			if(!visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
 			{
-				if(i == dir)
-					continue;
-				if(tile.getSide(i)=='t')
-				{
-					switch(i)
-					{
-					case 0:
-						if(boardState.getTile(x, y+1)!= null){
-							countTrails++;
-							ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), tile, 2);
-						}
-						break;
-					case 1:
-						if(boardState.getTile(x+1, y)!= null){
-							countTrails++;
-							ret = ret && recurse(x+1,y,boardState.getTile(x+1, y), tile,3);
-						}
-						break;
-					case 2:
-						if(boardState.getTile(x, y-1)!= null){
-							countTrails++;
-							ret = ret && recurse(x,y-1,boardState.getTile(x, y-1), tile, 0);
-						}
-						break;
-					case 3:
-						if(boardState.getTile(x-1, y)!= null){
-							countTrails++;
-							ret = ret && recurse(x-1,y,boardState.getTile(x-1, y), tile,1);
-						}
-						break;
-					default:
-					}
-				}
+				this.usedCells.add(boardState.getBoardCell(x, y));
+				return true;
 			}
-			if(countTrails == 0)
-				return false;
-			return ret;
+			else
+				return true;
+			
 		}
+		
+		this.usedCells.add(boardState.getBoardCell(x, y));
+		//find all adj tiles that have not already been visited
+		for(int i = 0; i < 4; i++)
+		{
+			//if you are looking in the direction you just came, ignore it
+			if(i == dir || tile.getSide(i) != 't')
+				continue;
+			if(!visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)])
+				this.usedCells.add(boardState.getBoardCell(x, y));
+			
+			switch(i)
+			{
+			case 0:
+				visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
+				if(boardState.getTile(x, y+1)!= null){
+					ret = ret && recurse(x,y+1,boardState.getTile(x, y+1), startTile, 2);
+				}
+				break;
+			case 1:
+				visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
+				if(boardState.getTile(x+1, y)!= null){
+
+					ret = ret && recurse(x+1,y,boardState.getTile(x+1, y), startTile,3);
+				}
+				break;
+			case 2:
+
+				visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
+				if(boardState.getTile(x, y-1)!= null){
+
+					ret = ret && recurse(x,y-1,boardState.getTile(x, y-1), startTile, 0);
+				}
+				break;
+			case 3:
+
+				visited[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
+				if(boardState.getTile(x-1, y)!= null){
+
+					ret = ret && recurse(x-1,y,boardState.getTile(x-1, y), startTile,1);
+				}
+				break;
+			default:
+			}
+			
+		}
+
+		return ret;
+		
 	}
 	
 	@Override
