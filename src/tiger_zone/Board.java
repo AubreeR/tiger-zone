@@ -44,8 +44,8 @@ public class Board {
 	public final boolean addTile(int x, int y, final Tile tile) {
 		if (this.validTilePlacement(x, y, tile, false)) {
 
-			x += this.origin;
-   			y =  this.origin - y;
+			x += this.getOrigin();
+   			y =  this.getOrigin() - y;
 
 
 			this.gameGrid[x][y].setTile(tile);
@@ -128,7 +128,7 @@ public class Board {
 	 *
 	 */
 	 public int  getBoardPosX(int x) {
-    		return x + this.origin;
+    		return x + this.getOrigin();
  	}
 
 	/**
@@ -139,7 +139,7 @@ public class Board {
 	 */
   	public int getBoardPosY(int y) {
 
-    		return this.origin - y;
+    		return this.getOrigin() - y;
   	}
 
 
@@ -161,6 +161,11 @@ public class Board {
 
 		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)].getTile();
 
+	}
+	
+	public BoardCell getBoardCell(final int x, final int y)
+	{
+		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)];
 	}
 
 	/**
@@ -309,5 +314,9 @@ public class Board {
 		buildStack(pile, AAsides, 'd', AAtigers, AAcrocs, "./src/resources/tile27.png",2);
 		buildStack(pile, ABsides, 'c', ABtigers, ABcrocs, "./src/resources/tile28.png",2);
 		return pile;
+	}
+
+	public int getOrigin() {
+		return origin;
 	}
 }
