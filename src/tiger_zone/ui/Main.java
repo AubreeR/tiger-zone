@@ -69,8 +69,8 @@ public class Main {
 		//p.tournamentProtocol();
 
 		List<Player> players = new ArrayList<Player>(2);
-		players.add(new Player(0, "p1"));
-		players.add(new Player(1, "p2"));
+		players.add(new Player(0, "AI1"));
+		players.add(new Player(1, "AI2"));
 		game.setPlayers(players);
 
 		PoorAiPlayer skynet1 = new PoorAiPlayer(game, "s1");

@@ -10,6 +10,8 @@ import tiger_zone.Tile;
  */
 public class PoorAiPlayer extends AiPlayer {
 	private int move_num = 1;
+	private String pid; 
+	private String currentPlayer;
 	/**
 	 * Create a new instance of <code>PoorAiPlayer</code>.
 	 * 
@@ -23,6 +25,8 @@ public class PoorAiPlayer extends AiPlayer {
 	 * Have this AI player place a tile on the board.
 	 */
 	public final void makeMove() {
+		currentPlayer = this.getPid(); 
+		
 		long millis = System.currentTimeMillis();
 		Tile current = this.game.getBoard().getPile().pop();
 		PossibleMovesRule pmr = new PossibleMovesRule(this.game.getBoard(), 0, 0, current, false);
@@ -41,10 +45,10 @@ public class PoorAiPlayer extends AiPlayer {
 		}
 		game.getBoard().addTile(move[0], move[1], current);
 		
-//		if(current.hasSpecial()){
-//			System.out.println("Tile has special attribute!");
-//			current.addTiger(1);
-//		}
+		if(current.hasDen()){
+			System.out.println("Player " + currentPlayer + " has placed a tiger!");
+			current.addTiger(5,currentPlayer);
+		}
 		
 		millis = System.currentTimeMillis() - millis;
 		System.out.println("Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: " 
@@ -53,5 +57,13 @@ public class PoorAiPlayer extends AiPlayer {
 				+ "\tElapsed Time: " + millis);
 		
 
+	}
+
+	public String getPid() {
+		return pid;
+	}
+
+	public void setPid(String pid) {
+		this.pid = pid;
 	}
 }
