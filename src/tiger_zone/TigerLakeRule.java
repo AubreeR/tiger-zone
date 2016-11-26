@@ -45,6 +45,7 @@ public class TigerLakeRule extends PlacementRule
 			if(trace)
 			for(BoardCell t : this.usedTiles)
 			{
+				System.err.println("tile: (" + (t.getXCoord() - boardState.getOrigin()) +"," + ( boardState.getOrigin() -t.getYCoord()) + ") Zone: " + this.zone+" Has Tiger: " + (t.getTile().hasTiger() ? "true":"false"));
 			}
 			return true;
 			
