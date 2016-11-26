@@ -53,6 +53,8 @@ public class TigerTrailRule extends PlacementRule
 		boolean ret = true;
 		int countTrails = 0;
 		boolean nullSide = false;
+		if(tile.hasTiger())
+			return false;
 		for(int i = 0; i < 4; i++)
 		{
 			if(tile.getSide(i)=='t')
@@ -101,7 +103,7 @@ public class TigerTrailRule extends PlacementRule
 	
 	private boolean recurse(int x, int y, Tile tile, Tile startTile, int dir)
 	{
-		if(tile == null)
+		if(tile == null || tile.hasTiger())
 			return false;
 		boolean ret = true;
 		int countTrails = 0;

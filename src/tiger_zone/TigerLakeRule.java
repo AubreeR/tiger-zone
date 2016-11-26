@@ -50,25 +50,23 @@ public class TigerLakeRule extends PlacementRule
 	
 	public boolean checkChildren( int cartX, int cartY)
 	{
-	
-		int lakeScore = 0;
 		boolean[][] testedTiles = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
-		lakeScore = recursiveLake(testedTiles, cartX, cartY);
-		return (lakeScore > 0);
+		 
+		return recursiveLake(testedTiles, cartX, cartY);
 	}
 	
 		
 		
-	public int recursiveLake(boolean[][] testedTiles, int cartX, int cartY)
+	public boolean recursiveLake(boolean[][] testedTiles, int cartX, int cartY)
 	{
 		//mark adjacent tiles with lakes
 		//check if 
+		if(this.tilePlaced.hasTiger())
+			return false;
+		if(testedTiles[boardState.getBoardPosX(cartX)][boardState.getBoardPosY(cartY)] || boardState.getTile(cartX, cartY) == null)
+			return true;
 		
-		if(testedTiles[boardState.getBoardPosX(cartX)][boardState.getBoardPosY(cartY)])
-		{return 0;}
-		if(boardState.getTile(cartX, cartY) == null)
-		{return 0;}
-		int sum = 1;
+		boolean ret = true;
 		int visitCount = 0;
 		for(int i = 0; i < 4; i++)
 		{
@@ -77,19 +75,19 @@ public class TigerLakeRule extends PlacementRule
 				switch(i)
 				{
 				case 0:	testedTiles[boardState.getBoardPosX(cartX)][boardState.getBoardPosY(cartY)] = true;
-						sum += recursiveLake(testedTiles, cartX,cartY+1);
+						ret = ret && recursiveLake(testedTiles, cartX,cartY+1);
 						visitCount++;
 					break;
 				case 1: testedTiles[boardState.getBoardPosX(cartX)][boardState.getBoardPosY(cartY)] = true;
-						sum += recursiveLake(testedTiles, cartX+1,cartY);
+						ret = ret && recursiveLake(testedTiles, cartX+1,cartY);
 						visitCount++;
 					break;
 				case 2: testedTiles[boardState.getBoardPosX(cartX)][boardState.getBoardPosY(cartY)] = true;
-						sum += recursiveLake(testedTiles, cartX,cartY-1);
+						ret = ret && recursiveLake(testedTiles, cartX,cartY-1);
 						visitCount++;
 					break;
 				case 3: testedTiles[boardState.getBoardPosX(cartX)][boardState.getBoardPosY(cartY)] = true;
-						sum += recursiveLake(testedTiles, cartX-1,cartY);
+						ret = ret && recursiveLake(testedTiles, cartX-1,cartY);
 						visitCount++;
 					break;
 				default:
@@ -99,13 +97,12 @@ public class TigerLakeRule extends PlacementRule
 				
 			}
 		}
-		if(visitCount == 0)//
-		{
-			return -200000;
-		}
+		if(visitCount == 0)
+			return false;
+		
 		//visited this tile
 		
-		return sum;
+		return ret;
 	}
 	
 	@Override

@@ -28,8 +28,8 @@ public class GameTest {
 	public void setPlayersTest() {
 		Game game = new Game();
 		List<Player> players = new ArrayList<Player>(2);
-		players.add(new Player(0));
-		players.add(new Player(1));
+		players.add(new Player(0,"0"));
+		players.add(new Player(1,"1"));
 		game.setPlayers(players);
 		assertEquals(2, game.getPlayers().size());
 		assertEquals(0, game.getPlayers().get(0).getIndex());
