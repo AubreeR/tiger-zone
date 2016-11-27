@@ -28,7 +28,8 @@ public class PoorAiPlayer extends AiPlayer {
 	}
 
 	/**
-	 * Have this AI player place a tile on the board.
+	 * Have this AI player place a tile on the board. To maximize points, AI places 
+	 * its tigers on the first available den or unique animal tile.
 	 */
 	public final void makeMove() {
 		currentPlayer = getPid();
@@ -42,9 +43,6 @@ public class PoorAiPlayer extends AiPlayer {
 			return;
 		}
 
-		// x = move[0]
-		// y = move[1]
-		// rotation = move[2]
 		int[] move = pmr.getFirstPossibleMove();
 		while (current.getRotation() != move[2]) {
 			current.rotate();
@@ -64,7 +62,8 @@ public class PoorAiPlayer extends AiPlayer {
 			for( i = 1; i < 10; i++){
 				if(current.getZone(i) == 'l'){
 					boolean check = this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  i, false);
-					if(check && current.addTiger(i, currentPlayer)){
+					if(check && getTigers().size() != 0 && current.addTiger(i, currentPlayer)){
+						getTigers().pop();
 						break;
 					}
 				}
