@@ -26,8 +26,8 @@ public class AdjacencyRule extends PlacementRule {
 			else {
 				throw new Exception(super.getName() + " failed under test condition index out of bounds or tile already occupied");
 			}
-			System.out.println(checkUp + " " + checkDown + " " + checkLeft + " " + checkRight);
-			// these will all be false if the size or placement is 
+			
+			// these will all be false if the size or placement is
 			if (checkUp || checkDown || checkLeft || checkRight) {
 				return true;
 			}
