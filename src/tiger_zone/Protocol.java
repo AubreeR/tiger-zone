@@ -1,17 +1,13 @@
 package tiger_zone;
 
+import java.util.Stack;
 import java.util.StringTokenizer;
 
-
-
-
-public class Protocol extends Client
-{
-	private String tPassword, pid, opid, gid, cid, rounds, rid, tile, x, y, orientation,
-	number_tiles, time, userName, password;
+public class Protocol extends Client {
+	private String tPassword, pid, opid, gid, cid, rounds, rid, number_tiles, time, userName, password;
 	private String[] tiles;
-
-
+	private Game game1 = null;
+	private Game game2 = null;
 	
 	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password)
 	{
@@ -21,14 +17,11 @@ public class Protocol extends Client
 		setTournamentPassword(tPassword);
 		setUserName(userName);
 		setPassword(password);
-		
 	}
 	
 	
 	public void tournamentProtocol()
 	{
-		
-		
 		String fromServer = this.receiveFromServer();
 		//THIS IS SPARTA! only caleld once
 		System.out.println("Server: " + fromServer);
@@ -172,6 +165,10 @@ public class Protocol extends Client
 		fromServer = receiveFromServer();
 		System.out.println("Server: " + fromServer);
 		strTok = new StringTokenizer(fromServer, " ");
+		String tile = null;
+		int x = 0;
+		int y = 0;
+		int orientation = 0;
 		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
 			tok = strTok.nextToken();
@@ -181,15 +178,14 @@ public class Protocol extends Client
 				tile = tok;
 				break;
 			case 5 :
-				x = tok;
+				x = Integer.parseInt(tok);
 				break;
 			case 6 : 
-				y = tok;
+				y = Integer.parseInt(tok);
 				break;
 			case 7 : 
-				orientation = tok;
+				orientation = Integer.parseInt(tok);
 				break;
-
 			default:
 				break;
 			}
@@ -240,6 +236,23 @@ public class Protocol extends Client
 			}
 		}
 		System.out.println("Time till match: " + time);
+		
+		Stack<Tile> pile = new Stack<Tile>();
+		
+		for (String s : tiles) {
+			pile.push(Board.tileMap.get(s).clone());
+		}
+		
+		Board board = new Board((Stack<Tile>)pile.clone());
+		Tile startingTile = Board.tileMap.get(tile).clone();
+		
+		while (startingTile.getRotation() != orientation) {
+			startingTile.rotate();
+		}
+		
+		board.addTileWithNoValidation(new Position(x, y), startingTile);
+		game1 = new Game(board.clone());
+		game2 = new Game(board.clone());
 		
 		for(int i = 0; i < Integer.parseInt(number_tiles); i++)
 		{
@@ -453,47 +466,6 @@ public class Protocol extends Client
 	public void setRid(String rid) {
 		this.rid = rid;
 	}
-
-
-	public String getTile() {
-		return tile;
-	}
-
-
-	public void setTile(String tile) {
-		this.tile = tile;
-	}
-
-
-	public String getX() {
-		return x;
-	}
-
-
-	public void setX(String x) {
-		this.x = x;
-	}
-
-
-	public String getY() {
-		return y;
-	}
-
-
-	public void setY(String y) {
-		this.y = y;
-	}
-
-
-	public String getOrientation() {
-		return orientation;
-	}
-
-
-	public void setOrientation(String orientation) {
-		this.orientation = orientation;
-	}
-
 
 	public String getNumber_tiles() {
 		return number_tiles;

@@ -36,6 +36,15 @@ public class Game {
 	public Game(Stack<Tile> pile) {
 		board = new Board(pile);
 	}
+	
+	/**
+	 * Creates a new instance of <code>Game</code> with the specified board.
+	 * 
+	 * @param board
+	 */
+	public Game(final Board board) {
+		this.board = board;
+	}
 
 	/**
 	 * Returns this game's board.

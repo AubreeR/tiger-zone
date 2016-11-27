@@ -59,10 +59,10 @@ public class Board implements Cloneable{
 		}
 		return false;
 	}
-
+	
 	/**
 	 * Places tile at position regardless of whether or not the placement is valid. Useful for placing the first tile.
-	 *
+	 * 
 	 * @param position Position to place at.
 	 * @param tile Tile to place.
 	 */
@@ -355,17 +355,17 @@ public class Board implements Cloneable{
 		buildStack(pile, ABsides,'c', ABtigers, ABcrocs, "./src/resources/tile28.png",2);
 		return pile;
 	}
-
+	
 	@Override
 	public final Board clone() {
 		// copy over pile
 		Board copy = new Board((Stack<Tile>)this.pile.clone());
-
+		
 		// copy over placed tiles
 		for (Entry<Position, Tile> p : this.gameGrid.entrySet()) {
 			copy.addTileWithNoValidation(p.getKey(), p.getValue().clone());
 		}
-
+		
 		return copy;
 	}
 }
