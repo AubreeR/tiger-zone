@@ -71,11 +71,14 @@ public class Protocol extends Client
 				break;
 			}
 		}
-		challengeProtocol(receiveFromServer());
+		
+		while(challengeProtocol(receiveFromServer()))
+		{}
 	}
 	
-	public void challengeProtocol(String fromServer)
+	public boolean challengeProtocol(String fromServer)
 	{
+	
 		System.out.println("Server: " + fromServer);
 		StringTokenizer strTok = new StringTokenizer(fromServer," ");
 		String tok = "";
@@ -102,8 +105,14 @@ public class Protocol extends Client
 			roundProtocol(receiveFromServer());
 		}
 		
-		fromServer = receiveFromServer();
 		//END OF CHALLENGES or PLEASE WAIT FOR NEXT CHALLEGE
+		fromServer = receiveFromServer();
+		strTok = new StringTokenizer(fromServer, " ");
+		int count = strTok.countTokens();
+		if(count < 4)
+			return false;//no more challenges
+		return true;
+		
 	}
 	
 	public void roundProtocol(String fromServer)
