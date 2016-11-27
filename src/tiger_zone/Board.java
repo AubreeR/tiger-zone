@@ -214,7 +214,6 @@ public class Board {
 		String str = ("" + edges[0] + edges[1] + edges[2] + edges[3] + center).trim();
 		Tile tmp = new Tile(edges, center, tigerSpots, crocSpots, file);
 		tileMap.put(str, tmp);
-//		System.out.println(str);
 		
 		for(int i = 0; i < tileCount; i++){
 			pile.push(tmp);
