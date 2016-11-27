@@ -1,15 +1,11 @@
 package tiger_zone;
 
-import java.util.Stack;
-
-enum TigerPlacement
-{
+enum TigerPlacement {
 	JUNGLE,
 	LAKE,
 	GAME,
 	DEN, 
 	NOTPLACED
-	
 };
 
 /**
@@ -22,19 +18,19 @@ public class Tiger {
 	private int locationPlaced;//what array index is the tiger placed on
 	private TigerPlacement placement;//the role fo the tiger
 	private int tigerCount;//Can use a max of 7 tigers
-	public Tiger()
-	{
+	private Player owner;
+	
+	public Tiger(Player owner) {
 		xCoor = -1;
 		yCoor = -1;
 		locationPlaced = -1;
 		tile = null;
 		placement = TigerPlacement.NOTPLACED;
-		
-		
+		this.owner = owner;
 	}
 	
 	
-	Tiger(final int x, final int y, Tile tile, final int locationPlaced)
+	public Tiger(final int x, final int y, Tile tile, final int locationPlaced)
 	{
 		
 		this.xCoor = x;
@@ -83,7 +79,7 @@ public class Tiger {
 	int getYCoor() { return yCoor; }
 	Tile getTile() { return tile;  }
 	
-	
-	
-
+	public final Player getOwner() {
+		return this.owner;
+	}
 }

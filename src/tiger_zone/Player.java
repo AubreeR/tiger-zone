@@ -24,7 +24,7 @@ public class Player {
 		this.pid = pid;
 
 		for (int i = 0; i < 7; i++){
-			tigers.push(new Tiger());
+			tigers.push(new Tiger(this));
 		}
 	}
 
@@ -101,7 +101,6 @@ public class Player {
 		}
 
 		public int checkForDen(int x, int y, int scores, Board boardState) {
-			String tigerOwner;
 			int pointsEarned = 0;
 			if(boardState.getTile(x, y) != null) {
 				Tile checkTile = boardState.getTile(x, y);
@@ -115,12 +114,11 @@ public class Player {
 							&& (boardState.getTile(x-1,y+1) != null)
 							&& (boardState.getTile(x-1,y-1) != null)){
 						//assign score values based on which player's tiger is there
-						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){
+						Player tigerOwner = checkTile.getTigerOwner();
+						if(tigerOwner.equals(this)) {
 							pointsEarned = 9;
 						}
 					}
-
 				}
 			}
 			else {
@@ -364,7 +362,7 @@ public class Player {
 			Boolean Error = false;
 			Boolean Error2 = true;
 			int side = -1;
-			String tigerOwner;
+			Player tigerOwner;
 
 			Tile checkTile = boardState.getTile(tileX, tileY);
 			char[] tileSides = checkTile.getSides();
@@ -399,10 +397,10 @@ public class Player {
 						//tiger count
 						if(checkTile.getTigerPosition() == 2 && roadcount != 2){
 							tigerOwner = checkTile.getTigerOwner();
-							if(tigerOwner.equals(getPid())){
+							if (tigerOwner.equals(this)) {
 								p1Tigers++;
 							}
-							else{
+							else {
 								p2Tigers++;
 							}
 						}
@@ -413,7 +411,7 @@ public class Player {
 						//tiger count
 						if(checkTile.getTigerPosition() == 6 && roadcount != 2){
 							tigerOwner = checkTile.getTigerOwner();
-							if(tigerOwner.equals(getPid())){
+							if (tigerOwner.equals(this)) {
 								p1Tigers++;
 							}
 							else
@@ -428,7 +426,7 @@ public class Player {
 						//tiger count
 						if(checkTile.getTigerPosition() == 8 && roadcount != 2){
 							tigerOwner = checkTile.getTigerOwner();
-							if(tigerOwner.equals(getPid())){
+							if (tigerOwner.equals(this)) {
 								p1Tigers++;
 							}
 							else
@@ -443,7 +441,7 @@ public class Player {
 						//tiger count
 						if(checkTile.getTigerPosition() == 4 && roadcount != 2){
 							tigerOwner = checkTile.getTigerOwner();
-							if(tigerOwner.equals(getPid())){
+							if (tigerOwner.equals(this)) {
 								p1Tigers++;
 							}
 							else
@@ -457,22 +455,22 @@ public class Player {
 				if(roadcount == 2){ //before looping, check for tigers on a road with two sides
 					if(checkTile.getTigerPosition() == 2 && tileSides[0] == 't'){ //starting at the top, going clockwise, check for tiger on a road
 						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){p1Tigers++;}
+						if(tigerOwner.equals(this)){p1Tigers++;}
 						else{p2Tigers++;}
 					}
 					else if(checkTile.getTigerPosition() == 6 && tileSides[1] == 't'){
 						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){p1Tigers++;}
+						if(tigerOwner.equals(this)){p1Tigers++;}
 						else{p2Tigers++;}
 					}
 					else if(checkTile.getTigerPosition() == 8 && tileSides[2] == 't'){
 						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){p1Tigers++;}
+						if(tigerOwner.equals(this)){p1Tigers++;}
 						else{p2Tigers++;}
 					}
 					else if(checkTile.getTigerPosition() == 4 && tileSides[3] == 't'){
 						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){p1Tigers++;}
+						if(tigerOwner.equals(this)){p1Tigers++;}
 						else{p2Tigers++;}
 					}
 				}
@@ -521,22 +519,22 @@ public class Player {
 					else if (roadcount == 1 || roadcount == 3 || roadcount == 4){//came to end of road, score up points
 						if(checkTile.getTigerPosition() == 2 && side == 0){ // check which side we came from and if there is a tiger there
 							tigerOwner = checkTile.getTigerOwner();
-							if(tigerOwner.equals(getPid())){p1Tigers++;}
+							if(tigerOwner.equals(this)){p1Tigers++;}
 							else{p2Tigers++;}
 						}
 						else if(checkTile.getTigerPosition() == 6 && side == 1){
 							tigerOwner = checkTile.getTigerOwner();
-							if(tigerOwner.equals(getPid())){p1Tigers++;}
+							if(tigerOwner.equals(this)){p1Tigers++;}
 							else{p2Tigers++;}
 						}
 						else if(checkTile.getTigerPosition() == 8 && side == 2){
 							tigerOwner = checkTile.getTigerOwner();
-							if(tigerOwner.equals(getPid())){p1Tigers++;}
+							if(tigerOwner.equals(this)){p1Tigers++;}
 							else{p2Tigers++;}
 						}
 						else if(checkTile.getTigerPosition() == 4 && side == 3){
 							tigerOwner = checkTile.getTigerOwner();
-							if(tigerOwner.equals(getPid())){p1Tigers++;}
+							if(tigerOwner.equals(this)){p1Tigers++;}
 							else{p2Tigers++;}
 						}
 						break;
@@ -569,22 +567,22 @@ public class Player {
 					//check road with two trail sides for a tiger
 					if(checkTile.getTigerPosition() == 2 && tileSides[0] == 't'){
 						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){p1Tigers++;}
+						if(tigerOwner.equals(this)){p1Tigers++;}
 						else{p2Tigers++;}
 					}
 					else if(checkTile.getTigerPosition() == 6 && tileSides[1] == 't'){
 						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){p1Tigers++;}
+						if(tigerOwner.equals(this)){p1Tigers++;}
 						else{p2Tigers++;}
 					}
 					else if(checkTile.getTigerPosition() == 8 && tileSides[2] == 't'){
 						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){p1Tigers++;}
+						if(tigerOwner.equals(this)){p1Tigers++;}
 						else{p2Tigers++;}
 					}
 					else if(checkTile.getTigerPosition() == 4 && tileSides[3] == 't'){
 						tigerOwner = checkTile.getTigerOwner();
-						if(tigerOwner.equals(getPid())){p1Tigers++;}
+						if(tigerOwner.equals(this)){p1Tigers++;}
 						else{p2Tigers++;}
 					}
 
@@ -627,7 +625,7 @@ public class Player {
 					|| (tigerPos == 6 && sides[1] == 'l')
 					|| (tigerPos == 8 && sides[2] == 'l'))
 				{
-					if(tile.getTigerOwner().equals(getPid())){
+					if(tile.getTigerOwner().equals(this)){
 						playersTigerCount[0]++;
 					}
 					else{

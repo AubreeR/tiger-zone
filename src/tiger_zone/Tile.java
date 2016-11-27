@@ -12,7 +12,7 @@ public class Tile {
 	private char[] tigerSpots; 
 	private char[] crocSpots;
 	private int tigerPosition = -1;
-	private String tigerOwner; 
+	private Tiger placedTiger = null;
 	
 
 	/**
@@ -23,14 +23,14 @@ public class Tile {
 	 * @param center Describes the center of this <code>Tile</code>.
 	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
 	 */
-	public Tile(char[] sides, char center,  String imagePath) {
+	public Tile(char[] sides, char center, String imagePath) {
 		this.originalSides = sides.clone();
 		this.sides = sides.clone();
 		this.tigerSpots = null;
 		this.center = center;
 		this.imagePath = imagePath;
-		this.setTigerOwner("none");
 	}
+	
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
 	 *
@@ -134,44 +134,34 @@ public class Tile {
 		return tigerPosition;
 	}
 	
+
 	/**
-	* Adds a tiger to a tile location if such placement is valid
-	*
-	*@param grisPos the position 1-9 at which the tiger is added
-	*/
-	public boolean addTiger(int gridPos, String player){
-		if(gridPos >= 1 && gridPos <= 9){
+	 * Adds a tiger to this tile at the specified grid position.
+	 * 
+	 * @param gridPos Position on grid.
+	 * @param tiger Tiger to add.
+	 * @return if placement was valid
+	 */
+	public boolean addTiger(int gridPos, Tiger tiger) {
+		if (gridPos >= 1 && gridPos <= 9) {
 			this.getTigerSpots()[gridPos-1] = 'q';
-			setTigerOwner(player); 
-			tigerPosition = gridPos; 
-		
+			this.tigerPosition = gridPos; 
+			this.placedTiger = tiger;
 			return true;
 		}
-		else
-			return false;
-		
-		
-	}
-	
-	public boolean hasTiger()
-	{
-		
-		for(char ch : this.getTigerSpots()){
-			if(ch == 'q'){
-				//System.out.println("Tile has a tiger!");
-				return true;
-			}
-		}
-		if(tigerPosition != -1)
-			return true;
-		
-		//System.out.println("Tiger not found on tile!");
 		return false;
 	}
 	
-	public char getZone(int index)
-	{
-		
+	/**
+	 * Returns true if this tile contains a tiger. Otherwise returns false.
+	 * 
+	 * @return has tiger
+	 */
+	public boolean hasTiger() {
+		return this.placedTiger != null;
+	}
+	
+	public char getZone(int index) {
 		if(this.originalSides[0] == 'j' &&this.originalSides[1] == 'l' &&this.originalSides[2] == 'l' &&this.originalSides[3] == 'j')
 		{
 			if(index == 5)
@@ -333,6 +323,7 @@ public class Tile {
 		}
 		return count == 3|| count == 4 || count == 1;
 	}
+	
 	//tiger position is independent of rotation
 	//get rotation and offset to get the actual placement in the array
 	public void setTigerPosition(int tigerPosition) {
@@ -344,11 +335,16 @@ public class Tile {
 		if(this.tigerSpots[tigerPosition] != '=')
 			this.tigerPosition = tigerPosition;
 	}
-	public String getTigerOwner() {
-		return tigerOwner;
+	
+	/**
+	 * Returns the owner of the tiger on this tile. Returns null if no tiger exists on this tile.
+	 * 
+	 * @return tiger's owner, or null if no tiger is on this tile
+	 */
+	public final Player getTigerOwner() {
+		if (this.tigerPosition == -1) {
+			return null;
+		}
+		return this.placedTiger.getOwner();
 	}
-	public void setTigerOwner(String tigerOwner) {
-		this.tigerOwner = tigerOwner;
-	}
-
 }

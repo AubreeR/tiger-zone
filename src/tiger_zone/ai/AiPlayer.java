@@ -10,21 +10,14 @@ import tiger_zone.Tiger;
  */
 public abstract class AiPlayer {
 	protected final Game game;
-	protected final String pid;
-	private final Stack<Tiger> tigers = new Stack<Tiger>();
+	
 	/**
 	 * Creates a new instance of <code>AiPlayer</code>.
 	 *
 	 * @param game The game instance.
 	 */
-	public AiPlayer(Game game, String pid) {
-
+	public AiPlayer(Game game) {
 		this.game = game;
-		this.pid = pid;
-
-		for(int i = 0; i < 7; i++){
-			tigers.push(new Tiger());
-		}
 	}
 
 	/**
@@ -32,13 +25,5 @@ public abstract class AiPlayer {
 	 */
 	public void makeMove() {
 		// TODO: figure out if an implementation should be here?
-	}
-
-	public String getPid(){
-		return pid;
-	}
-
-	public Stack<Tiger> getTigers(){
-		return tigers;
 	}
 }
