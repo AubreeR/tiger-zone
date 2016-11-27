@@ -29,24 +29,6 @@ public class Tiger {
 		this.owner = owner;
 	}
 	
-	
-	public Tiger(final int x, final int y, Tile tile, final int locationPlaced)
-	{
-		
-		this.xCoor = x;
-		this.yCoor = y;
-		this.locationPlaced = locationPlaced;
-		this.tile = tile;
-		try{
-		this.placement = this.evaluateRole();
-		}
-		catch(Exception ex)
-		{
-			this.placement = TigerPlacement.NOTPLACED;
-			System.err.println(ex);
-		}
-	}
-	
 	/**
 	 * Looks at the given tile coordinate the tiger was placed on to figure out it's role
 	 * @return TigerPlacement value (i.e. Jungle, Lake, Game...)
