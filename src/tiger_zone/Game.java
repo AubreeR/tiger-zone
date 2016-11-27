@@ -1,5 +1,6 @@
 package tiger_zone;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -90,7 +91,7 @@ public class Game {
 	 * @param aiPlayers List of AI players.
 	 */
 	public final void setAiPlayers(List<AiPlayer> aiPlayers) {
-		this.aiPlayers = aiPlayers;
+		this.aiPlayers = new ArrayList<>(aiPlayers);
 	}
 
 	/**
