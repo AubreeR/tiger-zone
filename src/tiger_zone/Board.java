@@ -61,6 +61,16 @@ public class Board implements Cloneable{
 	}
 
 	/**
+	 * Places tile at position regardless of whether or not the placement is valid. Useful for placing the first tile.
+	 *
+	 * @param position Position to place at.
+	 * @param tile Tile to place.
+	 */
+	public final void addTileWithNoValidation(final Position position, final Tile tile) {
+		this.gameGrid.put(position, tile);
+	}
+
+	/**
 	 * Returns true if placing tile at position is valid. Otherwise, returns false.
 	 * 
 	 * @param p Position to place at.
