@@ -17,7 +17,7 @@ public class Board {
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.
-	 * 
+	 *
 	 * @param pile Stack of unplaced tiles.
 	 */
 	public Board(final Stack<Tile> pile) {
@@ -38,7 +38,7 @@ public class Board {
 	 * @return if tile was successfully placed
 	 */
 	public final boolean addTile(final int x, final int y, final Tile tile) {
-		if (this.validTilePlacement(x, y, tile, true)) {
+		if (this.validTilePlacement(x, y, tile, false)) {
 			this.gameGrid.put(new Position(x, y), tile);
 			return true;
 		}
@@ -120,14 +120,14 @@ public class Board {
 
 	/**
 	 * Returns the tile location at position.
-	 * 
+	 *
 	 * @param position Instance of <code>Position</code>.
 	 * @return tile at position
 	 */
 	public final Tile getTile(final Position position){
 		return this.gameGrid.get(position);
 	}
-	
+
 	/**
 	 * Returns this board's stack of unplaced tiles.
 	 *
@@ -136,10 +136,10 @@ public class Board {
 	public Stack<Tile> getPile() {
 		return this.pile;
 	}
-	
+
 	/**
 	 * Returns a list of empty positions adjacent to existing tiles.
-	 * 
+	 *
 	 * @return open positions
 	 */
 	public final List<Position> getOpenPositions() {
@@ -160,42 +160,49 @@ public class Board {
 		}
 		return openPositions;
 	}
-	
+
 	/**
-	 * Returns valid placements for this tile on the board. The returned result maps Position to Rotations.
-	 * 
-	 * @param tile Tile to be placed.
+	 * Returns valid placements for this tile on the board. The returned result maps Position to rotations, for example,
+	 * the returned map may look like:
+	 *
+	 * 		   key | value
+	 * 		-------|-------------
+	 * 		(0, 1) | {0, 90, 270}
+	 * 		(1, 0) | {180}
+	 *
+	 * which indicates that one may place the tile at position (0, 1), with any of the rotations {0, 90, 270}, or at
+	 * position (1, 0), with rotation 180.
+	 *
+	 * @param tile Tile to get valid placements for.
 	 * @return valid tile placements
 	 */
 	public final Map<Position, List<Integer>> getValidTilePlacements(final Tile tile) {
 		Map<Position, List<Integer>> validTilePlacements = new HashMap<Position, List<Integer>>();
-		
+
 		// get list of empty positions
 		List<Position> openPositions = this.getOpenPositions();
-		
+
 		// save tile's original rotation for later
 		int originalRotation = tile.getRotation();
-		
-		System.out.println(openPositions.size());
-		
+
 		// for each open position, try every rotation of this tile until it fits
 		for (Position p : openPositions) {
 			for (int i = 0; i < 4; i++) {
-				tile.rotate();
 				if (this.validTilePlacement(p.getX(), p.getY(), tile)) {
 					if (!validTilePlacements.containsKey(p)) {
 						validTilePlacements.put(p, new ArrayList<Integer>());
 					}
 					validTilePlacements.get(p).add(tile.getRotation());
 				}
+				tile.rotate();
 			}
 		}
-		
+
 		// restore tile's original rotation
 		while (tile.getRotation() != originalRotation) {
 			tile.rotate();
 		}
-		
+
 		return validTilePlacements;
 	}
 
