@@ -1,12 +1,17 @@
 package tiger_zone;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Test;
+
+import tiger_zone.ai.AiPlayer;
+import tiger_zone.ai.PoorAiPlayer;
 
 public class GameTest {
 
@@ -34,5 +39,18 @@ public class GameTest {
 		assertEquals(2, game.getPlayers().size());
 		assertEquals(0, game.getPlayers().get(0).getIndex());
 		assertEquals(1, game.getPlayers().get(1).getIndex());
+	}
+
+	@Test
+	public void getSetAiPlayersTest() {
+		Game game = new Game();
+		List<AiPlayer> aiPlayers = new ArrayList<AiPlayer>(2);
+		aiPlayers.add(new PoorAiPlayer(game));
+		aiPlayers.add(new PoorAiPlayer(game));
+		game.setAiPlayers(aiPlayers);
+		assertNotSame(aiPlayers, game.getAiPlayers());
+		assertEquals(2, game.getAiPlayers().size());
+		assertSame(aiPlayers.get(0), game.getAiPlayers().get(0));
+		assertSame(aiPlayers.get(1), game.getAiPlayers().get(1));
 	}
 }
