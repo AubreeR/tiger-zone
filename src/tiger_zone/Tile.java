@@ -24,7 +24,7 @@ public class Tile {
 	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
 	 */
 	public Tile(char[] sides, char center,  String imagePath) {
-		this.originalSides = sides.clone();
+		this.originalSides = copyFoo(sides);
 		this.sides = sides.clone();
 		this.tigerSpots = null;
 		this.center = center;
@@ -40,7 +40,7 @@ public class Tile {
 	 * @param imagePath The path to the image file which portrays this <code>Tile</code>.
 	 */
 	public Tile(char[] sides, char center, char[] tigerSpots, char[] crocSpots, String imagePath) {
-		this.originalSides = sides.clone();
+		this.originalSides = copyFoo(sides);
 		this.sides = sides.clone();
 		this.tigerSpots = tigerSpots.clone();
 		this.crocSpots = crocSpots.clone();
@@ -350,5 +350,14 @@ public class Tile {
 	public void setTigerOwner(String tigerOwner) {
 		this.tigerOwner = tigerOwner;
 	}
+	
+	char[] copyFoo (char[] foo){
+		  char[] f = new char[4];
+		  //for all properties in FOo
+		  for(int i = 0; i < 4; i++){
+			  f[i] = foo[i];
+		  }
+		  return f;
+		}
 
 }

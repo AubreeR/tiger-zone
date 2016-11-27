@@ -79,9 +79,9 @@ public class Player {
 			{
 				updatedScores = checkForDen(lastTileX, lastTileY, updatedScores, boardState); //check placed tile
 				updatedScores = checkForDen(lastTileX+1, lastTileY, updatedScores, boardState); //check all tiles around the placed tile for dens and if they are complete
-				updatedScores = checkForDen(lastTileX, lastTileY+1, updatedScores, boardState);
 				updatedScores = checkForDen(lastTileX-1, lastTileY, updatedScores, boardState);
-				updatedScores = checkForDen(lastTileX+1, lastTileY-1, updatedScores, boardState);
+				updatedScores = checkForDen(lastTileX, lastTileY+1, updatedScores, boardState);
+				updatedScores = checkForDen(lastTileX, lastTileY-1, updatedScores, boardState);
 				updatedScores = checkForDen(lastTileX+1, lastTileY+1, updatedScores, boardState);
 				updatedScores = checkForDen(lastTileX+1, lastTileY-1, updatedScores,boardState);
 				updatedScores = checkForDen(lastTileX-1, lastTileY+1, updatedScores, boardState);
@@ -179,6 +179,7 @@ public class Player {
 
 			if(sides[0] == 'l' || sides[1] == 'l' || sides[2] == 'l' || sides[3] == 'l'){ //setting up stack: if the first tile has a lake side, add it to stack
 				XYStack.push(XY); //set up XY cordinate stack
+				//System.err.println("Push1: X: " + XY[0] + " Y: " + XY[1]);
 				flagGrid[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
 				totalScore += 1; //add 1 to total score
 			}
@@ -196,6 +197,7 @@ public class Player {
 				
 				
 				XY = XYStack.pop();
+				//System.err.println("Pop: X: " + XY[0] + " Y: " + XY[1]);
 				checkTile = boardState.getTile(XY[0], XY[1]);
 				center = checkTile.getCenter();
 				sides = checkTile.getSides();
@@ -220,8 +222,9 @@ public class Player {
 
 				if(sides[0] == 'l') //check top
 				{
-					tempXY = XY;
-					tempXY[1]++;
+					tempXY[0] = XY[0];
+					tempXY[1] = XY[1];
+					tempXY[1] = tempXY[1] + 1;
 					if(boardState.getTile(tempXY[0],tempXY[1]) == null) { //check if top has a tile
 						nullFound = true;
 						break;
@@ -239,9 +242,11 @@ public class Player {
 							tigerCheck = checkLake4Tigers(temp);
 							p1Tigers += tigerCheck[0];
 							p2Tigers += tigerCheck[1];
+							//System.err.println("check: " + tempXY[0] + " " + tempXY[1]);
 						}
-						else {
+						else if (tempsides[0] == 'l' || tempsides[1] == 'l' || tempsides[2] == 'l' || tempsides[3] == 'l'){
 							XYStack.push(tempXY); //push to XY cordinate stack
+							//System.err.println("Push: X: " + tempXY[0] + " Y: " + tempXY[1]);
 							flagGrid[boardState.getBoardPosX(tempXY[0])][boardState.getBoardPosY(tempXY[1])] = true;//flag first tile on flaggrid
 							totalScore += 1; //add 1 to total score
 						}
@@ -249,8 +254,9 @@ public class Player {
 				}
 				if(sides[1] == 'l') //check right
 				{
-					tempXY = XY;
-					tempXY[0]++;
+					tempXY[0] = XY[0];
+					tempXY[1] = XY[1];
+					tempXY[0] = tempXY[0] + 1;
 					if(boardState.getTile(tempXY[0],tempXY[1]) == null) { //check if top has a tile
 						nullFound = true;
 						break;
@@ -269,8 +275,9 @@ public class Player {
 							p1Tigers += tigerCheck[0];
 							p2Tigers += tigerCheck[1];
 						}
-						else {
+						else if (tempsides[0] == 'l' || tempsides[1] == 'l' || tempsides[2] == 'l' || tempsides[3] == 'l'){
 							XYStack.push(tempXY); //push to XY cordinate stack
+							//System.err.println("Push: X: " + tempXY[0] + " Y: " + tempXY[1]);
 							flagGrid[boardState.getBoardPosX(tempXY[0])][boardState.getBoardPosY(tempXY[1])] = true;//flag first tile on flaggrid
 							totalScore += 1; //add 1 to total score
 						}
@@ -278,8 +285,9 @@ public class Player {
 				}
 				if(sides[2] == 'l') //check bottom
 				{
-					tempXY = XY;
-					tempXY[1]--;
+					tempXY[0] = XY[0];
+					tempXY[1] = XY[1];
+					tempXY[1] = tempXY[1] - 1;
 					if(boardState.getTile(tempXY[0],tempXY[1]) == null) { //check if top has a tile
 						nullFound = true;
 						break;
@@ -298,8 +306,9 @@ public class Player {
 							p1Tigers += tigerCheck[0];
 							p2Tigers += tigerCheck[1];
 						}
-						else {
+						else if (tempsides[0] == 'l' || tempsides[1] == 'l' || tempsides[2] == 'l' || tempsides[3] == 'l'){
 							XYStack.push(tempXY); //push to XY cordinate stack
+							//System.err.println("Push: X: " + tempXY[0] + " Y: " + tempXY[1]);
 							flagGrid[boardState.getBoardPosX(tempXY[0])][boardState.getBoardPosY(tempXY[1])] = true;//flag first tile on flaggrid
 							totalScore += 1; //add 1 to total score
 						}
@@ -307,8 +316,9 @@ public class Player {
 				}
 				if(sides[3] == 'l') //check left
 				{
-					tempXY = XY;
-					tempXY[0]--;
+					tempXY[0] = XY[0];
+					tempXY[1] = XY[1];
+					tempXY[0] = tempXY[0] - 1;
 					if(boardState.getTile(tempXY[0],tempXY[1]) == null) { //check if top has a tile
 						nullFound = true;
 						break;
@@ -327,8 +337,9 @@ public class Player {
 							p1Tigers += tigerCheck[0];
 							p2Tigers += tigerCheck[1];
 						}
-						else {
+						else if (tempsides[0] == 'l' || tempsides[1] == 'l' || tempsides[2] == 'l' || tempsides[3] == 'l'){
 							XYStack.push(tempXY); //push to XY cordinate stack
+							//System.err.println("Push: X: " + tempXY[0] + " Y: " + tempXY[1]);
 							flagGrid[boardState.getBoardPosX(tempXY[0])][boardState.getBoardPosY(tempXY[1])] = true;//flag first tile on flaggrid
 							totalScore += 1; //add 1 to total score
 						}
@@ -574,27 +585,81 @@ public class Player {
 					}
 					
 					//road has two sides, so need to find the other side to continue path
+					Boolean nullTile = false;
+					int sidetrailscount = 0;
 					testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
 					for(int i = 0; i < 4; i++){ //find the other side with road
-						if(tileSides[i] == 't' && side != i) {
+						if(tileSides[i] == 't'){
 							Error2 = false;
 							if(i == 0){
-								tileY++;
-								side = 2; //set side for the next tile, telling the next tile that, that is the side we came from
+								if(boardState.getTile(tileX, tileY+1) == null){
+									nullTile = true;
+									break;
+								}
+								else if(testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY+1)] == true){
+									sidetrailscount++;
+								}
+								else {
+									tileY++;
+									side = 2;
+									break;
+								}
 							}
-							else if(i == 1){
-								tileX++;
-								side = 3;
+							if(i == 1){
+								if(boardState.getTile(tileX+1, tileY) == null){
+									nullTile = true;
+									break;
+								}
+								else if(testedTiles[boardState.getBoardPosX(tileX+1)][boardState.getBoardPosY(tileY)] == true){
+									sidetrailscount++;
+								}
+								else {
+									tileX++;
+									side = 3;
+									break;
+								}
+								
 							}
-							else if(i == 2){
-								tileY--;
-								side = 0;
+							if(i == 2){
+								if(boardState.getTile(tileX, tileY-1) == null){
+									nullTile = true;
+									break;
+								}
+								else if(testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY-1)] == true){
+									sidetrailscount++;
+								}
+								else {
+									tileY--;
+									side = 0;
+									break;
+								}
+								
 							}
-							else if(i == 3){
-								tileX--;
-								side = 1;
+							if(i == 3){
+								if(boardState.getTile(tileX-1, tileY) == null){
+									nullTile = true;
+									break;
+								}
+								else if(testedTiles[boardState.getBoardPosX(tileX-1)][boardState.getBoardPosY(tileY)] == true){
+									sidetrailscount++;
+								}
+								else {
+									tileX--;
+									side = 1;
+									break;
+								}
+								
 							}
 						}
+						
+						
+					}
+					if(nullTile == true){ //happens if one side of the two sided road has a null
+						Error = true; 
+						break;
+					}
+					if(sidetrailscount == 2){
+						break;
 					}
 					
 					//check road with two trail sides for a tiger
@@ -640,12 +705,12 @@ public class Player {
 				}
 			}
 			
-			if(Error == true){
+			/*if(Error == true){
 				score = 0;
-			}
-			else{
+			}*/
+			//else{
 				score = totalScoreSide[0] + totalScoreSide[1] + totalScoreSide[2] + totalScoreSide[3];
-			}
+			//}
 			return score;
 		}
 		
