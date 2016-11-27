@@ -20,7 +20,7 @@ public class Tiger {
 	private int tigerCount;//Can use a max of 7 tigers
 	private final Player owner;
 	
-	public Tiger(Player owner) {
+	public Tiger(final Player owner) {
 		xCoor = -1;
 		yCoor = -1;
 		locationPlaced = -1;
@@ -61,6 +61,11 @@ public class Tiger {
 	int getYCoor() { return yCoor; }
 	Tile getTile() { return tile;  }
 	
+	/**
+	 * Returns this tiger's owner.
+	 * 
+	 * @return owner
+	 */
 	public final Player getOwner() {
 		return this.owner;
 	}
