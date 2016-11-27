@@ -3,16 +3,7 @@ package tiger_zone;
 import java.util.StringTokenizer;
 
 
-enum ProtocolState
-{
-	TOURNAMENT,
-	AUTHENTICATION,
-	CHALLENGE,
-	ROUND,
-	MATCH,
-	MOVE,
-	UNDEFINED
-}
+
 
 public class Protocol extends Client
 {
@@ -20,13 +11,13 @@ public class Protocol extends Client
 	number_tiles, time, userName, password;
 	private String[] tiles;
 
-	private ProtocolState pState; 
+
 	
 	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password)
 	{
 		super(serverName, portNumber);
 		setPid("-1");
-		setProtocolState(ProtocolState.UNDEFINED);
+
 		setTournamentPassword(tPassword);
 		setUserName(userName);
 		setPassword(password);
@@ -245,12 +236,137 @@ public class Protocol extends Client
 		{
 			moveProtocol(receiveFromServer());
 		}
+		//get first game score
+		fromServer = receiveFromServer();		
+		System.out.println("Server: " + fromServer);
+		//get second game score
+		fromServer = receiveFromServer();		
+		System.out.println("Server: " + fromServer);
 	}
 	
 	
-	public void moveProtocol(String clientMove){
-		sendToServer(clientMove);
-		System.out.println(clientMove);
+	public void moveProtocol(String moveInstruction){
+		String moveNumber = "movenumber";
+		String moveTile = "movetile";
+		String moveGid = "movegid";
+		String movePid = "movepid";
+		String moveTime  = "movetime";
+		String moveX = "movex";
+		String moveY = "movey";
+		String moveOrientation = "moveorientation";
+		String moveZone = "movezone";
+		
+		//LINE 1 -- MAKE YOUR MOVE IN GAME <gid> WITHIN <moveTime> SECOND/SECONDS: MOVE <moveNumber> PLACE <moveTile>
+		System.out.println("Server: " + moveInstruction);
+		StringTokenizer strTok = new StringTokenizer(moveInstruction, " ");
+		String tok = "";
+		for(int i = 0; strTok.hasMoreTokens(); i++)
+		{
+			tok = strTok.nextToken();
+			switch(i)
+			{
+			case 5:
+				moveGid = tok;
+				break;
+			case 7:
+				moveTime = tok;
+				break;
+			case 10:
+				moveNumber = tok;
+				break;
+			case 12:
+				moveTile = tok;
+				break;
+			default:
+					break;
+			}
+		}
+		System.out.println("moveGid: " + moveGid + " moveTime: " + moveTime + " moveNumber: " + moveNumber + " moveTile: " + moveTile);
+		
+		
+		//SEND OUR MOVE
+		//getMove()
+		String input = "";
+		switch(0/*getMoveValue*/)
+		{
+		case 0 : 
+			input = "GAME " + moveGid + " PLACE " + moveTile + " AT " 
+					+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
+			break;
+		case 1 : 
+			input = "GAME " + moveGid + " PLACE " + moveTile + " AT " 
+					+ moveX + " " + moveY +  " " + moveOrientation + " CROCODILE ";
+			break;	
+		case 2 : 
+			input = "GAME " + moveGid + " PLACE " + moveTile + " AT " 
+					+ moveX + " " + moveY +  " " + moveOrientation + " TIGER " + moveZone + " ";
+			break;
+		case 3 : 
+			input = "GAME " + moveGid + " PLACE " + moveTile + " UNPLACEABLE PASS";
+			break;
+		case 4 : 
+			input = "GAME " + moveGid + " PLACE " + moveTile + " UNPLACEABLE RETRIEVE TIGER AT "
+					+ moveX + " " + moveY + " ";
+			break;
+		case 5 : 
+			input = "GAME " + moveGid + " PLACE " + moveTile + " UNPLACEABLE ADD ANOTHER TIGER TO "
+					+ moveX + " " + moveY + " ";
+			break;
+		default:
+			input = "GAME " + moveGid + " PLACE " + moveTile + " AT " 
+					+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
+		}
+		sendToServer(input);
+		
+		String fromServer = receiveFromServer();		
+		System.out.println("Server: " + fromServer);
+		strTok = new StringTokenizer(fromServer, " ");
+		for(int i = 0; strTok.hasMoreTokens(); i++)
+		{
+			tok = strTok.nextToken();
+			switch(i)
+			{
+			case 1: 
+				moveGid = tok;
+				break;
+			case 3: 
+				moveNumber = tok;
+				break;
+			default:
+				break;
+			}
+		}
+		
+		fromServer = receiveFromServer();		
+		System.out.println("Server: " + fromServer);
+		strTok = new StringTokenizer(fromServer, " ");
+		for(int i = 0; strTok.hasMoreTokens(); i++)
+		{
+			tok = strTok.nextToken();
+			switch(i)
+			{
+			case 1: 
+				moveGid = tok;
+				break;
+			case 3: 
+				moveNumber = tok;
+				break;
+			case 5:
+				movePid = tok;
+				break;
+			case 6:
+				if(!tok.equals("FORFEITED"))
+				{
+					moveX = tok;
+					moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
+					moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
+				}
+				break;
+			default:
+				break;
+			}
+		}
+		
 	}
 
 	public String getPid() {
@@ -293,13 +409,6 @@ public class Protocol extends Client
 		this.cid = cid;
 	}
 
-	public ProtocolState getProtocolState() {
-		return pState;
-	}
-
-	public void setProtocolState(ProtocolState pState) {
-		this.pState = pState;
-	}
 
 	public String getUserName() {
 		return userName;
