@@ -1,25 +1,18 @@
 package tiger_zone.ui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import javax.swing.JFrame;
 
 import tiger_zone.Board;
-
-import tiger_zone.Client;
 import tiger_zone.Game;
 import tiger_zone.Player;
 import tiger_zone.Tile;
-import tiger_zone.UnionFind;
 import tiger_zone.ai.AiPlayer;
-import tiger_zone.ai.CloseAiPlayer;
-import tiger_zone.ai.PoorAiPlayer;
-import tiger_zone.Protocol;
+import tiger_zone.ai.BetterAiPlayer;
 
 public class Main {
 	
@@ -58,8 +51,8 @@ public class Main {
 		players.add(new Player(1, "p2"));
 		game.setPlayers(players);
 
-		AiPlayer skynet1 = new CloseAiPlayer(game);
-		AiPlayer skynet2 = new PoorAiPlayer(game);
+		BetterAiPlayer skynet1 = new BetterAiPlayer(game, "s1");
+		BetterAiPlayer skynet2 = new BetterAiPlayer(game, "s2");
 		
 		List<AiPlayer> ai = new ArrayList<AiPlayer>();
 		ai.add(skynet1);

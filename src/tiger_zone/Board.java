@@ -23,6 +23,12 @@ public class Board implements Cloneable{
 	 *
 	 * @param pile Stack of unplaced tiles.
 	 */
+	public Board(BoardCell[][] brd, Stack<Tile> pile, int origin)
+	{
+		this.gameGrid= brd;
+		this.pile=pile;
+		this.origin=origin;
+	}
 	public Board(final Stack<Tile> pile) {
 		this.pile = pile;
 		char[] Ssides = {'t','l','t','j'};
