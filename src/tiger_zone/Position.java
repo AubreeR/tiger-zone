@@ -1,7 +1,8 @@
 package tiger_zone;
 
 /**
- * The <code>Position</code> class represents a position on the <code>Board</code>.
+ * The <code>Position</code> class represents a position on the <code>Board</code>. This is a "value object", which
+ * means it is completely immutable and equality between Positions is determined solely by their (x, y) values.
  */
 public class Position {
 	private final int x;
@@ -36,15 +37,38 @@ public class Position {
 		return this.y;
 	}
 	
+	/**
+	 * Returns the Position that is just north of this Position.
+	 * 
+	 * @return north position
+	 */
 	public final Position north() {
 		return new Position(this.x, this.y + 1);
 	}
+	
+	/**
+	 * Returns the Position that is just east of this Position.
+	 * 
+	 * @return east position
+	 */
 	public final Position east() {
 		return new Position(this.x + 1, this.y);
 	}
+	
+	/**
+	 * Returns the Position that is just south of this Position.
+	 * 
+	 * @return south position
+	 */
 	public final Position south() {
 		return new Position(this.x, this.y - 1);
 	}
+	
+	/**
+	 * Returns the Position that is just west of this Position.
+	 * 
+	 * @return west position
+	 */
 	public final Position west() {
 		return new Position(this.x - 1, this.y);
 	}
@@ -66,6 +90,13 @@ public class Position {
 		return result;
 	}
 	
+	/**
+	 * Returns true if P is a Position with equal (x, y) values to this Position. Otherwise, returns false.
+	 * 
+	 * @param p Object to compare.
+	 * @return true if equal, false otherwise
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
 	@Override
 	public final boolean equals(Object p) {
 		return p instanceof Position && this.x == ((Position)p).getX() && this.y == ((Position)p).getY();
