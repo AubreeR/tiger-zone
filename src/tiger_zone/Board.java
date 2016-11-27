@@ -127,7 +127,7 @@ public class Board {
 		{
 		case 'j': return false;
 		//case 't': placementEngine.addRule(new TigerTrailRule(this,x,y,tile, zone));
-		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone));
+		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone, trace));
 			break;
 		case 'x': return true;
 		}
