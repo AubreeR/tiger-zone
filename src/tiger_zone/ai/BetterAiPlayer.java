@@ -29,15 +29,17 @@ public class BetterAiPlayer extends AiPlayer {
 		//move[] consists of coordinates: (x,y), rotation, tiger placement
 		BoardCell[][] temp= Clone2D(game.getBoard().getGameGrid());
 		Stack<Tile> temptile= new Stack<Tile>();
+
 		temptile=(Stack<Tile>)game.getBoard().getPile().clone();
+		temptile.push(game.getCurrentTile());
+		PossibleMovesRule pmr= new PossibleMovesRule(game.getBoard(), 0, 0, game.getCurrentTile(), false);
 		int[] tempmove= MiniMax(temp, 0, true, temptile);
 		int[] move= new int[tempmove.length-1];
 		for(int i=0; i<move.length; i++)
 		{
 			move[i]=tempmove[i];
 		}
-		Tile current = this.game.getBoard().getPile().pop();
-		int size=this.game.getBoard().getPile().size();
+		Tile current = this.game.getCurrentTile();
 		while (current.getRotation() != move[2]) {
 			current.rotate();
 		}
@@ -49,9 +51,8 @@ public class BetterAiPlayer extends AiPlayer {
 				+ "\tElapsed Time: " + millis);
 	}
 	
-	public int[] MiniMax(BoardCell[][] tempgm, int loop, boolean current, Stack<Tile> StackTile)
+	public int[] MiniMax(BoardCell[][] gm, int loop, boolean current, Stack<Tile> StackTile)
 	{
-		BoardCell[][] gm= Clone2D(tempgm);
 		Stack<Tile> TileStack=new Stack<Tile>();
 		TileStack= (Stack<Tile>)StackTile.clone();
 		if(loop != 0) TileStack.pop();
@@ -70,7 +71,7 @@ public class BetterAiPlayer extends AiPlayer {
 		int x=0;
 		if(numberleft==1 && current)
 		{
-			while(x<5 && x<possiblemoves.size()) //#of rows
+			while(x<3 && x<possiblemoves.size()) //#of rows
 			{
 				int newevalmax;
 				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
@@ -88,7 +89,7 @@ public class BetterAiPlayer extends AiPlayer {
 		}
 		if(numberleft==1 && !current)
 		{
-			while(x<5 && x<possiblemoves.size())  //#of rows
+			while(x<3 && x<possiblemoves.size())  //#of rows
 			{
 				int newevalmin;
 				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
@@ -105,7 +106,7 @@ public class BetterAiPlayer extends AiPlayer {
 		}
 		if(loop==2 && current)
 		{
-			while(x<5 && x<possiblemoves.size())  //#of rows
+			while(x<3 && x<possiblemoves.size())  //#of rows
 			{
 				int newevalmax;
 				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
@@ -123,7 +124,7 @@ public class BetterAiPlayer extends AiPlayer {
 		}
 		if(loop==2 && !current)
 		{
-			while(x<5 && x<possiblemoves.size())  //#of rows
+			while(x<3 && x<possiblemoves.size())  //#of rows
 			{
 				int newevalmin;
 				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
@@ -143,7 +144,7 @@ public class BetterAiPlayer extends AiPlayer {
 		loop++;
 		if(current)
 		{
-			while(x<5 && x<possiblemoves.size())
+			while(x<3 && x<possiblemoves.size())
 			{
 				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
 				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
@@ -162,7 +163,7 @@ public class BetterAiPlayer extends AiPlayer {
 		}
 		else
 		{
-			while(x<5 && x<possiblemoves.size())
+			while(x<3 && x<possiblemoves.size())
 			{
 				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
 				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thatplayer);
