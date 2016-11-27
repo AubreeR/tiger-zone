@@ -89,7 +89,7 @@ public class Player {
 			}
 
 			//check if any lakes are completed
-			//updatedScores += checkForLake(lastTileX, lastTileY, updatedScores, boardState);
+			updatedScores += checkForLake(lastTileX, lastTileY, updatedScores, boardState);
 
 			//check if road complete
 			updatedScores += scoreRoad(boardState, lastTileX, lastTileY);
@@ -141,8 +141,6 @@ public class Player {
 			int totalScore = 0;
 			int[] XY = new int[2]; //used for the cordinate stack
 			int[] tempXY = new int[2];
-			XY[0] = x;
-			XY[1] = y;
 			Stack<int[]> XYStack = new Stack<int[]>(); //XY and tile stacks will be the same XY is the cords for the tile
 			Stack<Tile> tileStack = new Stack<Tile>();
 			Boolean[][] flagGrid = new Boolean[900][900];
@@ -158,6 +156,8 @@ public class Player {
 			String originalSides;
 			String tigerOwner;
 			int[] tigerCheck;
+			int LOOPKILLER = 30;
+			int LOOPKILLERCOUNT = 0;
 
 			if(boardState.getTile(x,y) == null){
 				System.err.println("Score Lake Error 1");
@@ -167,6 +167,8 @@ public class Player {
 			Tile checkTile = boardState.getTile(x, y);
 			char center = checkTile.getCenter();
 			char[] sides = checkTile.getSides();
+			XY[0] = x;
+			XY[1] = y;
 
 			//ideas: check all sides of current Tile -> if any sides has lake, check those sides ->
 			//if tile null, means lake not done end immediately, otherwise add to queue if not flagged, and flag on board
@@ -175,151 +177,152 @@ public class Player {
 
 
 			if(sides[0] == 'l' || sides[1] == 'l' || sides[2] == 'l' || sides[3] == 'l'){ //setting up stack: if the first tile has a lake side, add it to stack
-				tileStack.push(boardState.getTile(x, y)); //set up tile stack
 				XYStack.push(XY); //set up XY cordinate stack
 				flagGrid[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
 				totalScore += 1; //add 1 to total score
+			}
 
-				while(!tileStack.isEmpty()) {
-					XY = XYStack.pop();
-					checkTile = tileStack.pop();
-					center = checkTile.getCenter();
-					sides = checkTile.getSides();
-					
-					if(center == 'p'){ //count up the animals
-						boar++;
+			while(!XYStack.isEmpty()) {
+				LOOPKILLERCOUNT++;
+				if(LOOPKILLERCOUNT == LOOPKILLER){
+					System.out.println("Error: lakecompletecheck LOOP KILLER ACTIVATED");
+					nullFound = true;
+					break;
+				}
+				XY = XYStack.pop();
+				checkTile = boardState.getTile(XY[0], XY[1]);
+				center = checkTile.getCenter();
+				sides = checkTile.getSides();
+				
+				if(center == 'p'){ //count up the animals
+					boar++;
+				}
+				else if(center == 'd'){
+					deer++;
+				}
+				else if(center == 'b'){
+					buffalo++;
+				}
+				if(center == 'c'){
+					croc++;
+				}
+				
+				//tiger check here
+				tigerCheck = checkLake4Tigers(checkTile);
+				p1Tigers += tigerCheck[0];
+				p2Tigers += tigerCheck[1];
+
+				if(sides[0] == 'l') //check top
+				{
+					if(boardState.getTile(XY[0], XY[1]+1) == null) { //check if top has a tile
+						nullFound = true;
+						break;
 					}
-					else if(center == 'd'){
-						deer++;
-					}
-					else if(center == 'b'){
-						buffalo++;
-					}
-					if(center == 'c'){
-						croc++;
-					}
-					
-					//tiger check here
-					tigerCheck = checkLake4Tigers(checkTile);
-					p1Tigers += tigerCheck[0];
-					p2Tigers += tigerCheck[1];
-	
-					if(sides[0] == 'l') //check top
-					{
-						if(boardState.getTile(XY[0], XY[1]+1) == null) { //check if top has a tile
-							nullFound = true;
-							break;
+					else if (flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] != null) {}
+					else {
+						temp = boardState.getTile(XY[0], XY[1]+1);
+						tempcenter = temp.getCenter();
+						tempsides = temp.getSides();
+						originalSides = temp.getOriginalSides();
+						if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
+							flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] = true;//if true, flag it then add to score, dont push it to stack
+							totalScore += 1;
+							// add tiger check for special case tiles
+							tigerCheck = checkLake4Tigers(temp);
+							p1Tigers += tigerCheck[0];
+							p2Tigers += tigerCheck[1];
 						}
-						else if (flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] != null) {}
 						else {
-							temp = boardState.getTile(XY[0], XY[1]+1);
-							tempcenter = temp.getCenter();
-							tempsides = temp.getSides();
-							originalSides = temp.getOriginalSides();
-							if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
-								flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] = true;//if true, flag it then add to score, dont push it to stack
-								totalScore += 1;
-								// add tiger check for special case tiles
-								tigerCheck = checkLake4Tigers(temp);
-								p1Tigers += tigerCheck[0];
-								p2Tigers += tigerCheck[1];
-							}
-							else {
-								tempXY = XY;
-								tempXY[1] = XY[1] + 1;
-								tileStack.push(temp); //push to tile stack
-								XYStack.push(tempXY); //push to XY cordinate stack
-								flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] = true;//flag first tile on flaggrid
-								totalScore += 1; //add 1 to total score
-							}
+							tempXY = XY;
+							tempXY[1] = XY[1] + 1;
+							XYStack.push(tempXY); //push to XY cordinate stack
+							flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] = true;//flag first tile on flaggrid
+							totalScore += 1; //add 1 to total score
 						}
 					}
-					if(sides[1] == 'l') //check right
-					{
-						if(boardState.getTile(XY[0]+1, XY[1]) == null) { //check if right has a tile
-							nullFound = true;
-							break;
+				}
+				if(sides[1] == 'l') //check right
+				{
+					if(boardState.getTile(XY[0]+1, XY[1]) == null) { //check if right has a tile
+						nullFound = true;
+						break;
+					}
+					else if (flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] != null) {}
+					else {
+						temp = boardState.getTile(XY[0]+1, XY[1]);
+						tempcenter = temp.getCenter();
+						tempsides = temp.getSides();
+						originalSides = temp.getOriginalSides();
+						if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
+							flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
+							totalScore += 1;
+							//tiger scoring
+							tigerCheck = checkLake4Tigers(temp);
+							p1Tigers += tigerCheck[0];
+							p2Tigers += tigerCheck[1];
 						}
-						else if (flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] != null) {}
 						else {
-							temp = boardState.getTile(XY[0]+1, XY[1]);
-							tempcenter = temp.getCenter();
-							tempsides = temp.getSides();
-							originalSides = temp.getOriginalSides();
-							if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
-								flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
-								totalScore += 1;
-								//tiger scoring
-								tigerCheck = checkLake4Tigers(temp);
-								p1Tigers += tigerCheck[0];
-								p2Tigers += tigerCheck[1];
-							}
-							else {
-								tempXY = XY;
-								tempXY[0] = XY[0] + 1;
-								tileStack.push(temp); //set up tile stack
-								XYStack.push(tempXY); //set up XY cordinate stack
-								flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
-								totalScore += 1; //add 1 to total score
-							}
+							tempXY = XY;
+							tempXY[0] = XY[0] + 1;
+							XYStack.push(tempXY); //set up XY cordinate stack
+							flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
+							totalScore += 1; //add 1 to total score
 						}
 					}
-					if(sides[2] == 'l') //check bottom
-					{
-						if(boardState.getTile(XY[0], XY[1]-1) == null) { //check if bottom has a tile
-							nullFound = true;
-							break;
+				}
+				if(sides[2] == 'l') //check bottom
+				{
+					if(boardState.getTile(XY[0], XY[1]-1) == null) { //check if bottom has a tile
+						nullFound = true;
+						break;
+					}
+					else if (flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] != null) {}
+					else {
+						temp = boardState.getTile(XY[0], XY[1]-1);
+						tempcenter = temp.getCenter();
+						tempsides = temp.getSides();
+						originalSides = temp.getOriginalSides();
+						if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
+							flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] = true;//flag first tile on flaggrid
+							totalScore += 1;
+							tigerCheck = checkLake4Tigers(temp);
+							p1Tigers += tigerCheck[0];
+							p2Tigers += tigerCheck[1];
 						}
-						else if (flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] != null) {}
 						else {
-							temp = boardState.getTile(XY[0], XY[1]-1);
-							tempcenter = temp.getCenter();
-							tempsides = temp.getSides();
-							originalSides = temp.getOriginalSides();
-							if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
-								flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] = true;//flag first tile on flaggrid
-								totalScore += 1;
-								tigerCheck = checkLake4Tigers(temp);
-								p1Tigers += tigerCheck[0];
-								p2Tigers += tigerCheck[1];
-							}
-							else {
-								tempXY = XY;
-								tempXY[1] = XY[1] - 1;
-								tileStack.push(temp); //set up tile stack
-								XYStack.push(tempXY); //set up XY cordinate stack
-								flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] = true;//flag first tile on flaggrid
-								totalScore += 1; //add 1 to total score
-							}
+							tempXY = XY;
+							tempXY[1] = XY[1] - 1;
+							XYStack.push(tempXY); //set up XY cordinate stack
+							flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] = true;//flag first tile on flaggrid
+							totalScore += 1; //add 1 to total score
 						}
 					}
-					if(sides[3] == 'l') //check left
-					{
-						if(boardState.getTile(XY[0]-1, XY[1]) == null) { //check if left has a tile
-							nullFound = true;
-							break;
+				}
+				if(sides[3] == 'l') //check left
+				{
+					if(boardState.getTile(XY[0]-1, XY[1]) == null) { //check if left has a tile
+						nullFound = true;
+						break;
+					}
+					else if (flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] != null) {}
+					else {
+						temp = boardState.getTile(XY[0]-1, XY[1]);
+						tempcenter = temp.getCenter();
+						tempsides = temp.getSides();
+						originalSides = temp.getOriginalSides();
+						if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
+							flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
+							totalScore += 1;
+							tigerCheck = checkLake4Tigers(temp);
+							p1Tigers += tigerCheck[0];
+							p2Tigers += tigerCheck[1];
 						}
-						else if (flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] != null) {}
 						else {
-							temp = boardState.getTile(XY[0]-1, XY[1]);
-							tempcenter = temp.getCenter();
-							tempsides = temp.getSides();
-							originalSides = temp.getOriginalSides();
-							if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
-								flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
-								totalScore += 1;
-								tigerCheck = checkLake4Tigers(temp);
-								p1Tigers += tigerCheck[0];
-								p2Tigers += tigerCheck[1];
-							}
-							else {
-								tempXY = XY;
-								tempXY[0] = XY[0] - 1;
-								tileStack.push(temp); //set up tile stack
-								XYStack.push(tempXY); //set up XY cordinate stack
-								flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
-								totalScore += 1; //add 1 to total score
-							}
+							tempXY = XY;
+							tempXY[0] = XY[0] - 1;
+							XYStack.push(tempXY); //set up XY cordinate stack
+							flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
+							totalScore += 1; //add 1 to total score
 						}
 					}
 				}
