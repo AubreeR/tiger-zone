@@ -54,6 +54,11 @@ public class Board {
 		}
 		return false;
 	}
+	
+	public BoardCell[][] getGameGrid()
+	{
+		return this.gameGrid;
+	}
 
 	/**
 	 * Check if the tile can be placed at board position (x, y).
