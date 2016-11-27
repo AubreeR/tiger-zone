@@ -13,7 +13,8 @@ enum ProtocolState
 
 public class Protocol extends Client
 {
-	private String tPassword, pid, opid, gid, cid, rounds, rid, userName, password;
+	private String tPassword, pid, opid, gid, cid, rounds, rid, tile, x, y, orientation,
+	number_tiles, tiles,userName, password;
 	private ProtocolState pState; 
 	
 	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password)
@@ -193,6 +194,117 @@ public class Protocol extends Client
 					break;
 				}
 				opid = opid + fromServer.charAt(k);
+			}
+			break;
+			
+		default:
+			break;
+		}
+		}
+		
+		///// Line 2 - Get tile, x, y, and orientation //////
+		
+		fromServer = receiveFromServer();
+		System.out.println("Server: " + fromServer);
+		spaceCount = 0;
+		for(int i = 0; i < fromServer.length(); i++)
+		{
+			if(fromServer.charAt(i) == ' ')
+				spaceCount++;
+			switch(spaceCount)
+			{
+			case 3 : tile = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ' ')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				tile = tile + fromServer.charAt(k);
+			}
+			break;
+			
+			case 5 : x = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ' ')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				x = x + fromServer.charAt(k);
+			}
+			break;
+			
+			case 6 : y = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ' ')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				y = y + fromServer.charAt(k);
+			}
+			break;
+			
+			case 7 : orientation = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ' ')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				orientation = orientation + fromServer.charAt(k);
+			}
+			break;
+			
+			
+		default:
+			break;
+		}
+		}
+		
+		////// Line 3 - Get number of tiles and tile stack //////
+		
+		fromServer = receiveFromServer();		
+		System.out.println("Server: " + fromServer);
+		spaceCount = 0;
+		for(int i = 0; i < fromServer.length(); i++)
+		{
+			if(fromServer.charAt(i) == ' ')
+				spaceCount++;
+			switch(spaceCount)
+			{
+			case 2 : number_tiles = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ' ')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				number_tiles = number_tiles + fromServer.charAt(k);
+			}
+			break;
+			
+			case 5 : tiles = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ' ')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				tiles = tiles + fromServer.charAt(k);
 			}
 			break;
 			

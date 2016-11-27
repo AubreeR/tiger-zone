@@ -50,8 +50,8 @@ public class Main {
 		Game game = new Game(pile);
 
 		
-		//Protocol p = new Protocol("0.0.0.0",8000,"tpass","user","pass");
-		//p.tournamentProtocol();
+		Protocol p = new Protocol("10.138.7.222",8000,"tpass","user","pass");
+		p.tournamentProtocol();
 
 		List<Player> players = new ArrayList<Player>(2);
 		players.add(new Player(0, "p1"));
