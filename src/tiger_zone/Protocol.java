@@ -196,13 +196,17 @@ public class Protocol extends Client
 					i = k;
 					break;
 				}
+				
 				opid = opid + fromServer.charAt(k);
+				if(k + 1 == fromServer.length())
+					i = k;
 			}
 			break;
 			
-		default:
-			break;
-		}
+			default:
+				break;
+			}
+			
 		}
 		System.out.println("opid: " + opid);
 
@@ -271,6 +275,8 @@ public class Protocol extends Client
 				}
 				if(fromServer.charAt(k) != ' ')
 					orientation = orientation + fromServer.charAt(k);
+				if(k + 1 == fromServer.length())
+					i = k;
 			}
 			break;
 			
