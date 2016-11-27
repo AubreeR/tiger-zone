@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Stack;
 
 import tiger_zone.ai.AiPlayer;
+import tiger_zone.ai.BetterAiPlayer;
 import tiger_zone.ai.PoorAiPlayer;
 
 /**
@@ -110,7 +111,7 @@ public class Game {
 		this.currentTile = this.board.getPile().pop();
 
 		// It is our AiPlayer's turn. Make our move, send it to the server, and then conduct next turn.
-		if (currentAiPlayer instanceof PoorAiPlayer) {
+		if (currentAiPlayer instanceof BetterAiPlayer) {
 			currentAiPlayer.makeMove();
 			this.nextPlayer();
 			this.conductTurn();

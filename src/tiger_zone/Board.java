@@ -7,7 +7,7 @@ import java.util.Stack;
  * been placed.
  */
 public class Board {
-	private final BoardCell[][] gameGrid = new BoardCell[152][152];
+	private BoardCell[][] gameGrid = new BoardCell[152][152];
 	private final Stack<Tile> pile;
 	private final int origin; // center of the gameGrid cartesian view
 	private final RuleEngine placementEngine = new RuleEngine();
@@ -17,6 +17,12 @@ public class Board {
 	 * Assigns an origin point to map cartesian coordinates.
 	 * @param pile Stack of unplaced tiles.
 	 */
+	public Board(BoardCell[][] brd, Stack<Tile> pile, int origin)
+	{
+		this.gameGrid= brd;
+		this.pile=pile;
+		this.origin=origin;
+	}
 	public Board(final Stack<Tile> pile) {
 		this.pile = pile;
 		this.origin = pile.size(); //calculates mid-point of initialized gameGrid.length

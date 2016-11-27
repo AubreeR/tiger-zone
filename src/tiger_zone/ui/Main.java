@@ -16,7 +16,7 @@ import tiger_zone.Player;
 import tiger_zone.Tile;
 import tiger_zone.UnionFind;
 import tiger_zone.ai.AiPlayer;
-import tiger_zone.ai.PoorAiPlayer;
+import tiger_zone.ai.BetterAiPlayer;
 import tiger_zone.Protocol;
 
 public class Main {
@@ -58,8 +58,8 @@ public class Main {
 		players.add(new Player(1, "p2"));
 		game.setPlayers(players);
 
-		PoorAiPlayer skynet1 = new PoorAiPlayer(game, "s1");
-		PoorAiPlayer skynet2 = new PoorAiPlayer(game, "s2");
+		BetterAiPlayer skynet1 = new BetterAiPlayer(game, "s1");
+		BetterAiPlayer skynet2 = new BetterAiPlayer(game, "s2");
 		
 		List<AiPlayer> ai = new ArrayList<AiPlayer>();
 		ai.add(skynet1);
