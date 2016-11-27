@@ -24,22 +24,6 @@ public class PoorAiPlayer extends AiPlayer {
 	public PoorAiPlayer(Game game) {
 		super(game);
 	}
-
-	/**
-	 * Get the Player instance that corresponds to this AiPlayer.
-	 * 
-	 * @return player
-	 */
-	private final Player getPlayer() {
-		int i = 0;
-		for (AiPlayer player : this.game.getAiPlayers()) {
-			if (player.equals(this)) {
-				return this.game.getPlayers().get(i);
-			}
-			i++;
-		}
-		return null;
-	}
 	
 	/**
 	 * Have this AI player place a tile on the board. To maximize points, AI places its tigers on the first available

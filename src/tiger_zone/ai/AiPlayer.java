@@ -1,6 +1,7 @@
 package tiger_zone.ai;
 
 import tiger_zone.Game;
+import tiger_zone.Player;
 
 /**
  * Abstract class for AI players to extend.
@@ -15,6 +16,22 @@ public abstract class AiPlayer {
 	 */
 	public AiPlayer(Game game) {
 		this.game = game;
+	}
+
+	/**
+	 * Get the Player instance that corresponds to this AiPlayer.
+	 *
+	 * @return player
+	 */
+	protected final Player getPlayer() {
+		int i = 0;
+		for (AiPlayer player : this.game.getAiPlayers()) {
+			if (player.equals(this)) {
+				return this.game.getPlayers().get(i);
+			}
+			i++;
+		}
+		return null;
 	}
 
 	/**
