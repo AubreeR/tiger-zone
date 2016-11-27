@@ -7,6 +7,7 @@ import tiger_zone.TigerTrailRule;
 
 import tiger_zone.Tile;
 import tiger_zone.UnionFind;
+import tiger_zone.Player;
 
 /**
  * A pretty bad AI player which simply makes the first possible move found. This exists simply to demonstrate how an AI
@@ -61,10 +62,9 @@ public class PoorAiPlayer extends AiPlayer {
 		else if(current.hasAnimal() ){
 		
 			for( i = 1; i < 10; i++){
-				boolean check = this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  i, false);
-				if(current.getZone(i) == 'l' && check){
-					if(current.addTiger(i, currentPlayer) && getTigers().size() != 0){
-						getTigers().pop();
+				if(current.getZone(i) == 'l'){
+					boolean check = this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  i, false);
+					if(check && current.addTiger(i, currentPlayer)){
 						break;
 					}
 				}
@@ -72,7 +72,11 @@ public class PoorAiPlayer extends AiPlayer {
 			i = (i == 10) ? -1:i;
 
 		}
-
+		
+		Player me = new Player(1,"s1");
+		int score = me.updateScore(move[0], move[1], this.game.getBoard());
+		System.err.println("Score: " + score);
+		
 		millis = System.currentTimeMillis() - millis;
 		if( i != -1)
 		System.err.println(currentPlayer + "'s Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: "

@@ -92,6 +92,7 @@ public class PossibleMovesRule extends PlacementRule
 		
 		
 	}
+	
 	@Override
 	public boolean evaluate()
 	{
@@ -126,30 +127,34 @@ public class PossibleMovesRule extends PlacementRule
 					{
 					case 0: eval= boardState.validTilePlacement(i, j, this.nextTile, false);
 						north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-						if(eval)
+						if(eval){
 							possibleMoves.add(new int[]{i,j,0});
-						setArray(eval, i, j);
+							setArray(i, j);
+						}
 						ret = ret || eval;
 						break;
 					case 1:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-						if(eval)
+						if(eval){
 							possibleMoves.add(new int[]{i,j,90});
-						setArray(eval, i, j);
+							setArray(i, j);
+						}
 						ret = ret || eval;
 						break;
 					case 2:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-						if(eval)
+						if(eval){
 							possibleMoves.add(new int[]{i,j,180});
-						setArray(eval, i, j);
+							setArray(i, j);
+						}
 						ret = ret || eval;;
 						break;
 					case 3:eval = boardState.validTilePlacement(i, j, this.nextTile, false);
 						east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] = eval;
-						if(eval)
+						if(eval){
 							possibleMoves.add(new int[]{i,j,270});
-						setArray(eval, i, j);
+							setArray(i, j);
+						}
 						ret = ret || eval;
 						break;
 					default:
@@ -168,38 +173,37 @@ public class PossibleMovesRule extends PlacementRule
 
 	}
 	
-	public void setArray(boolean eval, int x, int y)
+	public void setArray(int x, int y)
 	{
-		if(eval)//the first true value
+		
+		int i = -1;
+		if(x >= 0 && y >= 0 && !foundQuad1)
 		{
-			int i = -1;
-			if(x >= 0 && y >= 0 && !foundQuad1)
-			{
-				i = 0;
-				foundQuad1 = true;
-			}
-			else if(x <= 0 && y >= 0 && !foundQuad2)
-			{
-				i = 1;
-				foundQuad2 = true;
-			}
-			else if( x <= 0 && y <= 0 && !foundQuad3)
-			{
-				i = 2;
-				foundQuad3 = true;
-			}
-			else if( x >= 0 && y <= 0 && !foundQuad4)
-			{
-				i = 3;
-				foundQuad4 = true;
-			}
-			if( i >= 0)
-			{
-				firstMove[i][0] = x;
-				firstMove[i][1] = y;
-				firstMove[i][2] = this.nextTile.getRotation();
-			}
+			i = 0;
+			foundQuad1 = true;
 		}
+		else if(x <= 0 && y >= 0 && !foundQuad2)
+		{
+			i = 1;
+			foundQuad2 = true;
+		}
+		else if( x <= 0 && y <= 0 && !foundQuad3)
+		{
+			i = 2;
+			foundQuad3 = true;
+		}
+		else if( x >= 0 && y <= 0 && !foundQuad4)
+		{
+			i = 3;
+			foundQuad4 = true;
+		}
+		if( i >= 0)
+		{
+			firstMove[i][0] = x;
+			firstMove[i][1] = y;
+			firstMove[i][2] = this.nextTile.getRotation();
+		}
+		
 	}
 	
 	public int[] getFirstPossibleMove()

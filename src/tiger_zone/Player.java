@@ -70,18 +70,9 @@ public class Player {
 		return this.tigers;
 	}
 
-	class Scoring {
-		private int score;
-		private Board boardState;
-		private int lastTileX;
-		private int lastTileY;
 
-		public int getScore() {
-			return score;
-		}
-
-		public int updateScore(int lastTileX, int lastTileY) {
-			int updatedScores = getScore(); //get player score
+		public int updateScore(int lastTileX, int lastTileY, Board boardState) {
+			int updatedScores = getPoints(); //get player score
 
 			Tile lastTile = boardState.getTile(lastTileX, lastTileY); //get the last updated tile
 			char[] lastTileSides = lastTile.getSides(); //get sides of last updated tile
@@ -91,19 +82,19 @@ public class Player {
 			//
 			if(lastTileSides[0] == 'j' || lastTileSides[1] == 'j' || lastTileSides[2] == 'j' || lastTileSides[3] == 'j')
 			{
-				updatedScores = checkForDen(lastTileX, lastTileY, updatedScores); //check placed tile
-				updatedScores = checkForDen(lastTileX+1, lastTileY, updatedScores); //check all tiles around the placed tile for dens and if they are complete
-				updatedScores = checkForDen(lastTileX, lastTileY+1, updatedScores);
-				updatedScores = checkForDen(lastTileX-1, lastTileY, updatedScores);
-				updatedScores = checkForDen(lastTileX+1, lastTileY-1, updatedScores);
-				updatedScores = checkForDen(lastTileX+1, lastTileY+1, updatedScores);
-				updatedScores = checkForDen(lastTileX+1, lastTileY-1, updatedScores);
-				updatedScores = checkForDen(lastTileX-1, lastTileY+1, updatedScores);
-				updatedScores = checkForDen(lastTileX-1, lastTileY-1, updatedScores);
+				updatedScores = checkForDen(lastTileX, lastTileY, updatedScores, boardState); //check placed tile
+				updatedScores = checkForDen(lastTileX+1, lastTileY, updatedScores, boardState); //check all tiles around the placed tile for dens and if they are complete
+				updatedScores = checkForDen(lastTileX, lastTileY+1, updatedScores, boardState);
+				updatedScores = checkForDen(lastTileX-1, lastTileY, updatedScores, boardState);
+				updatedScores = checkForDen(lastTileX+1, lastTileY-1, updatedScores, boardState);
+				updatedScores = checkForDen(lastTileX+1, lastTileY+1, updatedScores, boardState);
+				updatedScores = checkForDen(lastTileX+1, lastTileY-1, updatedScores,boardState);
+				updatedScores = checkForDen(lastTileX-1, lastTileY+1, updatedScores, boardState);
+				updatedScores = checkForDen(lastTileX-1, lastTileY-1, updatedScores, boardState);
 			}
 
 			//check if any lakes are completed
-			updatedScores = checkForLake(lastTileX, lastTileY, updatedScores);
+			//updatedScores = checkForLake(lastTileX, lastTileY, updatedScores, boardState);
 
 			//check if road complete
 			updatedScores += scoreRoad(boardState, lastTileX, lastTileY);
@@ -111,7 +102,7 @@ public class Player {
 			return updatedScores;
 		}
 
-		public int checkForDen(int x, int y, int scores) {
+		public int checkForDen(int x, int y, int scores, Board boardState) {
 			String tigerOwner;
 			int pointsEarned = 0;
 			if(boardState.getTile(x, y) != null) {
@@ -150,7 +141,7 @@ public class Player {
 		 * if normal tile: put that tile in the stack, add one to total
 		 * checking special lake tiles for tigers will just check if either lake has a tiger and then adds it to either player tiger count
 		 */
-		public int checkForLake(int x, int y, int scores) {
+		public int checkForLake(int x, int y, int scores, Board boardState) {
 			Boolean nullFound = false;
 			int totalScore = 0;
 			int[] XY = new int[2]; //used for the cordinate stack
@@ -359,7 +350,6 @@ public class Player {
 		
 		
 		public int scoreRoad(Board boardState, int cartX, int cartY){
-			this.boardState = boardState;
 			boolean[][] testedTiles = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
 			int score = 0;
 			int totalScoreSide[] = {0,0,0,0};
@@ -714,4 +704,3 @@ public class Player {
 
 
 	}
-}
