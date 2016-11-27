@@ -1,9 +1,6 @@
 package tiger_zone.ai;
 
-import java.util.Stack;
-
 import tiger_zone.Game;
-import tiger_zone.Tiger;
 
 /**
  * Abstract class for AI players to extend.

@@ -21,6 +21,11 @@ public class BoardTest {
 	}
 
 	@Test
+	public void initialTileTest() {
+		assertTrue(board.getTile(new Position(0, 0)) != null);
+	}
+	
+	@Test
 	public void addGetTileTest() {
 		char[] sides = {'t','j','t','j'};
 		Tile t = new Tile(sides, 't', "./src/resources/tile5.png");

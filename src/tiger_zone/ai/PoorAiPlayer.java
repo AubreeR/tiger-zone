@@ -1,8 +1,11 @@
 package tiger_zone.ai;
 
+import java.util.List;
+import java.util.Map;
+
 import tiger_zone.Game;
 import tiger_zone.Player;
-import tiger_zone.PossibleMovesRule;
+import tiger_zone.Position;
 import tiger_zone.Tiger;
 import tiger_zone.Tile;
 
@@ -45,19 +48,23 @@ public class PoorAiPlayer extends AiPlayer {
 	public final void makeMove() {
 		long millis = System.currentTimeMillis();
 		Tile current = this.game.getCurrentTile();
-		PossibleMovesRule pmr = new PossibleMovesRule(this.game.getBoard(), 0, 0, current, false);
+		
+		Map<Position, List<Integer>> validTilePlacements = this.game.getBoard().getValidTilePlacements(current);
 
 		// no possible move; simply pass our turn (not what's actually supposed to happen)
-		if (!pmr.evaluate()) {
+		if (validTilePlacements.isEmpty()) {
+			System.out.println("no moves, skipping :(");
 			return;
 		}
 
-		int[] move = pmr.getFirstPossibleMove();
-		while (current.getRotation() != move[2]) {
+		Position p = validTilePlacements.keySet().iterator().next();
+		int rotation = validTilePlacements.get(p).get(0);
+
+		while (current.getRotation() != rotation) {
 			current.rotate();
 		}
-
-		game.getBoard().addTile(move[0], move[1], current);
+		
+		game.getBoard().addTile(p.getX(), p.getY(), current);
 		
 		Player currentPlayer = this.getPlayer();
 		
@@ -72,7 +79,7 @@ public class PoorAiPlayer extends AiPlayer {
 		else if(current.hasAnimal()) {
 			for (i = 1; i < 10; i++) {
 				if (current.getZone(i) == 'l') {
-					boolean isValid = this.game.getBoard().validTigerPlacement(move[0], move[1], i, false);
+					boolean isValid = this.game.getBoard().validTigerPlacement(p.getX(), p.getY(), i, false);
 					if (isValid && currentPlayer.getTigers().size() > 0) {
 						Tiger tiger = currentPlayer.getTigers().pop();
 						current.addTiger(i, tiger);
@@ -84,17 +91,17 @@ public class PoorAiPlayer extends AiPlayer {
 		}
 		
 		Player me = new Player(1,"s1");
-		int score = me.updateScore(move[0], move[1], this.game.getBoard());
+		int score = me.updateScore(p.getX(), p.getY(), this.game.getBoard());
 		System.err.println("Score: " + score);
 		
 		millis = System.currentTimeMillis() - millis;
 		if( i != -1)
-		System.err.println(currentPlayer + "'s Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: "
+		System.err.println(currentPlayer + "'s Move: " + move_num++ + " \tCoor: (" + p.getX() +"," + p.getY() +") \ttile: "
 				+ current.getSide(0)+current.getSide(1)+current.getSide(2)+current.getSide(3)
 				+ "\tTiger Locations: "  + ((i != -1)? i:"N/A")
 				+ "\tElapsed Time: " + millis);
 		else
-			System.out.println(currentPlayer + "'s Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: "
+			System.out.println(currentPlayer + "'s Move: " + move_num++ + " \tCoor: (" + p.getX() +"," + p.getY() +") \ttile: "
 					+ current.getSide(0)+current.getSide(1)+current.getSide(2)+current.getSide(3)
 					+ "\tTiger Locations: "  + ((i != -1)? i:"N/A")
 					+ "\tElapsed Time: " + millis);

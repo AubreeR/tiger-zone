@@ -1,18 +1,13 @@
 package tiger_zone;
 
-
-
-public class SideMatchRule extends PlacementRule
-{
+public class SideMatchRule extends PlacementRule {
 	private Tile nextTile;//we must know the next tile to be placed in order to match sides
 	private Tile[] adj;
 	
-	public SideMatchRule(Board boardState,int cartX, int cartY, Tile nextTile, boolean trace)
-	{
-
+	public SideMatchRule(Board boardState,int cartX, int cartY, Tile nextTile, boolean trace) {
 		super(boardState,cartX, cartY, trace);
-
 		super.setRuleName("SideMatch Rule");
+		
 		this.nextTile = nextTile;
 		adj = new Tile[4];//UL, UC, UR, RC, DR, DC, DL, LC
 		
@@ -23,37 +18,27 @@ public class SideMatchRule extends PlacementRule
 	}
 	
 	@Override
-	public boolean evaluate()
-	{
-		int length = boardState.getBoardLength();
-		try
-		{
-			if(Math.abs(cartX) > length || (Math.abs(cartY) > length ))
-				
-					throw new Exception(super.getName() + " failed under condition: tile tile desired palcement out of bounds.");
-			/*
-			 * check to see which tiles are adjacent if any
-			 */
-			if(Math.abs(cartY + 1) < length)//center up
-				adj[0] = boardState.getTile(cartX,cartY+1);
-			if(Math.abs(cartX + 1) < length && Math.abs(cartY) < length)//right center				
-				adj[1] = boardState.getTile(cartX + 1,cartY);
-			if(Math.abs(cartY - 1) < length)//down center
-				adj[2] = boardState.getTile(cartX,cartY-1);
-			if(Math.abs(cartX - 1) < length && Math.abs(cartY) < length)//left center
-				adj[3] = boardState.getTile(cartX - 1,cartY);
+	public boolean evaluate() {
+		try	{
+			Position currentPosition = new Position(cartX, cartY);
+			// Check to see which tiles are adjacent to this tile
+			adj[0] = boardState.getTile(currentPosition.north());			
+			adj[1] = boardState.getTile(currentPosition.east());
+			adj[2] = boardState.getTile(currentPosition.south());
+			adj[3] = boardState.getTile(currentPosition.west());
 		
-			
-			for(int i = 0; i < 4; i++)//cycle through all possible adjacent tiles
-			{
-				//don't do checks on something that isnt there
-				if(adj[i] == null)
+			// go through each adjacent tile
+			for(int i = 0; i < 4; i++) {
+				// if no tile exists in this directory, just ignore
+				if (adj[i] == null) {
 					continue;
+				}
+				
 				//												0
 				//		UL	UC	RU			0							
 				//		CL	XX	CR		3		1		3				1
 				//		DL	DC	DR			2							
-				//												2	
+				//												2
 				switch(i)//this is to figure out what side we are checking
 				{
 				case 0://adjacent is UP
@@ -92,28 +77,20 @@ public class SideMatchRule extends PlacementRule
 				default:
 						
 				}
-				
 			}
-			
 			return true;
-			
 		}
-		catch(Exception ex)
-		{
-			if(super.trace)
-			{
+		catch(Exception ex) {
+			if(super.trace) {
 				System.err.println(ex);//display the error 
 			}
 			return false;
 		}
-		
 	}
 	
 	@Override
-	public void testFailure() throws Exception
-	{
+	public void testFailure() throws Exception {
 		throw new Exception(super.getName() + " failed under condition input: \"" + "\" does not equal \"Hello World\"");
 	}
-	
 }
 

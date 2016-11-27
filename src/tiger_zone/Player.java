@@ -1,7 +1,8 @@
 package tiger_zone;
 
 import java.util.Stack;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The <code>Player</code> class represents one of the two players in a game of Tiger Zone, and is used to keep track of
@@ -350,7 +351,7 @@ public class Player {
 
 
 		public int scoreRoad(Board boardState, int cartX, int cartY){
-			boolean[][] testedTiles = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
+			final Set<Position> testedTiles = new HashSet<Position>();
 			int score = 0;
 			int totalScoreSide[] = {0,0,0,0};
 			int p1Tigers = 0;
@@ -370,7 +371,7 @@ public class Player {
 
 			Tile checkTile = boardState.getTile(tileX, tileY);
 			char[] tileSides = checkTile.getSides();
-			testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
+			testedTiles.add(new Position(tileX, tileY));
 
 			//check if tile has any roads
 			for(int i = 0; i < 4; i++){
@@ -486,7 +487,7 @@ public class Player {
 						break;
 					}
 					//check if tile has been flagged, if it has, a loop has been made/finished
-					if(testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] == true){
+					if (testedTiles.contains(new Position(tileX, tileY))) {
 						break;
 					}
 
@@ -545,7 +546,7 @@ public class Player {
 					}
 
 					//road has two sides, so need to find the other side to continue path
-					testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
+					testedTiles.add(new Position(tileX, tileY));
 					for(int i = 0; i < 4; i++){ //find the other side with road
 						if(tileSides[i] == 't' && side != i) {
 							Error2 = false;

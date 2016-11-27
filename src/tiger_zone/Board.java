@@ -1,5 +1,9 @@
 package tiger_zone;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 /**
@@ -7,31 +11,22 @@ import java.util.Stack;
  * been placed.
  */
 public class Board {
-	private final BoardCell[][] gameGrid = new BoardCell[152][152];
+	private final Map<Position, Tile> gameGrid = new HashMap<Position, Tile>();
 	private final Stack<Tile> pile;
-	private final int origin; // center of the gameGrid cartesian view
 	private final RuleEngine placementEngine = new RuleEngine();
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.
-	 * Assigns an origin point to map cartesian coordinates.
+	 * 
 	 * @param pile Stack of unplaced tiles.
 	 */
 	public Board(final Stack<Tile> pile) {
 		this.pile = pile;
-		this.origin = pile.size(); //calculates mid-point of initialized gameGrid.length
-		for (int i = 0; i < this.gameGrid.length; ++i) {
-			for (int j = 0; j <  this.gameGrid.length; ++j) {
-				this.gameGrid[i][j] = new BoardCell(i, j);
-			}
-		}
-
 		char[] Ssides = {'t','l','t','j'};
 		char[] Stigers = {'j','t','j','=','=','l','=','=','='};
 		char[] Scrocs = {'=','t','j','=','=','=','=','=','='};
 		Tile init = new Tile( Ssides, '-', Stigers, Scrocs, "./src/resources/tile19.png");
-		this.gameGrid[this.getBoardPosX(0)][this.getBoardPosY(0)].setTile(init);
-
+		this.gameGrid.put(new Position(0, 0), init);
 	}
 
 	/**
@@ -42,22 +37,12 @@ public class Board {
 	 * @param tile The instance of <code>Tile</code> to add
 	 * @return if tile was successfully placed
 	 */
-	public final boolean addTile(int x, int y, final Tile tile) {
-		if (this.validTilePlacement(x, y, tile, false)) {
-
-			x += this.getOrigin();
-   			y =  this.getOrigin() - y;
-
-
-			this.gameGrid[x][y].setTile(tile);
+	public final boolean addTile(final int x, final int y, final Tile tile) {
+		if (this.validTilePlacement(x, y, tile, true)) {
+			this.gameGrid.put(new Position(x, y), tile);
 			return true;
 		}
 		return false;
-	}
-
-	public BoardCell[][] getGameGrid()
-	{
-		return this.gameGrid;
 	}
 
 	/**
@@ -69,16 +54,10 @@ public class Board {
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
 	public final boolean validTilePlacement(final int x, final int y, final Tile tile, boolean trace) {
-
-		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
-
-			return false;
-		}
-
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
-		placementEngine.addRule(new AdjacencyRule(this, x, y,trace));
+		placementEngine.addRule(new AdjacencyRule(this, x, y, trace));
 		placementEngine.addRule(new SideMatchRule(this, x, y, tile, trace));
 
 		return placementEngine.evaluateRules();
@@ -93,12 +72,6 @@ public class Board {
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
 	public final boolean validTilePlacement(final int x, final int y, final Tile tile) {
-
-		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length) {
-
-			return false;
-		}
-
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
@@ -119,10 +92,6 @@ public class Board {
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
 	public final boolean validTigerPlacement(final int x, final int y, final int zone, final boolean trace) {
-		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length || zone < 1 || zone >9) {
-			return false;
-		}
-
 		this.placementEngine.clearRules();
 
 		Tile tile = this.getTile(x, y);
@@ -137,34 +106,6 @@ public class Board {
 
 		return placementEngine.evaluateRules();
 	}
-	/**
-	 * Translates: Cartesian-> 2D Matrix position
-	 * @param type int coordinate point
-	 * @return value from cartesian points to matrix gameGrid[x][?] index
-	 *
-	 */
-	public int getBoardPosX(int x) {
-		return x + this.getOrigin();
-	}
-
-	/**
-	 * Translates: Cartesian-> 2D Matrix position
-	 * @param type int coordinate point
-	 * @return value from cartesian points to matrix gameGrid[?][y] index
-	 *
-	 */
-  	public int getBoardPosY(int y) {
-
-    		return this.getOrigin() - y;
-  	}
-
-
-  	public int getBoardLength()
-  	{
-  		return this.gameGrid.length;
-  	}
-
-
 
 	/**
 	 * Returns the tile located at position (x, y).
@@ -173,17 +114,20 @@ public class Board {
 	 * @param y The y coordinate
 	 * @return the instance of <code>Tile</code> at position (x, y)
 	 */
-	public Tile getTile(final int x, final int y){
-
-		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)].getTile();
-
+	public final Tile getTile(final int x, final int y){
+		return this.gameGrid.get(new Position(x, y));
 	}
 
-	public BoardCell getBoardCell(final int x, final int y)
-	{
-		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)];
+	/**
+	 * Returns the tile location at position.
+	 * 
+	 * @param position Instance of <code>Position</code>.
+	 * @return tile at position
+	 */
+	public final Tile getTile(final Position position){
+		return this.gameGrid.get(position);
 	}
-
+	
 	/**
 	 * Returns this board's stack of unplaced tiles.
 	 *
@@ -191,6 +135,68 @@ public class Board {
 	 */
 	public Stack<Tile> getPile() {
 		return this.pile;
+	}
+	
+	/**
+	 * Returns a list of empty positions adjacent to existing tiles.
+	 * 
+	 * @return open positions
+	 */
+	public final List<Position> getOpenPositions() {
+		List<Position> openPositions = new ArrayList<Position>();
+		for (Position p : this.gameGrid.keySet()) {
+			if (this.gameGrid.get(p.north()) == null) {
+				openPositions.add(p.north());
+			}
+			if (this.gameGrid.get(p.east()) == null) {
+				openPositions.add(p.east());
+			}
+			if (this.gameGrid.get(p.south()) == null) {
+				openPositions.add(p.south());
+			}
+			if (this.gameGrid.get(p.west()) == null) {
+				openPositions.add(p.west());
+			}
+		}
+		return openPositions;
+	}
+	
+	/**
+	 * Returns valid placements for this tile on the board. The returned result maps Position to Rotations.
+	 * 
+	 * @param tile Tile to be placed.
+	 * @return valid tile placements
+	 */
+	public final Map<Position, List<Integer>> getValidTilePlacements(final Tile tile) {
+		Map<Position, List<Integer>> validTilePlacements = new HashMap<Position, List<Integer>>();
+		
+		// get list of empty positions
+		List<Position> openPositions = this.getOpenPositions();
+		
+		// save tile's original rotation for later
+		int originalRotation = tile.getRotation();
+		
+		System.out.println(openPositions.size());
+		
+		// for each open position, try every rotation of this tile until it fits
+		for (Position p : openPositions) {
+			for (int i = 0; i < 4; i++) {
+				tile.rotate();
+				if (this.validTilePlacement(p.getX(), p.getY(), tile)) {
+					if (!validTilePlacements.containsKey(p)) {
+						validTilePlacements.put(p, new ArrayList<Integer>());
+					}
+					validTilePlacements.get(p).add(tile.getRotation());
+				}
+			}
+		}
+		
+		// restore tile's original rotation
+		while (tile.getRotation() != originalRotation) {
+			tile.rotate();
+		}
+		
+		return validTilePlacements;
 	}
 
 	public static void buildStack(Stack<Tile> pile, char[] edges, char center, char[] tigerSpots,
@@ -330,9 +336,5 @@ public class Board {
 		buildStack(pile, AAsides, 'd', AAtigers, AAcrocs, "./src/resources/tile27.png",2);
 		buildStack(pile, ABsides, 'c', ABtigers, ABcrocs, "./src/resources/tile28.png",2);
 		return pile;
-	}
-
-	public int getOrigin() {
-		return origin;
 	}
 }
