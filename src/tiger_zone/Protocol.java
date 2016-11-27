@@ -13,7 +13,7 @@ enum ProtocolState
 
 public class Protocol extends Client
 {
-	private String tPassword, pid, gid, cid, rounds, userName, password;
+	private String tPassword, pid, opid, gid, cid, rounds, rid, userName, password;
 	private ProtocolState pState; 
 	
 	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password)
@@ -130,13 +130,76 @@ public class Protocol extends Client
 	
 	public void roundProtocol(String fromServer)
 	{
-		//fromServer should start with BEGIN ROUND <rid> OF <rounds>
+ 
+		System.out.println("Server: " + fromServer);
+		int spaceCount = 0;
+		for(int i = 0; i < fromServer.length(); i++)
+		{
+			if(fromServer.charAt(i) == ' ')
+				spaceCount++;
+			switch(spaceCount)
+			{
+			case 2 : rid = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ' ')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				rid = rid + fromServer.charAt(k);
+			}
+			break;
+		case 5 : rounds = "";
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == 'P')	// If "please" is contained in string, more rounds are to come
+				{
+					return;
+				}
+				rounds = rounds + fromServer.charAt(k);
+			}
+			break;
+		default:
+			break;
+		}
+		}
 		
+		for(int i = 0; i < Integer.parseInt(rounds); i++)
+		{
+			matchProtocol(receiveFromServer());
+		}
+			
 	}
 	
 	public void matchProtocol(String fromServer)
 	{
-		
+		System.out.println("Server: " + fromServer);
+		int spaceCount = 0;
+		for(int i = 0; i < fromServer.length(); i++)
+		{
+			if(fromServer.charAt(i) == ' ')
+				spaceCount++;
+			switch(spaceCount)
+			{
+			case 4 : opid = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ' ')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				opid = opid + fromServer.charAt(k);
+			}
+			break;
+			
+		default:
+			break;
+		}
+		}
 	}
 	
 	public void moveProtocol(String clientMove){
