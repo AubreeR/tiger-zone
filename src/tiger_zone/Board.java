@@ -47,7 +47,7 @@ public class Board implements Cloneable{
 	/**
 	 * Place tile at position if possible.
 	 * 
-	 * @param p Position to place at
+	 * @param position Position to place at
 	 * @param tile Tile to place
 	 * @return true if placed, else false
 	 */
