@@ -73,8 +73,7 @@ public class BetterAiPlayer extends AiPlayer {
 			while(x<5 && x<possiblemoves.size()) //#of rows
 			{
 				int newevalmax;
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
+				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
 				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
 				newevalmax=Evaluation(nextGame, possiblemoves.get(x));//send row
 				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmax; //set last column as evaluation number
@@ -92,8 +91,7 @@ public class BetterAiPlayer extends AiPlayer {
 			while(x<5 && x<possiblemoves.size())  //#of rows
 			{
 				int newevalmin;
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
+				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
 				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thatplayer);
 				newevalmin=Evaluation(nextGame, possiblemoves.get(x));//send row
 				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmin; //set last column as evaluation number
@@ -110,8 +108,7 @@ public class BetterAiPlayer extends AiPlayer {
 			while(x<5 && x<possiblemoves.size())  //#of rows
 			{
 				int newevalmax;
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
+				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
 				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
 				newevalmax=Evaluation(nextGame, possiblemoves.get(x));//send row
 				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmax; //set last column as evaluation number
@@ -129,8 +126,7 @@ public class BetterAiPlayer extends AiPlayer {
 			while(x<5 && x<possiblemoves.size())  //#of rows
 			{
 				int newevalmin;
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
+				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
 				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
 				newevalmin=Evaluation(nextGame, possiblemoves.get(x));//send row
 				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmin; //set last column as evaluation number
@@ -149,8 +145,7 @@ public class BetterAiPlayer extends AiPlayer {
 		{
 			while(x<5 && x<possiblemoves.size())
 			{
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
+				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
 				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
 				//call MiniMax, new eval = last column
 				int[] temp=MiniMax(nextGame, loop, next, TileStack); //get eval #
@@ -169,8 +164,7 @@ public class BetterAiPlayer extends AiPlayer {
 		{
 			while(x<5 && x<possiblemoves.size())
 			{
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
+				BoardCell[][] nextGame=apply(gm, possiblemoves.get(x), TileStack);
 				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thatplayer);
 				//call MiniMax, new eval = last column
 				int[] temp=MiniMax(nextGame, loop, next, TileStack);//get eval #
