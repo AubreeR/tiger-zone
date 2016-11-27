@@ -47,9 +47,9 @@ public class PoorAiPlayer extends AiPlayer {
 	 */
 	public final void makeMove() {
 		long millis = System.currentTimeMillis();
-		Tile current = this.game.getCurrentTile();
+		final Tile current = this.game.getCurrentTile();
 		
-		Map<Position, List<Integer>> validTilePlacements = this.game.getBoard().getValidTilePlacements(current);
+		final Map<Position, List<Integer>> validTilePlacements = this.game.getBoard().getValidTilePlacements(current);
 
 		// no possible move; simply pass our turn (not what's actually supposed to happen)
 		if (validTilePlacements.isEmpty()) {
@@ -57,16 +57,18 @@ public class PoorAiPlayer extends AiPlayer {
 			return;
 		}
 
-		Position p = validTilePlacements.keySet().iterator().next();
-		int rotation = validTilePlacements.get(p).get(0);
+		// Get first valid tile placement
+		final Position p = validTilePlacements.keySet().iterator().next();
+		final int rotation = validTilePlacements.get(p).get(0);
 
+		// Rotate tile until we get desired rotation
 		while (current.getRotation() != rotation) {
 			current.rotate();
 		}
 		
-		game.getBoard().addTile(p.getX(), p.getY(), current);
+		game.getBoard().addTile(p, current);
 		
-		Player currentPlayer = this.getPlayer();
+		final Player currentPlayer = this.getPlayer();
 		
 		int i = -1;
 		
@@ -79,7 +81,7 @@ public class PoorAiPlayer extends AiPlayer {
 		else if(current.hasAnimal()) {
 			for (i = 1; i < 10; i++) {
 				if (current.getZone(i) == 'l') {
-					boolean isValid = this.game.getBoard().validTigerPlacement(p.getX(), p.getY(), i, false);
+					boolean isValid = this.game.getBoard().validTigerPlacement(p, i, false);
 					if (isValid && currentPlayer.getTigers().size() > 0) {
 						Tiger tiger = currentPlayer.getTigers().pop();
 						current.addTiger(i, tiger);
@@ -90,8 +92,7 @@ public class PoorAiPlayer extends AiPlayer {
 			i = (i == 10) ? -1 : i;
 		}
 		
-		Player me = new Player(1,"s1");
-		int score = me.updateScore(p.getX(), p.getY(), this.game.getBoard());
+		final int score = currentPlayer.updateScore(p.getX(), p.getY(), this.game.getBoard());
 		System.err.println("Score: " + score);
 		
 		millis = System.currentTimeMillis() - millis;

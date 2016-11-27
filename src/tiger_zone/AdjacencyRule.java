@@ -1,8 +1,8 @@
 package tiger_zone;
 
 public class AdjacencyRule extends PlacementRule {
-	public AdjacencyRule(Board boardState,int cartX, int cartY, boolean trace) {
-		super(boardState, cartX, cartY, trace);
+	public AdjacencyRule(Board boardState, Position position, boolean trace) {
+		super(boardState, position, trace);
 		super.setRuleName("Adjacency Rule");
 	}
 
@@ -14,14 +14,14 @@ public class AdjacencyRule extends PlacementRule {
 		boolean checkRight = false;
 		
 		try {
-			boolean placementTileEmpty = boardState.getTile(cartX, cartY) == null;
+			boolean placementTileEmpty = boardState.getTile(this.position) == null;
 			
 			// if the tile you want to put something is empty, check to see if there is an adjacent tile
 			if (placementTileEmpty) {
-				checkRight = boardState.getTile(cartX+1, cartY) != null;
-				checkLeft = boardState.getTile(cartX -1, cartY) != null;
-				checkDown =boardState.getTile(cartX, cartY-1) != null;
-				checkUp = this.boardState.getTile(cartX, cartY+1) != null;
+				checkRight = this.boardState.getTile(this.position.east()) != null;
+				checkLeft = this.boardState.getTile(this.position.west()) != null;
+				checkDown = this.boardState.getTile(this.position.south()) != null;
+				checkUp = this.boardState.getTile(this.position.north()) != null;
 			}
 			else {
 				throw new Exception(super.getName() + " failed under test condition index out of bounds or tile already occupied");

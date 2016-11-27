@@ -9,8 +9,8 @@ public class TigerJungleRule extends PlacementRule {
 	private final int zone;
 	
 	
-	public TigerJungleRule(Board boardState,int cartX, int cartY, Tile tilePlaced, int zone) {
-		super(boardState, cartX, cartY, true);
+	public TigerJungleRule(Board boardState, Position position, Tile tilePlaced, int zone) {
+		super(boardState, position, true);
 		super.setRuleName("TigerJungle Rule");
 		this.tilePlaced = tilePlaced;
 		this.zone = zone;

@@ -11,16 +11,16 @@ public class TigerLakeRule extends PlacementRule {
 	private int zone;
 	
 	
-	public TigerLakeRule(Board boardState,int cartX, int cartY, Tile tilePlaced, int zone) {
-		super(boardState,cartX, cartY, true);
+	public TigerLakeRule(Board boardState, Position position, Tile tilePlaced, int zone) {
+		super(boardState, position, true);
 		super.setRuleName("TigerLake Rule");
 		this.tilePlaced = tilePlaced;
 		this.zone = zone;
 		this.usedTiles = new ArrayList<Position>();
 	}
 	
-	public TigerLakeRule(Board boardState, int cartX, int cartY, Tile tilePlaced, int zone, boolean trace) {
-		super(boardState,cartX, cartY, trace);
+	public TigerLakeRule(Board boardState, Position position, Tile tilePlaced, int zone, boolean trace) {
+		super(boardState, position, trace);
 		super.setRuleName("TigerLake Rule");
 		this.tilePlaced = tilePlaced;
 		this.zone = zone;
@@ -30,7 +30,7 @@ public class TigerLakeRule extends PlacementRule {
 	@Override
 	public boolean evaluate() {
 		try {
-			if(checkChildren(this.cartX, this.cartY)) {
+			if(checkChildren(this.position)) {
 				if(trace) {
 					for(Position t : this.usedTiles) {
 						System.err.println("tile: (" + t.getX() +"," + t.getY() + ") Zone: " + this.zone+" Has Tiger: "
@@ -53,48 +53,48 @@ public class TigerLakeRule extends PlacementRule {
 		return false;
 	}
 
-	public boolean checkChildren( int cartX, int cartY) {
+	public boolean checkChildren(Position position) {
 		Set<Position> testedTiles = new HashSet<Position>();
 		if (this.tilePlaced.getZone(this.zone) != 'l'|| this.tilePlaced.hasTiger()) {
 			 return false;
 		}
-		return recursiveLake(testedTiles, cartX, cartY);
+		return recursiveLake(testedTiles, position);
 	}
 	
-	public boolean recursiveLake(Set<Position> testedTiles, int X, int Y) {
-		if(boardState.getTile(X, Y) == null) {
+	public boolean recursiveLake(Set<Position> testedTiles, Position position) {
+		if(boardState.getTile(position) == null) {
 			return true;
 		}
 		
 		//mark adjacent tiles with lakes
-		if(boardState.getTile(X, Y).hasTiger()) {
+		if(boardState.getTile(position).hasTiger()) {
 			return false;
 		}
 		
 		//already visited this tile or no more tiles to check
-		if(testedTiles.contains(new Position(X, Y))) {
+		if(testedTiles.contains(position)) {
 			return true;
 		}
 		
 		boolean ret = true;
 		for (int i = 0; i < 4; i++) {
-			if (boardState.getTile(X, Y).getSide(i) == 'l') {
-				if(!testedTiles.contains(new Position(X, Y))) {
-					usedTiles.add(new Position(X, Y));
-					testedTiles.add(new Position(X, Y));
+			if (boardState.getTile(position).getSide(i) == 'l') {
+				if(!testedTiles.contains(position)) {
+					usedTiles.add(position);
+					testedTiles.add(position);
 				}
 				switch(i) {
 					case 0:	
-						ret = ret && recursiveLake(testedTiles, X,Y+1);
+						ret = ret && recursiveLake(testedTiles, position.north());
 						break;
 					case 1: 
-						ret = ret && recursiveLake(testedTiles, X+1,Y);
+						ret = ret && recursiveLake(testedTiles, position.east());
 						break;
 					case 2: 
-						ret = ret && recursiveLake(testedTiles, X,Y-1);
+						ret = ret && recursiveLake(testedTiles, position.south());
 						break;
 					case 3: 
-						ret = ret && recursiveLake(testedTiles, X-1,Y);
+						ret = ret && recursiveLake(testedTiles, position.west());
 						break;
 					default:
 						break;	

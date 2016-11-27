@@ -30,53 +30,34 @@ public class Board {
 	}
 
 	/**
-	 * Adds tile to this board at position (x, y).
-	 *
-	 * @param x The x coordinate of the destination translation to the cartesian system.
-	 * @param y The y coordinate of the destination translation to the cartesian system.
-	 * @param tile The instance of <code>Tile</code> to add
-	 * @return if tile was successfully placed
+	 * Place tile at position if possible.
+	 * 
+	 * @param p Position to place at
+	 * @param tile Tile to place
+	 * @return true if placed, else false
 	 */
-	public final boolean addTile(final int x, final int y, final Tile tile) {
-		if (this.validTilePlacement(x, y, tile, false)) {
-			this.gameGrid.put(new Position(x, y), tile);
+	public final boolean addTile(final Position position, final Tile tile) {
+		if (this.validTilePlacement(position, tile, false)) {
+			this.gameGrid.put(position, tile);
 			return true;
 		}
 		return false;
 	}
 
 	/**
-	 * Check if the tile can be placed at board position (x, y).
-	 *
-	 * @param x The x coordinate of the tile
-	 * @param y The y coordinate of the tile
-	 * @param tile The instance of <code>Tile</code> to add
-	 * @return true, if the tile can be placed in the location, otherwise false
+	 * Returns true if placing tile at position is valid. Otherwise, returns false.
+	 * 
+	 * @param p Position to place at.
+	 * @param tile Tile to place.
+	 * @param trace Enable verbose logging.
+	 * @return true if valid placement, else false
 	 */
-	public final boolean validTilePlacement(final int x, final int y, final Tile tile, boolean trace) {
+	public final boolean validTilePlacement(final Position position, final Tile tile, boolean trace) {
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
-		placementEngine.addRule(new AdjacencyRule(this, x, y, trace));
-		placementEngine.addRule(new SideMatchRule(this, x, y, tile, trace));
-
-		return placementEngine.evaluateRules();
-	}
-
-	/**
-	 * Check if the tile can be placed at board position (x, y).
-	 *
-	 * @param x The x coordinate of the tile
-	 * @param y The y coordinate of the tile
-	 * @param tile The instance of <code>Tile</code> to add
-	 * @return true, if the tile can be placed in the location, otherwise false
-	 */
-	public final boolean validTilePlacement(final int x, final int y, final Tile tile) {
-		placementEngine.clearRules();
-
-		// Check for adjacent tiles
-		placementEngine.addRule(new AdjacencyRule(this, x, y, false));
-		placementEngine.addRule(new SideMatchRule(this, x, y, tile, false));
+		placementEngine.addRule(new AdjacencyRule(this, position, trace));
+		placementEngine.addRule(new SideMatchRule(this, position, tile, trace));
 
 		return placementEngine.evaluateRules();
 	}
@@ -91,14 +72,14 @@ public class Board {
 	 * @param trace
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
-	public final boolean validTigerPlacement(final int x, final int y, final int zone, final boolean trace) {
+	public final boolean validTigerPlacement(final Position position, final int zone, final boolean trace) {
 		this.placementEngine.clearRules();
 
-		Tile tile = this.getTile(x, y);
+		Tile tile = this.getTile(position);
 		switch(tile.getZone(zone)) {
 			case 'j': return false;
 			// case 't': placementEngine.addRule(new TigerTrailRule(this, x, y, tile, zone));
-			case 'l': this.placementEngine.addRule(new TigerLakeRule(this, x, y, tile, zone, trace));
+			case 'l': this.placementEngine.addRule(new TigerLakeRule(this, position, tile, zone, trace));
 				break;
 			case 'x': return true;
 			default: return false;
@@ -188,7 +169,7 @@ public class Board {
 		// for each open position, try every rotation of this tile until it fits
 		for (Position p : openPositions) {
 			for (int i = 0; i < 4; i++) {
-				if (this.validTilePlacement(p.getX(), p.getY(), tile)) {
+				if (this.validTilePlacement(p, tile, false)) {
 					if (!validTilePlacements.containsKey(p)) {
 						validTilePlacements.put(p, new ArrayList<Integer>());
 					}

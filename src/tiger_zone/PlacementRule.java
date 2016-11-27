@@ -3,35 +3,30 @@ package tiger_zone;
 public class PlacementRule implements Rule {
 	private String ruleName = "";
 	protected Board boardState;
-	protected int cartX, cartY;
+	protected Position position;
 	protected boolean trace;
 	
-	public PlacementRule(Board boardState, int cartX, int cartY, boolean trace) {
+	public PlacementRule(Board boardState, Position position, boolean trace) {
 		this.boardState = boardState;
-		this.cartX = cartX;
-		this.cartY = cartY;
+		this.position = position;
 		this.trace = trace;
 	}
 	
 	@Override
-	public void setBoardState(Board boardState, int cartX, int cartY) {
+	public void setBoardState(Board boardState, Position position) {
 		this.boardState = boardState;
-		this.cartX = cartX;
-		this.cartY = cartY;
-		
+		this.position = position;
 	}
 	
 	@Override
-	public void setPosition(int cartX, int cartY) {
-		this.cartX = cartX;
-		this.cartY = cartY;
+	public void setPosition(Position position) {
+		this.position = position;
 	}
 	
 	@Override
 	public void setBoardState(Board boardState) {
 		this.boardState = boardState;
 	}
-	
 	
 	@Override
 	public boolean evaluate()  {

@@ -8,6 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import tiger_zone.Game;
+import tiger_zone.Position;
 import tiger_zone.Tile;
 
 public class OnBoardClick extends MouseAdapter {
@@ -40,20 +41,16 @@ public class OnBoardClick extends MouseAdapter {
 		rowClick = (int) j.getClientProperty("row");
 		colClick = (int) j.getClientProperty("col");
 
-		if(this.game.getBoard().addTile(rowClick, colClick, placedTile))
-		{
+		if(this.game.getBoard().addTile(new Position(rowClick, colClick), placedTile)) {
 			System.out.println("Board: " + rowClick + ", " + colClick);
 			ImageIcon img = new ImageIcon(placedTile.getImagePath());
 			j.setImg(img);
 			j.setRotation(placedTile.getRotation());
 		}
-		else
-		{
+		else {
 			this.game.getBoard().getPile().push(placedTile);
 			previewImg = new ImageIcon(placedTile.getImagePath());
 			BoardFrame.tilePreview.setImg(previewImg);
 		}
-
-
 	}
 }

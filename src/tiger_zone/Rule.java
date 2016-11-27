@@ -14,19 +14,17 @@ package tiger_zone;
  *		re.evaluateRules();
  */
 //Maps basic rules 
-public interface Rule
-{
+public interface Rule {
 	void setBoardState(Board boardState);
-	void setBoardState(Board boardState, int cartX, int cartY);
+	void setBoardState(Board boardState, Position position);
 	
-	void setPosition(int cartX, int cartY);
+	void setPosition(Position position);
 	
 	//Description:hold conditions for passing or failing 
 	//	the given rule set
 	//returns: 	true if rule is validated
 	//			false if rule fails
 	boolean evaluate();
-	
 	
 	//Description: the result of failing a rule
 	//returns: void

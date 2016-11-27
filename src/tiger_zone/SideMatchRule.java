@@ -4,8 +4,8 @@ public class SideMatchRule extends PlacementRule {
 	private Tile nextTile;//we must know the next tile to be placed in order to match sides
 	private Tile[] adj;
 	
-	public SideMatchRule(Board boardState,int cartX, int cartY, Tile nextTile, boolean trace) {
-		super(boardState,cartX, cartY, trace);
+	public SideMatchRule(Board boardState, Position position, Tile nextTile, boolean trace) {
+		super(boardState, position, trace);
 		super.setRuleName("SideMatch Rule");
 		
 		this.nextTile = nextTile;
@@ -20,7 +20,8 @@ public class SideMatchRule extends PlacementRule {
 	@Override
 	public boolean evaluate() {
 		try	{
-			Position currentPosition = new Position(cartX, cartY);
+			Position currentPosition = this.position;
+			
 			// Check to see which tiles are adjacent to this tile
 			adj[0] = boardState.getTile(currentPosition.north());			
 			adj[1] = boardState.getTile(currentPosition.east());

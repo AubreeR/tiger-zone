@@ -29,9 +29,9 @@ public class BoardTest {
 	public void addGetTileTest() {
 		char[] sides = {'t','j','t','j'};
 		Tile t = new Tile(sides, 't', "./src/resources/tile5.png");
-		assertTrue(board.addTile(0, -1, t));
-		assertSame(t, board.getTile(0, -1));
-		assertFalse(board.addTile(0, -1, t));
+		assertTrue(board.addTile(new Position(0, -1), t));
+		assertSame(t, board.getTile(new Position(0, -1)));
+		assertFalse(board.addTile(new Position(0, -1), t));
 	}
 
 	@Test
