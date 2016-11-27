@@ -1,8 +1,12 @@
 package tiger_zone;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+=======
+import java.util.HashMap;
+>>>>>>> ef1bc31... Created TileMap
 import java.util.Map;
 import java.util.Stack;
 
@@ -14,7 +18,11 @@ public class Board {
 	private final Map<Position, Tile> gameGrid = new HashMap<Position, Tile>();
 	private final Stack<Tile> pile;
 	private final RuleEngine placementEngine = new RuleEngine();
+<<<<<<< HEAD
 	private Position latest;
+=======
+	static Map tileMap = new HashMap(); 
+>>>>>>> ef1bc31... Created TileMap
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.
@@ -203,8 +211,13 @@ public class Board {
 
 	public static void buildStack(Stack<Tile> pile, char[] edges, char center, char[] tigerSpots,
 			char[] crocSpots, String file, int tileCount){
+		String str = ("" + edges[0] + edges[1] + edges[2] + edges[3] + center).trim();
+		Tile tmp = new Tile(edges, center, tigerSpots, crocSpots, file);
+		tileMap.put(str, tmp);
+//		System.out.println(str);
+		
 		for(int i = 0; i < tileCount; i++){
-			pile.push(new Tile(edges, center, tigerSpots, crocSpots, file));
+			pile.push(tmp);
 		}
 	}
 
@@ -244,8 +257,8 @@ public class Board {
 		char[] Xsides = {'t','l','l','t'};
 		char[] Ysides = {'t','l','l','t'};
 		char[] Zsides = {'l','j','t','j'};
-		char[] AAsides = {'l','j','t','j'};
-		char[] ABsides = {'t','l','l','l'};
+		char[] AAsides ={'l','j','t','j'};
+		char[] ABsides ={'t','l','l','l'};
 
 		char[] Atigers = {'j','=','=','=','=','=','=','=','='};
 		char[] Btigers = {'j','=','=','=','x','=','=','=','='};
@@ -306,6 +319,7 @@ public class Board {
 		char[] AAcrocs = {'j','=','j','=','t','=','=','=','='};
 		char[] ABcrocs = {'j','t','j','=','=','=','=','=','='};
 
+		
 
 		Stack<Tile> pile = new Stack<Tile>();
 		// One Tile1
@@ -335,8 +349,8 @@ public class Board {
 		buildStack(pile, Xsides, '-', Xtigers, Xcrocs, "./src/resources/tile24.png",3);
 		buildStack(pile, Ysides, 'b', Ytigers, Ycrocs, "./src/resources/tile25.png",2);
 		buildStack(pile, Zsides, '-', Ztigers, Zcrocs, "./src/resources/tile26.png",1);
-		buildStack(pile, AAsides, 'd', AAtigers, AAcrocs, "./src/resources/tile27.png",2);
-		buildStack(pile, ABsides, 'c', ABtigers, ABcrocs, "./src/resources/tile28.png",2);
+		buildStack(pile, AAsides,'d', AAtigers, AAcrocs, "./src/resources/tile27.png",2);
+		buildStack(pile, ABsides,'c', ABtigers, ABcrocs, "./src/resources/tile28.png",2);
 		return pile;
 	}
 }
