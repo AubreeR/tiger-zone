@@ -130,6 +130,7 @@ public class Board {
 		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone, trace));
 			break;
 		case 'x': return true;
+		default: return false;
 		}
 		
 		

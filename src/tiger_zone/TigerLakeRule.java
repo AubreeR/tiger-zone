@@ -94,9 +94,10 @@ public class TigerLakeRule extends PlacementRule
 			if( boardState.getTile(X, Y).getSide(i) == 'l')
 			{
 				if(!testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)])
+				{
 					usedTiles.add(this.boardState.getBoardCell(X, Y));
-				testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
-				
+					testedTiles[boardState.getBoardPosX(X)][boardState.getBoardPosY(Y)] = true;
+				}
 				switch(i)
 				{
 				case 0:	

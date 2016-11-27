@@ -60,9 +60,10 @@ public class PoorAiPlayer extends AiPlayer {
 		else if(current.hasAnimal() ){
 		
 			for( i = 1; i < 10; i++){
-				boolean check = this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  i, false);
-				if(current.getZone(i) == 'l' && check){
-					if(current.addTiger(i, currentPlayer)){
+				
+				if(current.getZone(i) == 'l'){
+					boolean check = this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  i, false);
+					if(check && current.addTiger(i, currentPlayer)){
 						break;
 					}
 				}
