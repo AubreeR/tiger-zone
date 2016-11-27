@@ -15,6 +15,7 @@ public class Protocol extends Client
 {
 	private String tPassword, pid, opid, gid, cid, rounds, rid, tile, x, y, orientation,
 	number_tiles, tiles, time, userName, password;
+
 	private ProtocolState pState; 
 	
 	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password)
@@ -382,6 +383,14 @@ public class Protocol extends Client
 	public void setPid(String pid) {
 		this.pid = pid;
 	}
+	
+	public String getOpid(){
+		return opid;
+	}
+	
+	public void setOpid(String opid){
+		this.opid = opid;
+	}
 
 	public String getTournamentPassword() {
 		return tPassword;
@@ -441,5 +450,82 @@ public class Protocol extends Client
 		this.rounds = rounds;
 	}
 	
-	
+	public String getRid() {
+		return rid;
+	}
+
+
+	public void setRid(String rid) {
+		this.rid = rid;
+	}
+
+
+	public String getTile() {
+		return tile;
+	}
+
+
+	public void setTile(String tile) {
+		this.tile = tile;
+	}
+
+
+	public String getX() {
+		return x;
+	}
+
+
+	public void setX(String x) {
+		this.x = x;
+	}
+
+
+	public String getY() {
+		return y;
+	}
+
+
+	public void setY(String y) {
+		this.y = y;
+	}
+
+
+	public String getOrientation() {
+		return orientation;
+	}
+
+
+	public void setOrientation(String orientation) {
+		this.orientation = orientation;
+	}
+
+
+	public String getNumber_tiles() {
+		return number_tiles;
+	}
+
+
+	public void setNumber_tiles(String number_tiles) {
+		this.number_tiles = number_tiles;
+	}
+
+
+	public String getTiles() {
+		return tiles;
+	}
+
+
+	public void setTiles(String tiles) {
+		this.tiles = tiles;
+	}
+
+
+	public String getTime() {
+		return time;
+	}
+
+
+	public void setTime(String time) {
+		this.time = time;
+	}	
 }
