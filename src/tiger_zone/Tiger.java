@@ -22,7 +22,7 @@ public class Tiger {
 	private int locationPlaced;//what array index is the tiger placed on
 	private TigerPlacement placement;//the role fo the tiger
 	private int tigerCount;//Can use a max of 7 tigers
-	Tiger()
+	public Tiger()
 	{
 		xCoor = -1;
 		yCoor = -1;

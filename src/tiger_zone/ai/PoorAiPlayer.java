@@ -1,6 +1,7 @@
 package tiger_zone.ai;
 
 import tiger_zone.Game;
+import tiger_zone.Player;
 import tiger_zone.PossibleMovesRule;
 import tiger_zone.TigerTrailRule;
 
@@ -52,7 +53,8 @@ public class PoorAiPlayer extends AiPlayer {
 
 		if (current.hasDen()) {
 			System.out.println("Player " + currentPlayer + " has placed a tiger!");
-			if(current.addTiger(5, currentPlayer)){
+			if(current.addTiger(5, currentPlayer) && getTigers().size() != 0){
+				getTigers().pop(); 
 				System.out.println("Tiger placed at index 5 at location " + move[0] + ", " + move[1]);
 			}
 		}
@@ -61,7 +63,8 @@ public class PoorAiPlayer extends AiPlayer {
 			for(int i = 1; i < 10; i++){
 				boolean check = this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  i, false);
 				if(current.getZone(i) == 'l' && check){
-					if(current.addTiger(i, currentPlayer)){
+					if(current.addTiger(i, currentPlayer) && getTigers().size() != 0){
+						getTigers().pop();
 						System.out.println("Tiger placed at index " + i + " at location " + move[0] + ", " + move[1]);
 						break;
 					}

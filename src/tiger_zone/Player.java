@@ -10,8 +10,8 @@ import java.util.List;
  */
 public class Player {
 	private int points;
-	private final List<Tiger> tigers = new ArrayList<Tiger>(7);
-	private final List<Crocodile> crocodiles = new ArrayList<Crocodile>(2);
+	private final Stack<Tiger> tigers = new Stack<Tiger>();
+	private final Stack<Crocodile> crocodiles = new Stack<Crocodile>();
 	private final int index;
 	private final String pid;
 
@@ -23,6 +23,11 @@ public class Player {
 	public Player(int index, String pid) {
 		this.index = index;
 		this.pid = pid;
+		
+		Tiger t = new Tiger();
+		for(int i = 0; i < 7; i++){
+		tigers.push(t); 
+		}
 	}
 
 	/**
