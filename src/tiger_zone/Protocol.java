@@ -152,7 +152,8 @@ public class Protocol extends Client
 				rid = rid + fromServer.charAt(k);
 			}
 			break;
-		case 5 : rounds = "";
+			
+			case 5 : rounds = "";
 			for(int k = i+1; k < fromServer.length(); k++)
 			{
 				if(fromServer.charAt(k) == 'P')	// If "please" is contained in string, more rounds are to come
@@ -166,6 +167,8 @@ public class Protocol extends Client
 			break;
 		}
 		}
+		
+		System.out.println("rid: " + rid + ", rounds = " + rounds);
 		
 		for(int i = 0; i < Integer.parseInt(rounds); i++)
 		{
@@ -201,7 +204,8 @@ public class Protocol extends Client
 			break;
 		}
 		}
-		
+		System.out.println("opid: " + opid);
+
 		///// Line 2 - Get tile, x, y, and orientation //////
 		
 		fromServer = receiveFromServer();
@@ -270,7 +274,8 @@ public class Protocol extends Client
 			break;
 		}
 		}
-		
+		System.out.println("tile: " + tile + ", x: " + x + ", y: " + y + ", orientation: " + orientation);
+
 		////// Line 3 - Get number of tiles and tile stack //////
 		
 		fromServer = receiveFromServer();		
