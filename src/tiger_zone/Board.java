@@ -208,8 +208,8 @@ public class Board {
 		Tile tmp = new Tile(edges, center, tigerSpots, crocSpots, file);
 		tileMap.put(str, tmp);
 		
-		for(int i = 0; i < tileCount; i++){
-			pile.push(tmp);
+		for (int i = 0; i < tileCount; i++) {
+			pile.push(tmp.clone());
 		}
 	}
 

@@ -3,18 +3,17 @@ package tiger_zone;
 /**
  * The <code>Tile</code> class represents a game tile.
  */
-public class Tile {
-	private char[] sides;
-	private char[] originalSides;
-	private char center;
-	private String imagePath;
+public class Tile implements Cloneable {
+	private final char[] sides;
+	private final char[] originalSides;
+	private final char center;
+	private final String imagePath;
 	private int rotation = 0;
-	private char[] tigerSpots; 
-	private char[] crocSpots;
+	private final char[] tigerSpots; 
+	private final char[] crocSpots;
 	private int tigerPosition = -1;
 	private Tiger placedTiger = null;
 	
-
 	/**
 	 * Creates a new instance of <code>Tile</code> with the specified sides, center, and image path.
 	 *
@@ -27,6 +26,7 @@ public class Tile {
 		this.originalSides = sides.clone();
 		this.sides = sides.clone();
 		this.tigerSpots = null;
+		this.crocSpots = null;
 		this.center = center;
 		this.imagePath = imagePath;
 	}
@@ -348,6 +348,23 @@ public class Tile {
 		return this.placedTiger.getOwner();
 	}
 	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#clone()
+	 */
+	@Override
+	public final Tile clone() {
+		final Tile copy = new Tile(this.sides, this.center, this.tigerSpots, this.crocSpots, this.imagePath);
+		
+		while (copy.getRotation() != this.rotation) {
+			copy.rotate();
+		}
+		
+		return copy;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#toString()
+	 */
 	@Override
 	public final String toString() {
 		return Character.toUpperCase(this.sides[0]) + "" + Character.toUpperCase(this.sides[1]) + ""
