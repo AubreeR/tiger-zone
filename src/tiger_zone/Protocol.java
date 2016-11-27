@@ -213,6 +213,7 @@ public class Protocol extends Client
 		spaceCount = 0;
 		for(int i = 0; i < fromServer.length(); i++)
 		{
+			
 			if(fromServer.charAt(i) == ' ')
 				spaceCount++;
 			switch(spaceCount)
@@ -231,48 +232,54 @@ public class Protocol extends Client
 			break;
 			
 			case 5 : x = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
+			for(int k = i; k < fromServer.length(); k++)
 			{
-				if(fromServer.charAt(k) == ' ')
+				if(fromServer.charAt(k) == ' ' && k != i)
 				{
 					spaceCount++;
 					i = k;
 					break;
 				}
+				if(fromServer.charAt(k) != ' ')
 				x = x + fromServer.charAt(k);
 			}
 			break;
 			
 			case 6 : y = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
+			for(int k = i; k < fromServer.length(); k++)
 			{
-				if(fromServer.charAt(k) == ' ')
+				if(fromServer.charAt(k) == ' '&& k != i)
 				{
 					spaceCount++;
 					i = k;
 					break;
 				}
+				if(fromServer.charAt(k) != ' ')
+
 				y = y + fromServer.charAt(k);
 			}
 			break;
 			
 			case 7 : orientation = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
+			for(int k = i; k < fromServer.length(); k++)
 			{
-				if(fromServer.charAt(k) == ' ')
+				if(fromServer.charAt(k) == ' ' && k != i)
 				{
 					spaceCount++;
 					i = k;
 					break;
 				}
-				orientation = orientation + fromServer.charAt(k);
+				if(fromServer.charAt(k) != ' ')
+					orientation = orientation + fromServer.charAt(k);
 			}
 			break;
 			
 			
-		default:
-			break;
-		}
+			default:
+				break;
+			}
+			if(i == fromServer.length())
+				break;
 		}
 		System.out.println("tile: " + tile + ", x: " + x + ", y: " + y + ", orientation: " + orientation);
 
