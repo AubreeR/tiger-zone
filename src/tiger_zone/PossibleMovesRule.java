@@ -231,28 +231,25 @@ public class PossibleMovesRule extends PlacementRule
 	public int[] getClosestToOriginEstimateMove()
 	{
 		int choice = -1;
-		double distance = Double.MAX_VALUE;
-		double temp = Double.MAX_VALUE;
-		for(int rot = 0; rot < 4; rot++)
+				
+		for(int i = -1; Math.abs(i)<= 5; i =((i>0) ? (i * -1) : (i-1)*-1))
 		{
-			for(int i = -((length -1)/ 2); i < length/2; i++)
+			for(int j = -1; Math.abs(j) <= 5; j =((j>0) ?  (j * -1):(j-1)*-1 ))
 			{
-				for(int j = -((length-1) / 2); j < length/2; j++)
-				{
-					switch(rot)
-					{
-					case 0: if(north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] && i > -5 && i < 5 && j > -5 && j < 5)
-							return new int[]{i,j,0};
-					case 1:if(west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] && i > -5 && i < 5 && j > -5 && j < 5)
-						return new int[]{i,j,90};
-					case 2:if(south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] && i > -5 && i < 5 && j > -5 && j < 5)
-						return new int[]{i,j,180};
-					case 3:if(east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] && i > -5 && i < 5 && j > -5 && j < 5)
-						return new int[]{i,j,270};
-					}
-				}
+				//System.out.println(i + "," + j);
+				if(north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)])
+						return new int[]{i,j,0};
+				if(west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)])
+					return new int[]{i,j,90};
+				if(south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)])
+					return new int[]{i,j,180};
+				if(east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)])
+					return new int[]{i,j,270};
+				
 			}
+			
 		}
+		
 		int ind = (int)Math.random() * 4;
 		for(int i = 0; i <4; i++)
 		{
