@@ -64,7 +64,7 @@ public class Player {
 		this.points = points;
 	}
 
-	public final List<Tiger> getTigers(){
+	public final Stack<Tiger> getTigers() {
 		return this.tigers;
 	}
 
