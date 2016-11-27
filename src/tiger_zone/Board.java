@@ -284,10 +284,9 @@ public class Board {
 		char[] Wtigers = {'j','t','j','t','=','l','j','t','='};
 		char[] Xtigers = {'j','t','j','=','=','l','=','=','='};
 		char[] Ytigers = {'j','t','j','=','=','l','=','=','='};
-		char[] Ztigers = {'j','l','j','=','t','=','=','=','='};	//Check this one
-		char[] AAtigers = {'j','l','j','=','t','=','=','=','='};//And this one
+		char[] Ztigers = {'j','l','j','=','t','=','=','=','='};
+		char[] AAtigers = {'j','l','j','=','t','=','=','=','='};
 		char[] ABtigers = {'j','t','j','l','=','=','=','=','='};
-
 
 		char[] Acrocs = {'=','=','=','=','=','=','=','=','='};
 		char[] Bcrocs = {'=','=','=','=','=','=','=','=','='};
