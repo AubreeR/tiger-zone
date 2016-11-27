@@ -20,7 +20,7 @@ public abstract class AiPlayer {
 
 	/**
 	 * Get the Player instance that corresponds to this AiPlayer.
-	 *
+	 * 
 	 * @return player
 	 */
 	protected final Player getPlayer() {
@@ -33,7 +33,7 @@ public abstract class AiPlayer {
 		}
 		return null;
 	}
-
+	
 	/**
 	 * Have this AI player make a move on the board.
 	 */

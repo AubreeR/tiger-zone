@@ -347,4 +347,11 @@ public class Tile {
 		}
 		return this.placedTiger.getOwner();
 	}
+	
+	@Override
+	public final String toString() {
+		return Character.toUpperCase(this.sides[0]) + "" + Character.toUpperCase(this.sides[1]) + ""
+				+ Character.toUpperCase(this.sides[2]) + "" + Character.toUpperCase(this.sides[3]) + ""
+				+ Character.toUpperCase(this.center);
+	}
 }

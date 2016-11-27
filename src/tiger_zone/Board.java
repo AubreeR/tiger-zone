@@ -14,6 +14,7 @@ public class Board {
 	private final Map<Position, Tile> gameGrid = new HashMap<Position, Tile>();
 	private final Stack<Tile> pile;
 	private final RuleEngine placementEngine = new RuleEngine();
+	private Position latest;
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.
@@ -30,6 +31,18 @@ public class Board {
 	}
 
 	/**
+	 * Returns the position of the last tile placed on the board.
+	 * 
+	 * TODO: this is only ever used for a little logging in game; consider removing or refactoring into somewhere else
+	 * later
+	 * 
+	 * @return position of latest tile
+	 */
+	public final Position getLatest() {
+		return this.latest;
+	}
+	
+	/**
 	 * Place tile at position if possible.
 	 * 
 	 * @param p Position to place at
@@ -39,6 +52,7 @@ public class Board {
 	public final boolean addTile(final Position position, final Tile tile) {
 		if (this.validTilePlacement(position, tile, false)) {
 			this.gameGrid.put(position, tile);
+			this.latest = position;
 			return true;
 		}
 		return false;

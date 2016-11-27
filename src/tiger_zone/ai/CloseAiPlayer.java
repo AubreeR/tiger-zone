@@ -10,23 +10,13 @@ import tiger_zone.Tiger;
 import tiger_zone.Tile;
 
 /**
- * A pretty bad AI player which simply makes the first possible move found. This exists simply to demonstrate how an AI
- * player should function.
+ * A sample AiPlayer which places tiles as close to the origin as possible.
  */
-public class PoorAiPlayer extends AiPlayer {
-	/**
-	 * Create a new instance of <code>PoorAiPlayer</code>.
-	 *
-	 * @param game The game instance.
-	 */
-	public PoorAiPlayer(Game game) {
+public class CloseAiPlayer extends AiPlayer {
+	public CloseAiPlayer(Game game) {
 		super(game);
 	}
 	
-	/**
-	 * Have this AI player place a tile on the board. To maximize points, AI places its tigers on the first available
-	 * den or unique animal tile.
-	 */
 	public final void makeMove() {
 		final Tile current = this.game.getCurrentTile();
 		
@@ -37,19 +27,26 @@ public class PoorAiPlayer extends AiPlayer {
 			System.out.println("no moves, skipping :(");
 			return;
 		}
-		
-		// Get first valid tile placement
-		Position p = validTilePlacements.keySet().iterator().next();
 
+		// Get closest placement to origin
+		double minDistance = Double.MAX_VALUE;
+		Position closest = null;
+		Position origin = new Position(0, 0);
+		for (Position p : validTilePlacements.keySet()) {
+			if (origin.distance(p) < minDistance) {
+				minDistance = origin.distance(p);
+				closest = p;
+			}
+		}
 		
-		final int rotation = validTilePlacements.get(p).get(0);
+		final int rotation = validTilePlacements.get(closest).get(0);
 
 		// Rotate tile until we get desired rotation
 		while (current.getRotation() != rotation) {
 			current.rotate();
 		}
 		
-		game.getBoard().addTile(p, current);
+		game.getBoard().addTile(closest, current);
 		
 		final Player currentPlayer = this.getPlayer();
 		
@@ -64,7 +61,7 @@ public class PoorAiPlayer extends AiPlayer {
 		else if(current.hasAnimal()) {
 			for (i = 1; i < 10; i++) {
 				if (current.getZone(i) == 'l') {
-					boolean isValid = this.game.getBoard().validTigerPlacement(p, i, false);
+					boolean isValid = this.game.getBoard().validTigerPlacement(closest, i, false);
 					if (isValid && currentPlayer.getTigers().size() > 0) {
 						Tiger tiger = currentPlayer.getTigers().pop();
 						current.addTiger(i, tiger);

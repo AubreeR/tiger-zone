@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 import tiger_zone.ai.AiPlayer;
+import tiger_zone.ai.CloseAiPlayer;
 import tiger_zone.ai.PoorAiPlayer;
 
 /**
@@ -18,6 +19,7 @@ public class Game {
 	private Player currentPlayer;
 	private boolean isOver = false;
 	private String gid;
+	private int turnNumber = 0;
 
 	/**
 	 * Creates a new instance of <code>Game</code> with the default tile stack being the pile.
@@ -115,18 +117,22 @@ public class Game {
 		if (this.isOver) {
 			return;
 		}
+		
+		this.turnNumber++;
 
 		AiPlayer currentAiPlayer = this.aiPlayers.get(this.currentPlayer.getIndex());
 		this.currentTile = this.board.getPile().pop();
 
 		// It is our AiPlayer's turn. Make our move, send it to the server, and then conduct next turn.
-		if (currentAiPlayer instanceof PoorAiPlayer) {
+		if (currentAiPlayer instanceof PoorAiPlayer || currentAiPlayer instanceof CloseAiPlayer) {
+			final long start = System.currentTimeMillis();
 			currentAiPlayer.makeMove();
+			
+			System.out.printf("(#%d) %s placed %s at position %s in %d ms\n", this.turnNumber, this.currentPlayer,
+					this.currentTile, this.board.getLatest(), System.currentTimeMillis() - start);
+			
 			this.nextPlayer();
 			this.conductTurn();
 		}
-
-		// Otherwise, it is the opponent's AI turn. We can't force them to play but rather we can only wait for them to
-		// make a move on their own time.
 	}
 }
