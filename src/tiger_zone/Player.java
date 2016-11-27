@@ -89,7 +89,7 @@ public class Player {
 			}
 
 			//check if any lakes are completed
-			//updatedScores = checkForLake(lastTileX, lastTileY, updatedScores, boardState);
+			//updatedScores += checkForLake(lastTileX, lastTileY, updatedScores, boardState);
 
 			//check if road complete
 			updatedScores += scoreRoad(boardState, lastTileX, lastTileY);
@@ -145,7 +145,7 @@ public class Player {
 			XY[1] = y;
 			Stack<int[]> XYStack = new Stack<int[]>(); //XY and tile stacks will be the same XY is the cords for the tile
 			Stack<Tile> tileStack = new Stack<Tile>();
-			Boolean[][] flagGrid = new Boolean[152][152];
+			Boolean[][] flagGrid = new Boolean[900][900];
 			int p1Tigers = 0;
 			int p2Tigers = 0;
 			int croc = 0;
@@ -159,6 +159,10 @@ public class Player {
 			String tigerOwner;
 			int[] tigerCheck;
 
+			if(boardState.getTile(x,y) == null){
+				System.err.println("Score Lake Error 1");
+				return 0;
+			}
 
 			Tile checkTile = boardState.getTile(x, y);
 			char center = checkTile.getCenter();
@@ -173,7 +177,7 @@ public class Player {
 			if(sides[0] == 'l' || sides[1] == 'l' || sides[2] == 'l' || sides[3] == 'l'){ //setting up stack: if the first tile has a lake side, add it to stack
 				tileStack.push(boardState.getTile(x, y)); //set up tile stack
 				XYStack.push(XY); //set up XY cordinate stack
-				flagGrid[x][y] = true; //flag first tile on flaggrid
+				flagGrid[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
 				totalScore += 1; //add 1 to total score
 
 				while(tileStack.peek() != null) {
@@ -206,17 +210,17 @@ public class Player {
 							nullFound = true;
 							break;
 						}
-						else if (flagGrid[XY[0]][XY[1]+1] == true) {}
+						else if (flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] != null) {}
 						else {
 							temp = boardState.getTile(XY[0], XY[1]+1);
 							tempcenter = temp.getCenter();
 							tempsides = temp.getSides();
 							originalSides = temp.getOriginalSides();
-							if(originalSides == "ljlj" || originalSides == "jllj"){ //special case tiles
-								flagGrid[XY[0]][XY[1]+1] = true; //if true, flag it then add to score, dont push it to stack
+							if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
+								flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] = true;//if true, flag it then add to score, dont push it to stack
 								totalScore += 1;
 								// add tiger check for special case tiles
-								tigerCheck = checkLake4Tigers(checkTile);
+								tigerCheck = checkLake4Tigers(temp);
 								p1Tigers += tigerCheck[0];
 								p2Tigers += tigerCheck[1];
 							}
@@ -225,7 +229,7 @@ public class Player {
 								tempXY[1] = XY[1] + 1;
 								tileStack.push(temp); //push to tile stack
 								XYStack.push(tempXY); //push to XY cordinate stack
-								flagGrid[XY[0]][XY[1]-1] = true; //flag first tile on flaggrid
+								flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]+1)] = true;//flag first tile on flaggrid
 								totalScore += 1; //add 1 to total score
 							}
 						}
@@ -236,17 +240,17 @@ public class Player {
 							nullFound = true;
 							break;
 						}
-						else if (flagGrid[XY[0]+1][XY[1]] == true) {}
+						else if (flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] != null) {}
 						else {
 							temp = boardState.getTile(XY[0]+1, XY[1]);
 							tempcenter = temp.getCenter();
 							tempsides = temp.getSides();
 							originalSides = temp.getOriginalSides();
-							if(originalSides == "ljlj" || originalSides == "jllj"){
-								flagGrid[XY[0]][XY[1]-1] = true; //if true, flag it then add to score, dont push it to stack
+							if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
+								flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
 								totalScore += 1;
 								//tiger scoring
-								tigerCheck = checkLake4Tigers(checkTile);
+								tigerCheck = checkLake4Tigers(temp);
 								p1Tigers += tigerCheck[0];
 								p2Tigers += tigerCheck[1];
 							}
@@ -255,7 +259,7 @@ public class Player {
 								tempXY[0] = XY[0] + 1;
 								tileStack.push(temp); //set up tile stack
 								XYStack.push(tempXY); //set up XY cordinate stack
-								flagGrid[XY[0]+1][XY[1]] = true; //flag first tile on flaggrid
+								flagGrid[boardState.getBoardPosX(XY[0]+1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
 								totalScore += 1; //add 1 to total score
 							}
 						}
@@ -266,16 +270,16 @@ public class Player {
 							nullFound = true;
 							break;
 						}
-						else if (flagGrid[XY[0]][XY[1]-1] == true) {}
+						else if (flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] != null) {}
 						else {
 							temp = boardState.getTile(XY[0], XY[1]-1);
 							tempcenter = temp.getCenter();
 							tempsides = temp.getSides();
 							originalSides = temp.getOriginalSides();
-							if(originalSides == "ljlj" || originalSides == "jllj"){
-								flagGrid[XY[0]][XY[1]-1] = true; //if true, flag it then add to score, dont push it to stack
+							if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
+								flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] = true;//flag first tile on flaggrid
 								totalScore += 1;
-								tigerCheck = checkLake4Tigers(checkTile);
+								tigerCheck = checkLake4Tigers(temp);
 								p1Tigers += tigerCheck[0];
 								p2Tigers += tigerCheck[1];
 							}
@@ -284,7 +288,7 @@ public class Player {
 								tempXY[1] = XY[1] - 1;
 								tileStack.push(temp); //set up tile stack
 								XYStack.push(tempXY); //set up XY cordinate stack
-								flagGrid[XY[0]][XY[1]-1] = true; //flag first tile on flaggrid
+								flagGrid[boardState.getBoardPosX(XY[0])][boardState.getBoardPosY(XY[1]-1)] = true;//flag first tile on flaggrid
 								totalScore += 1; //add 1 to total score
 							}
 						}
@@ -295,16 +299,16 @@ public class Player {
 							nullFound = true;
 							break;
 						}
-						else if (flagGrid[XY[0]-1][XY[1]] == true) {}
+						else if (flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] != null) {}
 						else {
 							temp = boardState.getTile(XY[0]-1, XY[1]);
 							tempcenter = temp.getCenter();
 							tempsides = temp.getSides();
 							originalSides = temp.getOriginalSides();
-							if(originalSides == "ljlj" || originalSides == "jllj"){
-								flagGrid[XY[0]-1][XY[1]] = true; //if true, flag it then add to score, dont push it to stack
+							if(originalSides.equals("ljlj") || originalSides.equals("jllj")){ //special case tiles
+								flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
 								totalScore += 1;
-								tigerCheck = checkLake4Tigers(checkTile);
+								tigerCheck = checkLake4Tigers(temp);
 								p1Tigers += tigerCheck[0];
 								p2Tigers += tigerCheck[1];
 							}
@@ -313,7 +317,7 @@ public class Player {
 								tempXY[0] = XY[0] - 1;
 								tileStack.push(temp); //set up tile stack
 								XYStack.push(tempXY); //set up XY cordinate stack
-								flagGrid[XY[0]-1][XY[1]] = true; //flag first tile on flaggrid
+								flagGrid[boardState.getBoardPosX(XY[0]-1)][boardState.getBoardPosY(XY[1])] = true;//flag first tile on flaggrid
 								totalScore += 1; //add 1 to total score
 							}
 						}
@@ -379,6 +383,8 @@ public class Player {
 			
 			//loop through all sides
 			for(int k = 0; k < 4; k++){
+				Error = false;
+				Error2 = true;
 				p1Tigers = 0;
 				p2Tigers = 0;
 				croc = 0;
@@ -511,7 +517,7 @@ public class Player {
 					}
 					
 					if(roadcount == 0){
-						System.err.println("Road Scoring Error1: Tile has no roads");
+						System.err.println("Road Scoring Error1: Tile has no roads, Side: " + side);
 						Error = true;
 						break;
 					}
@@ -545,7 +551,7 @@ public class Player {
 						if(tileSides[i] == 't' && side != i) {
 							Error2 = false;
 							if(i == 0){
-								tileY--;
+								tileY++;
 								side = 2; //set side for the next tile, telling the next tile that, that is the side we came from
 							}
 							else if(i == 1){
@@ -553,7 +559,7 @@ public class Player {
 								side = 3;
 							}
 							else if(i == 2){
-								tileY++;
+								tileY--;
 								side = 0;
 							}
 							else if(i == 3){
@@ -592,14 +598,17 @@ public class Player {
 						break;
 					}
 				}
-				//score up and add to scores
-				scoreCount = scoreCount + buffalo + deer + boar - croc;
-				//decide who gets the points
-				if(p2Tigers > p1Tigers){
-					totalScoreSide[k] = 0;
-				}
-				else if(p1Tigers > 0 && p1Tigers >= p2Tigers){
-					totalScoreSide[k] = scoreCount;
+				if(Error == true){totalScoreSide[k] = 0;}
+				else{
+					//score up and add to scores
+					scoreCount = scoreCount + buffalo + deer + boar - croc;
+					//decide who gets the points
+					if(p2Tigers > p1Tigers){
+						totalScoreSide[k] = 0;
+					}
+					else if(p1Tigers > 0 && p1Tigers >= p2Tigers){
+						totalScoreSide[k] = scoreCount;
+					}
 				}
 			}
 			
