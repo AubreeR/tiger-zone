@@ -3,7 +3,7 @@ package tiger_zone;
 /**
  * The <code>BoardCell</code> class represents a position on the <code>Board</code>.
  */
-class BoardCell {
+public class BoardCell {
 	private final int x;
 	private final int y;
 	private Tile tile = null;

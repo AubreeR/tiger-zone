@@ -49,27 +49,40 @@ public class PoorAiPlayer extends AiPlayer {
 		}
 
 		game.getBoard().addTile(move[0], move[1], current);
+		int i = -1;
+		if (current.hasDen()) {
+		
+			if(current.addTiger(5, currentPlayer)){
+				i = 5;
 
-		if (current.hasDen() /*||this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  5)*/) {
-			System.out.println("Player " + currentPlayer + " has placed a tiger!");
-			current.addTiger(5, currentPlayer);
+			}
+		}
+		else if(current.hasAnimal() ){
+		
+			for( i = 1; i < 10; i++){
+				
+				if(current.getZone(i) == 'l'){
+					boolean check = this.game.getBoard().validTigerPlacement(move[0],  move[1], current,  i, false);
+					if(check && current.addTiger(i, currentPlayer)){
+						break;
+					}
+				}
+			}
+			i = (i == 10) ? -1:i;
+
 		}
 
-		
-
-		
-		
-
-
 		millis = System.currentTimeMillis() - millis;
-		System.out.println("Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: "
+		if( i != -1)
+		System.err.println(currentPlayer + "'s Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: "
 				+ current.getSide(0)+current.getSide(1)+current.getSide(2)+current.getSide(3)
-				+ "\tTiger Locations: "  + (-1)
+				+ "\tTiger Locations: "  + ((i != -1)? i:"N/A")
 				+ "\tElapsed Time: " + millis);
-
-		
-		
-
+		else
+			System.out.println(currentPlayer + "'s Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: "
+					+ current.getSide(0)+current.getSide(1)+current.getSide(2)+current.getSide(3)
+					+ "\tTiger Locations: "  + ((i != -1)? i:"N/A")
+					+ "\tElapsed Time: " + millis);
 
 
 	}

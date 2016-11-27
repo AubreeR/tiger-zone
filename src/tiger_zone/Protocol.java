@@ -138,6 +138,10 @@ public class Protocol extends Client
 	{
 		
 	}
+	
+	public void moveProtocol(String clientMove){
+		
+	}
 
 	public String getPid() {
 		return pid;
