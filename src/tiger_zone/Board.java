@@ -1,12 +1,8 @@
 package tiger_zone;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-=======
-import java.util.HashMap;
->>>>>>> ef1bc31... Created TileMap
 import java.util.Map;
 import java.util.Stack;
 
@@ -18,11 +14,8 @@ public class Board {
 	private final Map<Position, Tile> gameGrid = new HashMap<Position, Tile>();
 	private final Stack<Tile> pile;
 	private final RuleEngine placementEngine = new RuleEngine();
-<<<<<<< HEAD
 	private Position latest;
-=======
-	static Map tileMap = new HashMap(); 
->>>>>>> ef1bc31... Created TileMap
+	static Map<String, Tile> tileMap = new HashMap<String, Tile>();
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.
