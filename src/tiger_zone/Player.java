@@ -346,7 +346,13 @@ public class Player {
 						uniques--;
 					}
 				}
-				return ((2*totalScore)*(1+uniques));
+				if(p1Tigers >= p2Tigers && p1Tigers != 0){
+					return ((2*totalScore)*(1+uniques));
+				}
+				else{
+					return 0;
+				}
+				
 			}
 		}
 		
