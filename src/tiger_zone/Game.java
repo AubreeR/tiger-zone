@@ -16,7 +16,7 @@ public class Game {
 	private Tile currentTile;
 	private Player currentPlayer;
 	private boolean isOver = false;
-	private String gid; 
+	private String gid;
 
 	/**
 	 * Creates a new instance of <code>Game</code> with the default tile stack being the pile.
@@ -59,6 +59,15 @@ public class Game {
 	 */
 	public final List<Player> getPlayers() {
 		return this.players;
+	}
+
+	/**
+	 * Returns this game's AI players.
+	 *
+	 * @return ai players
+	 */
+	public final List<AiPlayer> getAiPlayers() {
+		return this.aiPlayers;
 	}
 
 	/**
