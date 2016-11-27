@@ -223,18 +223,33 @@ public class PossibleMovesRule extends PlacementRule
 	public int[] getClosestToOriginEstimateMove()
 	{
 		int choice = -1;
-		double distance = Double.MAX_VALUE;
-		double temp = Double.MAX_VALUE;
-		for(int i = 0; i < firstMove.length; i++)
+		
+		for(int i = -1; Math.abs(i)<= 5; i =((i>0) ? (i * -1) : (i-1)*-1))
 		{
-			if(this.firstMove[i][0] == Integer.MAX_VALUE)
-				continue;
-			temp = Math.sqrt(Math.pow(this.firstMove[i][0], 2) + Math.pow(this.firstMove[i][1], 2));
-			if(temp < distance)
+			for(int j = -1; Math.abs(j) <= 5; j =((j>0) ?  (j * -1):(j-1)*-1 ))
 			{
-				choice = i;
-				distance = temp;
+				//System.out.println(i + "," + j);
+				if(north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)])
+						return new int[]{i,j,0};
+				if(west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)])
+					return new int[]{i,j,90};
+				if(south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)])
+					return new int[]{i,j,180};
+				if(east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)])
+					return new int[]{i,j,270};
+				
 			}
+			
+		}
+		
+		int ind = (int)Math.random() * 4;
+		for(int i = 0; i <4; i++)
+		{
+			if(ind == 4)
+				ind = 0;
+			if(this.firstMove[ind][0] != Integer.MAX_VALUE )
+				return this.firstMove[ind]; 
+			ind++;
 		}
 		return this.firstMove[choice];
 	}
