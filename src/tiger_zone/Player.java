@@ -180,7 +180,7 @@ public class Player {
 				flagGrid[boardState.getBoardPosX(x)][boardState.getBoardPosY(y)] = true;
 				totalScore += 1; //add 1 to total score
 
-				while(tileStack.peek() != null) {
+				while(!tileStack.isEmpty()) {
 					XY = XYStack.pop();
 					checkTile = tileStack.pop();
 					center = checkTile.getCenter();
@@ -395,6 +395,8 @@ public class Player {
 				tileY = cartY;
 				roadcount = 0;
 				scoreCount = 0;
+				checkTile = boardState.getTile(tileX, tileY);
+				tileSides = checkTile.getSides();
 				if(tileSides[k] == 't'){
 					if(k == 0){//go up
 						side = 2; 
@@ -481,6 +483,7 @@ public class Player {
 				}
 				
 				while(true){
+					//System.err.println("X: " + tileX + " Y: " + tileY);
 					Error2 = true;
 					if(boardState.getTile(tileX, tileY) == null) { //if tile is there
 						Error = true;
@@ -515,9 +518,8 @@ public class Player {
 							roadcount++;
 						}
 					}
-					
 					if(roadcount == 0){
-						System.err.println("Road Scoring Error1: Tile has no roads, Side: " + side);
+						System.err.println("Road Scoring Error1: Tile has no roads, Side: " + side + " X: " + tileX + " Y: " + tileY);
 						Error = true;
 						break;
 					}
