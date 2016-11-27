@@ -1,7 +1,6 @@
 package tiger_zone;
 
 import java.util.Stack;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,10 +22,9 @@ public class Player {
 	public Player(int index, String pid) {
 		this.index = index;
 		this.pid = pid;
-		
-		Tiger t = new Tiger();
-		for(int i = 0; i < 7; i++){
-		tigers.push(t); 
+
+		for (int i = 0; i < 7; i++){
+			tigers.push(new Tiger());
 		}
 	}
 
@@ -47,7 +45,7 @@ public class Player {
 	public final int getIndex() {
 		return this.index;
 	}
-	
+
 	/**
 	 * Returns the index of this player.
 	 *
@@ -65,7 +63,7 @@ public class Player {
 	public final void setPoints(final int points) {
 		this.points = points;
 	}
-	
+
 	public final List<Tiger> getTigers(){
 		return this.tigers;
 	}
@@ -98,7 +96,7 @@ public class Player {
 
 			//check if road complete
 			updatedScores += scoreRoad(boardState, lastTileX, lastTileY);
-			
+
 			return updatedScores;
 		}
 
@@ -122,7 +120,7 @@ public class Player {
 							pointsEarned = 9;
 						}
 					}
-					
+
 				}
 			}
 			else {
@@ -186,7 +184,7 @@ public class Player {
 					checkTile = tileStack.pop();
 					center = checkTile.getCenter();
 					sides = checkTile.getSides();
-					
+
 					if(center == 'p'){ //count up the animals
 						boar++;
 					}
@@ -199,12 +197,12 @@ public class Player {
 					if(center == 'c'){
 						croc++;
 					}
-					
+
 					//tiger check here
 					tigerCheck = checkLake4Tigers(checkTile);
 					p1Tigers += tigerCheck[0];
 					p2Tigers += tigerCheck[1];
-	
+
 					if(sides[0] == 'l') //check top
 					{
 						if(boardState.getTile(XY[0], XY[1]+1) == null) { //check if top has a tile
@@ -347,8 +345,8 @@ public class Player {
 				return ((2*totalScore)*(1+uniques));
 			}
 		}
-		
-		
+
+
 		public int scoreRoad(Board boardState, int cartX, int cartY){
 			boolean[][] testedTiles = new boolean[boardState.getBoardLength()][boardState.getBoardLength()];
 			int score = 0;
@@ -367,11 +365,11 @@ public class Player {
 			Boolean Error2 = true;
 			int side = -1;
 			String tigerOwner;
-			
+
 			Tile checkTile = boardState.getTile(tileX, tileY);
 			char[] tileSides = checkTile.getSides();
-			testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;		
-			
+			testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
+
 			//check if tile has any roads
 			for(int i = 0; i < 4; i++){
 				if(tileSides[i] == 't'){
@@ -381,7 +379,7 @@ public class Player {
 			if(roadcount == 0){
 				return score;
 			}
-			
+
 			//loop through all sides
 			for(int k = 0; k < 4; k++){
 				p1Tigers = 0;
@@ -396,7 +394,7 @@ public class Player {
 				scoreCount = 0;
 				if(tileSides[k] == 't'){
 					if(k == 0){//go up
-						side = 2; 
+						side = 2;
 						tileY++;
 						//tiger count
 						if(checkTile.getTigerPosition() == 2 && roadcount != 2){
@@ -428,7 +426,7 @@ public class Player {
 						side = 0;
 						tileY--;
 						//tiger count
-						if(checkTile.getTigerPosition() == 8 && roadcount != 2){ 
+						if(checkTile.getTigerPosition() == 8 && roadcount != 2){
 							tigerOwner = checkTile.getTigerOwner();
 							if(tigerOwner.equals(getPid())){
 								p1Tigers++;
@@ -455,7 +453,7 @@ public class Player {
 						}
 					}
 				}
-				
+
 				if(roadcount == 2){ //before looping, check for tigers on a road with two sides
 					if(checkTile.getTigerPosition() == 2 && tileSides[0] == 't'){ //starting at the top, going clockwise, check for tiger on a road
 						tigerOwner = checkTile.getTigerOwner();
@@ -478,7 +476,7 @@ public class Player {
 						else{p2Tigers++;}
 					}
 				}
-				
+
 				while(true){
 					Error2 = true;
 					if(boardState.getTile(tileX, tileY) == null) { //if tile is there
@@ -489,11 +487,11 @@ public class Player {
 					if(testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] == true){
 						break;
 					}
-					
+
 					checkTile = boardState.getTile(tileX, tileY);
 					tileSides = checkTile.getSides();
 					scoreCount++;
-					
+
 					if(checkTile.getCenter() == 'p'){ //count up the animals
 						boar++;
 					}
@@ -503,18 +501,18 @@ public class Player {
 					else if(checkTile.getCenter() == 'b'){
 						buffalo++;
 					}
-					
+
 					if(checkTile.getCenter() == 'c'){
 						croc++;
 					}
-					
+
 					roadcount = 0;
 					for(int i = 0; i < 4; i++){ //find how many sides have a road
 						if(tileSides[i] == 't') {
 							roadcount++;
 						}
 					}
-					
+
 					if(roadcount == 0){
 						System.err.println("Road Scoring Error1: Tile has no roads");
 						Error = true;
@@ -543,7 +541,7 @@ public class Player {
 						}
 						break;
 					}
-					
+
 					//road has two sides, so need to find the other side to continue path
 					testedTiles[boardState.getBoardPosX(tileX)][boardState.getBoardPosY(tileY)] = true;
 					for(int i = 0; i < 4; i++){ //find the other side with road
@@ -567,7 +565,7 @@ public class Player {
 							}
 						}
 					}
-					
+
 					//check road with two trail sides for a tiger
 					if(checkTile.getTigerPosition() == 2 && tileSides[0] == 't'){
 						tigerOwner = checkTile.getTigerOwner();
@@ -589,7 +587,7 @@ public class Player {
 						if(tigerOwner.equals(getPid())){p1Tigers++;}
 						else{p2Tigers++;}
 					}
-					
+
 					//error check
 					if(Error2 == true){
 						System.err.println("Road Scoring Error2: couldn't find other side of road with 2 sides.");
@@ -607,7 +605,7 @@ public class Player {
 					totalScoreSide[k] = scoreCount;
 				}
 			}
-			
+
 			if(Error == true){
 				score = 0;
 			}
@@ -616,7 +614,7 @@ public class Player {
 			}
 			return score;
 		}
-		
+
 		public int[] checkLake4Tigers(Tile tile){
 			int[] playersTigerCount = {0,0};
 			char[] sides = tile.getSides();
@@ -639,8 +637,8 @@ public class Player {
 			}
 			return playersTigerCount;
 		}
-	
-		
+
+
 		/*public int scoreLake(Board boardState, int cartX, int cartY)
 		{
 			this.boardState = boardState;
@@ -649,14 +647,14 @@ public class Player {
 			lakeScore = recursiveLake(testedTiles, cartX, cartY);
 			return (lakeScore > 0 ? lakeScore : -1);
 		}
-		
-		
-		
+
+
+
 		public int recursiveLake(boolean[][] testedTiles, int cartX, int cartY)
 		{
 			//mark adjacent tiles with lakes
-			//check if 
-			
+			//check if
+
 			if(testedTiles[boardState.getBoardPosX(cartX)][boardState.getBoardPosY(cartY)])
 			{return 0;}
 			if(boardState.getTile(cartX, cartY) == null)
@@ -687,9 +685,9 @@ public class Player {
 						break;
 					default:
 						break;
-						
+
 					}
-					
+
 				}
 			}
 			if(visitCount == 0)//
@@ -697,7 +695,7 @@ public class Player {
 				return -200000;
 			}
 			//visited this tile
-			
+
 			return sum;
 		}
 		*/
