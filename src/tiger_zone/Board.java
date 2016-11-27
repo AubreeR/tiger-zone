@@ -54,6 +54,11 @@ public class Board {
 		}
 		return false;
 	}
+	
+	public BoardCell[][] getGameGrid()
+	{
+		return this.gameGrid;
+	}
 
 	/**
 	 * Check if the tile can be placed at board position (x, y).
@@ -122,7 +127,7 @@ public class Board {
 		{
 		case 'j': return false;
 		//case 't': placementEngine.addRule(new TigerTrailRule(this,x,y,tile, zone));
-		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone));
+		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone, trace));
 			break;
 		case 'x': return true;
 		}
