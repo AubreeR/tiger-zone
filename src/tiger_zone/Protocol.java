@@ -14,7 +14,7 @@ enum ProtocolState
 public class Protocol extends Client
 {
 	private String tPassword, pid, opid, gid, cid, rounds, rid, tile, x, y, orientation,
-	number_tiles, tiles,userName, password;
+	number_tiles, tiles, time, userName, password;
 	private ProtocolState pState; 
 	
 	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password)
@@ -313,7 +313,38 @@ public class Protocol extends Client
 			}
 			break;
 			
-			case 5 : tiles = "";	
+			case 6 : tiles = "";	
+			for(int k = i+1; k < fromServer.length(); k++)
+			{
+				if(fromServer.charAt(k) == ']')
+				{
+					spaceCount++;
+					i = k;
+					break;
+				}
+				tiles = tiles + fromServer.charAt(k);
+				if(k + 1 == fromServer.length())
+					i = k;
+			}
+			System.out.println("Tile #: " + number_tiles + ", Tile stack: " + tiles);
+			break;
+			
+		default:
+			break;
+			}
+		}
+		
+		////// Line 4 - Getting time until match start //////
+		fromServer = receiveFromServer();		
+		System.out.println("Server: " + fromServer);
+		spaceCount = 0;
+		for(int i = 0; i < fromServer.length(); i++)
+		{
+			if(fromServer.charAt(i) == ' ')
+				spaceCount++;
+			switch(spaceCount)
+			{
+			case 3 : time = "";	
 			for(int k = i+1; k < fromServer.length(); k++)
 			{
 				if(fromServer.charAt(k) == ' ')
@@ -322,18 +353,26 @@ public class Protocol extends Client
 					i = k;
 					break;
 				}
-				tiles = tiles + fromServer.charAt(k);
+				time = time + fromServer.charAt(k);
 			}
 			break;
 			
-		default:
-			break;
-		}
+			default:
+				break;
+				}
+			}
+		System.out.println("Time till match: " + time);
+		
+		for(int i = 0; i < Integer.parseInt(number_tiles); i++)
+		{
+			moveProtocol(receiveFromServer());
 		}
 	}
 	
+	
 	public void moveProtocol(String clientMove){
-		
+		sendToServer(clientMove);
+		System.out.println(clientMove);
 	}
 
 	public String getPid() {
