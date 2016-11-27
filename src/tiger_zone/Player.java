@@ -68,6 +68,10 @@ public class Player {
 		return this.tigers;
 	}
 
+	@Override
+	public final String toString() {
+		return "Player " + this.index;
+	}
 
 		public int updateScore(int lastTileX, int lastTileY, Board boardState) {
 			int updatedScores = getPoints(); //get player score

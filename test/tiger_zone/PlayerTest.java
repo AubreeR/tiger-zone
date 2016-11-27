@@ -24,4 +24,9 @@ public class PlayerTest {
 		player.setPoints(1);
 		assertEquals(1, player.getPoints());
 	}
+	
+	@Test
+	public void toStringTest() {
+		assertEquals("Player 0", player.toString());
+	}
 }
