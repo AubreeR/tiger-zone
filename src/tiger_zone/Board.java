@@ -54,7 +54,7 @@ public class Board {
 		}
 		return false;
 	}
-	
+
 	public BoardCell[][] getGameGrid()
 	{
 		return this.gameGrid;
@@ -74,7 +74,7 @@ public class Board {
 
 			return false;
 		}
-		
+
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
@@ -83,7 +83,7 @@ public class Board {
 
 		return placementEngine.evaluateRules();
 	}
-	
+
 	/**
 	 * Check if the tile can be placed at board position (x, y).
 	 *
@@ -109,31 +109,31 @@ public class Board {
 	}
 
 	/**
-	 * Check if the tiger can be placed at board position (x, y).
+	 * Check if the tiger can be placed at the tile found at board position (x, y) on the specified grid position of the
+	 * tile.
 	 *
-	 * @param x The x coordinate of the tile
-	 * @param y The y coordinate of the tile
-	 * @param tile The instance of <code>Tile</code> to add
+	 * @param x The x coordinate of the tile.
+	 * @param y The y coordinate of the tile.
+	 * @param zone The destination zone on the tile.
+	 * @param trace
 	 * @return true, if the tile can be placed in the location, otherwise false
 	 */
-	public final boolean validTigerPlacement(final int x, final int y, final Tile tile, final int zone, boolean trace)
-	{
+	public final boolean validTigerPlacement(final int x, final int y, final int zone, final boolean trace) {
 		if (Math.abs(x) >= this.gameGrid.length|| Math.abs(y) >= this.gameGrid.length || zone < 1 || zone >9) {
-
 			return false;
 		}
-		placementEngine.clearRules();
-		switch(tile.getZone(zone))
-		{
-		case 'j': return false;
-		//case 't': placementEngine.addRule(new TigerTrailRule(this,x,y,tile, zone));
-		case 'l': placementEngine.addRule(new TigerLakeRule(this,x,y,tile,zone, trace));
-			break;
-		case 'x': return true;
-		default: return false;
+
+		this.placementEngine.clearRules();
+
+		Tile tile = this.getTile(x, y);
+		switch(tile.getZone(zone)) {
+			case 'j': return false;
+			// case 't': placementEngine.addRule(new TigerTrailRule(this, x, y, tile, zone));
+			case 'l': this.placementEngine.addRule(new TigerLakeRule(this, x, y, tile, zone, trace));
+				break;
+			case 'x': return true;
+			default: return false;
 		}
-		
-		
 
 		return placementEngine.evaluateRules();
 	}
@@ -143,9 +143,9 @@ public class Board {
 	 * @return value from cartesian points to matrix gameGrid[x][?] index
 	 *
 	 */
-	 public int  getBoardPosX(int x) {
-    		return x + this.getOrigin();
- 	}
+	public int getBoardPosX(int x) {
+		return x + this.getOrigin();
+	}
 
 	/**
 	 * Translates: Cartesian-> 2D Matrix position
@@ -178,7 +178,7 @@ public class Board {
 		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)].getTile();
 
 	}
-	
+
 	public BoardCell getBoardCell(final int x, final int y)
 	{
 		return this.gameGrid[this.getBoardPosX(x)][this.getBoardPosY(y)];
@@ -267,8 +267,8 @@ public class Board {
 		char[] Ztigers = {'j','l','j','=','t','=','=','=','='};	//Check this one
 		char[] AAtigers = {'j','l','j','=','t','=','=','=','='};//And this one
 		char[] ABtigers = {'j','t','j','l','=','=','=','=','='};
-		
-		
+
+
 		char[] Acrocs = {'=','=','=','=','=','=','=','=','='};
 		char[] Bcrocs = {'=','=','=','=','=','=','=','=','='};
 		char[] Ccrocs = {'=','=','=','=','=','=','=','t','='};
@@ -297,7 +297,7 @@ public class Board {
 		char[] Zcrocs = {'j','=','j','=','t','=','=','=','='};
 		char[] AAcrocs = {'j','=','j','=','t','=','=','=','='};
 		char[] ABcrocs = {'j','t','j','=','=','=','=','=','='};
-		
+
 
 		Stack<Tile> pile = new Stack<Tile>();
 		// One Tile1
