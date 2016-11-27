@@ -4,13 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Stack;
 
 /**
  * The <code>Board</code> class represents both the collection of placed tiles and the stack of tiles which have not yet
  * been placed.
  */
-public class Board {
+public class Board implements Cloneable{
 	private final Map<Position, Tile> gameGrid = new HashMap<Position, Tile>();
 	private final Stack<Tile> pile;
 	private final RuleEngine placementEngine = new RuleEngine();
@@ -343,5 +344,18 @@ public class Board {
 		buildStack(pile, AAsides,'d', AAtigers, AAcrocs, "./src/resources/tile27.png",2);
 		buildStack(pile, ABsides,'c', ABtigers, ABcrocs, "./src/resources/tile28.png",2);
 		return pile;
+	}
+
+	@Override
+	public final Board clone() {
+		// copy over pile
+		Board copy = new Board((Stack<Tile>)this.pile.clone());
+
+		// copy over placed tiles
+		for (Entry<Position, Tile> p : this.gameGrid.entrySet()) {
+			copy.addTileWithNoValidation(p.getKey(), p.getValue().clone());
+		}
+
+		return copy;
 	}
 }
