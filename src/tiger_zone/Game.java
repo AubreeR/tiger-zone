@@ -117,7 +117,7 @@ public class Game {
 		if (this.isOver) {
 			return;
 		}
-		
+
 		this.turnNumber++;
 
 		AiPlayer currentAiPlayer = this.aiPlayers.get(this.currentPlayer.getIndex());
@@ -127,10 +127,14 @@ public class Game {
 		if (currentAiPlayer instanceof PoorAiPlayer || currentAiPlayer instanceof CloseAiPlayer) {
 			final long start = System.currentTimeMillis();
 			currentAiPlayer.makeMove();
-			
-			System.out.printf("(#%d) %s placed %s at position %s in %d ms\n", this.turnNumber, this.currentPlayer,
-					this.currentTile, this.board.getLatest(), System.currentTimeMillis() - start);
-			
+
+			System.out.printf("(#%d) %s placed %s at position %s", this.turnNumber, this.currentPlayer,
+					this.currentTile, this.board.getLatest());
+			if (this.currentTile.hasTiger()) {
+				System.out.printf(" and tiger at position %d", this.currentTile.getTigerPosition());
+			}
+			System.out.printf(" in %d ms\n", System.currentTimeMillis() - start);
+
 			this.nextPlayer();
 			this.conductTurn();
 		}
