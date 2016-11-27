@@ -1,5 +1,9 @@
 package tiger_zone;
 
+import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 enum ProtocolState
 {
 	TOURNAMENT,
@@ -14,7 +18,8 @@ enum ProtocolState
 public class Protocol extends Client
 {
 	private String tPassword, pid, opid, gid, cid, rounds, rid, tile, x, y, orientation,
-	number_tiles, tiles, time, userName, password;
+	number_tiles, time, userName, password;
+	private String[] tiles;
 	private ProtocolState pState; 
 	
 	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password)
@@ -31,7 +36,10 @@ public class Protocol extends Client
 	
 	public void tournamentProtocol()
 	{
+		
+		
 		String fromServer = this.receiveFromServer();
+		
 		System.out.println("Server: " + fromServer);
 		if(fromServer.equals("THIS IS SPARTA!"))
 		{
@@ -41,38 +49,34 @@ public class Protocol extends Client
 	
 	public void authenticationProtocol(String fromServer)
 	{
-		if(!fromServer.equals("THIS IS SPARTA!"))
-			return;
+		
 		String toServer = "Join " + this.getTournamentPassword();
 		sendToServer(toServer);
 		System.out.println("Client: " + toServer);
 		
 		fromServer = receiveFromServer();
 		System.out.println("Server: "  + fromServer);
-		//THIS ALWAYS GOES TO FALSE FOR SOMEREASON
-		//boolean serverTest = "Hello!".equals(fromServer.trim());
-		//if(!serverTest)
-		//	return;
+		
+				
 		toServer = "I AM " + getUserName() + " " + getPassword();
 		sendToServer(toServer);
 		System.out.println("Client: " + toServer);
 		
-		fromServer = receiveFromServer();
-		System.out.println("Server: "  + fromServer);
+		StringTokenizer strTok;
 		
-		for(int i = 0; i < fromServer.length(); i++)
+		fromServer = receiveFromServer();
+		strTok = new StringTokenizer(fromServer, " ");
+		String tok = "";
+		System.out.println("Server: "  + fromServer);
+		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
-			char j = fromServer.charAt(i);
-			
-			if(j == ' ')
+			tok = strTok.nextToken();
+			switch(i)
 			{
-				pid = "";
-				for(int k = i + 1; k < fromServer.length(); k++)
-				{
-					if(fromServer.charAt(k) == ' ')
-						break;
-					pid = pid + fromServer.charAt(k);
-				}
+			case 1: 
+				pid = tok;
+				break;
+			default:
 				break;
 			}
 		}
@@ -82,43 +86,25 @@ public class Protocol extends Client
 	public void challengeProtocol(String fromServer)
 	{
 		System.out.println("Server: " + fromServer);
-		int spaceCount = 0;
-		for(int i = 0; i < fromServer.length(); i++)
+		StringTokenizer strTok = new StringTokenizer(fromServer," ");
+		String tok = "";
+		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
-			if(fromServer.charAt(i) == ' ')
-				spaceCount++;
-			switch(spaceCount)
+			tok = strTok.nextToken();
+			switch(i)
 			{
-			case 2 : cid = "";
-				for(int k = i+1; k < fromServer.length(); k++)
-				{
-					if(fromServer.charAt(k) == ' ')
-					{
-						spaceCount++;
-						i = k;
-						break;
-					}
-					cid = cid + fromServer.charAt(k);
-				}
+			case 2 : 
+				cid = tok;
 				break;
-			case 6 : rounds = "";
-				for(int k = i+1; k < fromServer.length(); k++)
-				{
-					if(fromServer.charAt(k) == ' ')
-					{
-						spaceCount++;
-						i = k;
-						break;
-					}
-					rounds = rounds + fromServer.charAt(k);
-				}
+			case 6 : 
+				rounds = tok;
 				break;
 			default:
 				break;
 			}
 
 		}
-		
+		System.out.println("CID: " + cid + " ROUNDS: " + rounds);
 		
 		for(int i = 0; i < Integer.parseInt(rounds); i++)
 		{
@@ -133,39 +119,22 @@ public class Protocol extends Client
 	{
  
 		System.out.println("Server: " + fromServer);
-		int spaceCount = 0;
-		for(int i = 0; i < fromServer.length(); i++)
+		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
+		String tok = "";
+		for(int i = 0;strTok.hasMoreTokens(); i++)
 		{
-			if(fromServer.charAt(i) == ' ')
-				spaceCount++;
-			switch(spaceCount)
+			tok = strTok.nextToken();
+			switch(i)
 			{
-			case 2 : rid = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ' ')
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				rid = rid + fromServer.charAt(k);
+			case 2 : 
+				rid = tok;
+				break;
+			case 5 : 
+				rounds = tok;
+				break;
+			default:
+				break;
 			}
-			break;
-			
-			case 5 : rounds = "";
-			for(int k = i+1; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == 'P')	// If "please" is contained in string, more rounds are to come
-				{
-					return;
-				}
-				rounds = rounds + fromServer.charAt(k);
-			}
-			break;
-		default:
-			break;
-		}
 		}
 		
 		System.out.println("rid: " + rid + ", rounds = " + rounds);
@@ -180,29 +149,17 @@ public class Protocol extends Client
 	public void matchProtocol(String fromServer)
 	{
 		System.out.println("Server: " + fromServer);
-		int spaceCount = 0;
-		for(int i = 0; i < fromServer.length(); i++)
+		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
+		String tok = "";
+		
+		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
-			if(fromServer.charAt(i) == ' ')
-				spaceCount++;
-			switch(spaceCount)
+			tok = strTok.nextToken();
+			switch(i)
 			{
-			case 4 : opid = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ' ')
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				
-				opid = opid + fromServer.charAt(k);
-				if(k + 1 == fromServer.length())
-					i = k;
-			}
-			break;
-			
+			case 4 :
+				opid  = tok;
+				break;
 			default:
 				break;
 			}
@@ -214,78 +171,29 @@ public class Protocol extends Client
 		
 		fromServer = receiveFromServer();
 		System.out.println("Server: " + fromServer);
-		spaceCount = 0;
-		for(int i = 0; i < fromServer.length(); i++)
+		strTok = new StringTokenizer(fromServer, " ");
+		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
-			
-			if(fromServer.charAt(i) == ' ')
-				spaceCount++;
-			switch(spaceCount)
+			tok = strTok.nextToken();
+			switch(i)
 			{
-			case 3 : tile = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ' ')
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				tile = tile + fromServer.charAt(k);
-			}
-			break;
-			
-			case 5 : x = "";	
-			for(int k = i; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ' ' && k != i)
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				if(fromServer.charAt(k) != ' ')
-				x = x + fromServer.charAt(k);
-			}
-			break;
-			
-			case 6 : y = "";	
-			for(int k = i; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ' '&& k != i)
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				if(fromServer.charAt(k) != ' ')
+			case 3 : 
+				tile = tok;
+				break;
+			case 5 :
+				x = tok;
+				break;
+			case 6 : 
+				y = tok;
+				break;
+			case 7 : 
+				orientation = tok;
+				break;
 
-				y = y + fromServer.charAt(k);
-			}
-			break;
-			
-			case 7 : orientation = "";	
-			for(int k = i; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ' ' && k != i)
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				if(fromServer.charAt(k) != ' ')
-					orientation = orientation + fromServer.charAt(k);
-				if(k + 1 == fromServer.length())
-					i = k;
-			}
-			break;
-			
-			
 			default:
 				break;
 			}
-			if(i == fromServer.length())
-				break;
+			
 		}
 		System.out.println("tile: " + tile + ", x: " + x + ", y: " + y + ", orientation: " + orientation);
 
@@ -293,74 +201,44 @@ public class Protocol extends Client
 		
 		fromServer = receiveFromServer();		
 		System.out.println("Server: " + fromServer);
-		spaceCount = 0;
-		for(int i = 0; i < fromServer.length(); i++)
+		strTok = new StringTokenizer(fromServer, " ");
+		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
-			if(fromServer.charAt(i) == ' ')
-				spaceCount++;
-			switch(spaceCount)
+			tok = strTok.nextToken();
+			switch(i)
 			{
-			case 2 : number_tiles = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ' ')
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				number_tiles = number_tiles + fromServer.charAt(k);
-			}
-			break;
+			case 2 : 
+				number_tiles = tok;	
+				tiles = new String[Integer.parseInt(number_tiles)];
+				break;
 			
-			case 6 : tiles = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ']')
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				tiles = tiles + fromServer.charAt(k);
-				if(k + 1 == fromServer.length())
-					i = k;
-			}
-			System.out.println("Tile #: " + number_tiles + ", Tile stack: " + tiles);
-			break;
-			
-		default:
-			break;
+			default:
+				if(i >= 6 && i - 6 < tiles.length)
+					tiles[i-6] = tok;
+				break;
 			}
 		}
-		
+		System.out.print("Tile #: " + number_tiles+ ", Tile stack: ");
+		for(String s : tiles)
+			System.out.print(s + " ");
+		System.out.println("");
 		////// Line 4 - Getting time until match start //////
 		fromServer = receiveFromServer();		
 		System.out.println("Server: " + fromServer);
-		spaceCount = 0;
-		for(int i = 0; i < fromServer.length(); i++)
+		strTok = new StringTokenizer(fromServer, " ");
+		for(int i = 0;strTok.hasMoreTokens(); i++)
 		{
-			if(fromServer.charAt(i) == ' ')
-				spaceCount++;
-			switch(spaceCount)
-			{
-			case 3 : time = "";	
-			for(int k = i+1; k < fromServer.length(); k++)
-			{
-				if(fromServer.charAt(k) == ' ')
-				{
-					spaceCount++;
-					i = k;
-					break;
-				}
-				time = time + fromServer.charAt(k);
-			}
-			break;
+			tok = strTok.nextToken();
 			
+			switch(i)
+			{
+			case 3 : 
+				time = tok;
+				break;
 			default:
 				break;
-				}
 			}
+		}
 		System.out.println("Time till match: " + time);
 		
 		for(int i = 0; i < Integer.parseInt(number_tiles); i++)
