@@ -30,7 +30,7 @@ public class Protocol extends Client
 		
 		
 		String fromServer = this.receiveFromServer();
-		
+		//THIS IS SPARTA! only caleld once
 		System.out.println("Server: " + fromServer);
 		if(fromServer.equals("THIS IS SPARTA!"))
 		{
@@ -40,21 +40,21 @@ public class Protocol extends Client
 	
 	public void authenticationProtocol(String fromServer)
 	{
-		
+		//send username and password
 		String toServer = "Join " + this.getTournamentPassword();
 		sendToServer(toServer);
 		System.out.println("Client: " + toServer);
-		
+		//hello
 		fromServer = receiveFromServer();
 		System.out.println("Server: "  + fromServer);
 		
-				
+		//identifying ourself
 		toServer = "I AM " + getUserName() + " " + getPassword();
 		sendToServer(toServer);
 		System.out.println("Client: " + toServer);
 		
 		StringTokenizer strTok;
-		
+		//WELCOME <pid> PLEASE WAIT FOR THE NEXT CHALLENGE 
 		fromServer = receiveFromServer();
 		strTok = new StringTokenizer(fromServer, " ");
 		String tok = "";
@@ -290,30 +290,30 @@ public class Protocol extends Client
 		switch(0/*getMoveValue*/)
 		{
 		case 0 : 
-			input = "GAME " + moveGid + " PLACE " + moveTile + " AT " 
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
 					+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
 			break;
 		case 1 : 
-			input = "GAME " + moveGid + " PLACE " + moveTile + " AT " 
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
 					+ moveX + " " + moveY +  " " + moveOrientation + " CROCODILE ";
 			break;	
 		case 2 : 
-			input = "GAME " + moveGid + " PLACE " + moveTile + " AT " 
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
 					+ moveX + " " + moveY +  " " + moveOrientation + " TIGER " + moveZone + " ";
 			break;
 		case 3 : 
-			input = "GAME " + moveGid + " PLACE " + moveTile + " UNPLACEABLE PASS";
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE PASS";
 			break;
 		case 4 : 
-			input = "GAME " + moveGid + " PLACE " + moveTile + " UNPLACEABLE RETRIEVE TIGER AT "
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE RETRIEVE TIGER AT "
 					+ moveX + " " + moveY + " ";
 			break;
 		case 5 : 
-			input = "GAME " + moveGid + " PLACE " + moveTile + " UNPLACEABLE ADD ANOTHER TIGER TO "
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE ADD ANOTHER TIGER TO "
 					+ moveX + " " + moveY + " ";
 			break;
 		default:
-			input = "GAME " + moveGid + " PLACE " + moveTile + " AT " 
+			input = "GAME " + moveGid + " MOVE " + moveNumber +" PLACE " + moveTile + " AT " 
 					+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
 		}
 		sendToServer(input);
