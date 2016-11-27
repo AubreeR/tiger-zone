@@ -213,7 +213,15 @@ public class PossibleMovesRule extends PlacementRule
 		{
 			if(ind == 4)
 				ind = 0;
-			if(this.firstMove[ind][0] != Integer.MAX_VALUE)
+			if(this.firstMove[ind][0] != Integer.MAX_VALUE && (this.firstMove[ind][0]<5 && this.firstMove[ind][0] > -5) &&(this.firstMove[ind][1]<5 && this.firstMove[ind][1] > -5))
+				return this.firstMove[ind]; 
+			ind++;
+		}
+		for(int i = 0; i <4; i++)
+		{
+			if(ind == 4)
+				ind = 0;
+			if(this.firstMove[ind][0] != Integer.MAX_VALUE )
 				return this.firstMove[ind]; 
 			ind++;
 		}
