@@ -233,16 +233,34 @@ public class PossibleMovesRule extends PlacementRule
 		int choice = -1;
 		double distance = Double.MAX_VALUE;
 		double temp = Double.MAX_VALUE;
-		for(int i = 0; i < firstMove.length; i++)
+		for(int rot = 0; rot < 4; rot++)
 		{
-			if(this.firstMove[i][0] == Integer.MAX_VALUE)
-				continue;
-			temp = Math.sqrt(Math.pow(this.firstMove[i][0], 2) + Math.pow(this.firstMove[i][1], 2));
-			if(temp < distance)
+			for(int i = -((length -1)/ 2); i < length/2; i++)
 			{
-				choice = i;
-				distance = temp;
+				for(int j = -((length-1) / 2); j < length/2; j++)
+				{
+					switch(rot)
+					{
+					case 0: if(north[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] && i > -5 && i < 5 && j > -5 && j < 5)
+							return new int[]{i,j,0};
+					case 1:if(west[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] && i > -5 && i < 5 && j > -5 && j < 5)
+						return new int[]{i,j,90};
+					case 2:if(south[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] && i > -5 && i < 5 && j > -5 && j < 5)
+						return new int[]{i,j,180};
+					case 3:if(east[boardState.getBoardPosX(i)][boardState.getBoardPosY(j)] && i > -5 && i < 5 && j > -5 && j < 5)
+						return new int[]{i,j,270};
+					}
+				}
 			}
+		}
+		int ind = (int)Math.random() * 4;
+		for(int i = 0; i <4; i++)
+		{
+			if(ind == 4)
+				ind = 0;
+			if(this.firstMove[ind][0] != Integer.MAX_VALUE )
+				return this.firstMove[ind]; 
+			ind++;
 		}
 		return this.firstMove[choice];
 	}

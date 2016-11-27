@@ -44,7 +44,7 @@ public class PoorAiPlayer extends AiPlayer {
 		// x = move[0]
 		// y = move[1]
 		// rotation = move[2]
-		int[] move = pmr.getFirstPossibleMove();
+		int[] move = pmr.getClosestToOriginEstimateMove();
 		while (current.getRotation() != move[2]) {
 			current.rotate();
 		}
