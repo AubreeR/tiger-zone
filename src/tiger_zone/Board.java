@@ -75,8 +75,8 @@ public class Board {
 		placementEngine.clearRules();
 
 		// Check for adjacent tiles
-		placementEngine.addRule(new AdjacencyRule(this, x, y,true));
-		placementEngine.addRule(new SideMatchRule(this, x, y, tile, true));
+		placementEngine.addRule(new AdjacencyRule(this, x, y, false));
+		placementEngine.addRule(new SideMatchRule(this, x, y, tile, false));
 
 		return placementEngine.evaluateRules();
 	}
