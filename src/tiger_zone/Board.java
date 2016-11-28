@@ -58,7 +58,7 @@ public class Board implements Cloneable{
 	public final boolean addTile(final Position position, final Tile tile) {
 		if (this.validTilePlacement(position, tile, false)) {
 			this.gameGrid.put(position, tile);
-			System.out.println("Board: setting latest to " + position);
+			//System.out.println("Board: setting latest to " + position);
 			this.latest = position;
 			return true;
 		}
@@ -372,7 +372,9 @@ public class Board implements Cloneable{
 		
 		// copy over placed tiles
 		for (Entry<Position, Tile> p : this.gameGrid.entrySet()) {
-			copy.addTileWithNoValidation(p.getKey(), p.getValue().clone());
+			Position TestKey= new Position(p.getKey().getX(), p.getKey().getY());
+			Tile TestValue= new Tile(p.getValue().getSides(), p.getValue().getCenter(), p.getValue().getTigerSpots(), p.getValue().getCrocSpots(), p.getValue().getImagePath());
+			copy.addTileWithNoValidation(TestKey, TestValue);
 		}
 		
 		if (this.latest != null) {

@@ -51,7 +51,9 @@ public class Tile implements Cloneable {
 		this.center = center;
 		this.imagePath = imagePath;
 	}
-
+	public char[] getCrocSpots(){
+		return this.crocSpots;
+	}
 	/**
 	 * Returns the sides of this tile.
 	 *

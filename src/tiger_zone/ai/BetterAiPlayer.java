@@ -103,7 +103,7 @@ public class BetterAiPlayer extends AiPlayer {
 					}
 				}
 			}
-			System.out.println("1 left, current: " + new Position(move[0], move[1]));
+			//System.out.println("1 left, current: " + new Position(move[0], move[1]));
 			return move;
 		}
 		
@@ -124,7 +124,7 @@ public class BetterAiPlayer extends AiPlayer {
 					}
 				}
 			}
-			System.out.println("1 left, !current: " + new Position(move[0], move[1]));
+			//System.out.println("1 left, !current: " + new Position(move[0], move[1]));
 			return move;
 		}
 		
@@ -146,7 +146,7 @@ public class BetterAiPlayer extends AiPlayer {
 					}
 				}
 			}
-			System.out.println("2 depth: " + new Position(move[0], move[1]));
+			//System.out.println("2 depth: " + new Position(move[0], move[1]));
 			return move;
 		}
 
@@ -167,13 +167,14 @@ public class BetterAiPlayer extends AiPlayer {
 						move[1] = p.getKey().getY();
 						move[2] = rotation;
 						move[3] = -1;
+						move[4] = evalmax;
 					}
 				}
 			}
-			System.out.println("current: " + new Position(move[0], move[1]));
-			move[4] = evalmax;
+			//System.out.println("current: " + new Position(move[0], move[1]));
 			return move;
 		}
+		
 		else {
 			for (Entry<Position, List<Integer>> p : possiblemoves.entrySet()) {
 				for (Integer rotation : p.getValue()) {
@@ -192,7 +193,7 @@ public class BetterAiPlayer extends AiPlayer {
 					}
 				}
 			}
-			System.out.println("!current: " + new Position(move[0], move[1]));
+			//System.out.println("!current: " + new Position(move[0], move[1]));
 			return move;
 		}
 	}
