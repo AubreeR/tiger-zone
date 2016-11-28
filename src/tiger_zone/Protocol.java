@@ -245,12 +245,8 @@ public class Protocol extends Client {
 		
 		
 		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
-		Board board = new Board((Stack<Tile>)pile.clone(), startingTile,x,y, orientation );
-		/*while (startingTile.getRotation() != orientation) {
-			startingTile.rotate();
-		}
-		
-		board.addTileWithNoValidation(new Position(x, y), startingTile);*/
+		Board board = new Board((Stack<Tile>)pile.clone(), startingTile, new Position(x, y), orientation);
+
 		game1 = new Game(board.clone());
 		game2 = new Game(board.clone());
 		

@@ -23,11 +23,24 @@ public class Board implements Cloneable{
 	 *
 	 * @param pile Stack of unplaced tiles.
 	 */
-	public Board(final Stack<Tile> pile, Tile startingTile, final int x, final int y, final int rotation) {
+	public Board(final Stack<Tile> pile) {
 		this.pile = pile;
-		while(startingTile.getRotation() != rotation)
+	}
+	
+	/**
+	 * Creates a board with the specified pile and a single starting tile.
+	 * 
+	 * @param pile Stack of unplaced tiles.
+	 * @param startingTile Default tile on board.
+	 * @param position Position of starting tile.
+	 * @param rotation Orientation of starting tile.
+	 */
+	public Board(final Stack<Tile> pile, Tile startingTile, final Position position, final int rotation) {
+		this.pile = pile;
+		while (startingTile.getRotation() != rotation) {
 			startingTile.rotate();
-		this.gameGrid.put(new Position(x, y), startingTile);
+		}
+		this.gameGrid.put(position, startingTile);
 	}
 
 	/**
