@@ -285,8 +285,8 @@ public class Protocol extends Client {
 		
 		Stack<Tile> pile = new Stack<Tile>();
 		Board.createDefaultStack();
-		for (String s : tiles) {
-			pile.push(Board.tileMap.get(s.toLowerCase()).clone());
+		for (int i = tiles.length - 1; i >= 0; i--) {
+			pile.push(Board.tileMap.get(tiles[i].toLowerCase()).clone());
 		}
 
 		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
