@@ -131,18 +131,24 @@ public class Game {
 
 		AiPlayer currentAiPlayer = this.aiPlayers.get(this.currentPlayer.getIndex());
 		this.currentTile = this.board.getPile().pop();
+		
+		Player me = new Player(1, "p1");
 
 		// It is our AiPlayer's turn. Make our move, send it to the server, and then conduct next turn.
 		if (currentAiPlayer instanceof PoorAiPlayer || currentAiPlayer instanceof BetterAiPlayer) {
 			final long start = System.currentTimeMillis();
 			currentAiPlayer.makeMove();
-
+			
+			int score = me.updateScore(this.board, this.board.getLatest()); //new "player" to check scores after a move
 			System.out.printf("(#%d) %s placed %s at position %s", this.turnNumber, this.currentPlayer,
 					this.currentTile, this.board.getLatest());
 			if (this.currentTile.hasTiger()) {
 				System.out.printf(" and tiger at position %d", this.currentTile.getTigerPosition());
 			}
-			System.out.printf(" in %d ms\n\n", System.currentTimeMillis() - start);
+
+			System.out.printf(" in %d ms", System.currentTimeMillis() - start);
+			System.out.printf("\nScore: " + score + "\n");
+
 
 			this.nextPlayer();
 			this.conductTurn();
