@@ -598,7 +598,7 @@ public class Player {
 						switch(i) {
 							case 0:	
 								recieved = recursiveLake(testedTiles, position.north(), boardState, 2);
-								if(recieved[7] < 0){
+								if(recieved[7] < 0 || ((recieved[1] == 0) && recieved[2] == 0)){
 									for(int k = 0; i < 8; i++){
 										recieved[k] = 0;
 									}
@@ -616,7 +616,7 @@ public class Player {
 								break;
 							case 1: 
 								recieved = recursiveLake(testedTiles, position.east(), boardState, 3);
-								if(recieved[7] < 0){
+								if(recieved[7] < 0 || ((recieved[1] == 0) && recieved[2] == 0)){
 									for(int k = 0; i < 8; i++){
 										recieved[k] = 0;
 									}
@@ -634,7 +634,7 @@ public class Player {
 								break;
 							case 2: 
 								recieved = recursiveLake(testedTiles, position.south(), boardState, 0);
-								if(recieved[7] < 0){
+								if(recieved[7] < 0 || ((recieved[1] == 0) && recieved[2] == 0)){
 									for(int k = 0; i < 8; i++){
 										recieved[k] = 0;
 									}
@@ -652,7 +652,7 @@ public class Player {
 								break;
 							case 3: 
 								recieved = recursiveLake(testedTiles, position.west(), boardState, 1);
-								if(recieved[7] < 0){
+								if(recieved[7] < 0 || ((recieved[1] == 0) && recieved[2] == 0)){
 									for(int k = 0; i < 8; i++){
 										recieved[k] = 0;
 									}
