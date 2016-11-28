@@ -21,8 +21,8 @@ public class Protocol extends Client {
 		setPassword(password);
 	}
 	
-	public final void makeMove(Tile current, int x, int y, int rotation, String gid) {
-		Position pos = new Position(x,y);
+	public final void makeMove(Tile current, String x, String y, String orientation, String zoneIndex, String gid) {
+		Position pos = new Position(Integer.parseInt(x),Integer.parseInt(y));
 		Game gameAlias = null;
 		
 		if(gid.equals(game1.getGid())){
@@ -34,11 +34,20 @@ public class Protocol extends Client {
 		}
 		
 		
-		while(current.getRotation() != rotation){
+		while(current.getRotation() != Integer.parseInt(orientation)){
 			current.rotate();
 		}
 		
 		gameAlias.getBoard().addTile(pos, current);
+		Tiger tiger = null;
+		
+		if(zoneIndex.equals("")){
+			return;
+		}
+		else{
+			current.addTiger(current.getZone(Integer.parseInt(zoneIndex)), tiger);
+			return;
+		}
 		
 	}
 	
@@ -435,7 +444,7 @@ public class Protocol extends Client {
 		}
 		if(!movePid.equals(pid))
 		{
-			//MAKE MOVE HERE
+			makeMove();
 		}
 	}
 
