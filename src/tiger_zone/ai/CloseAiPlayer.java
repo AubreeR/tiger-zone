@@ -8,6 +8,9 @@ import tiger_zone.Player;
 import tiger_zone.Position;
 import tiger_zone.Tiger;
 import tiger_zone.Tile;
+import tiger_zone.action.Action;
+import tiger_zone.action.PassAction;
+import tiger_zone.action.TilePlacementAction;
 
 /**
  * A sample AiPlayer which places tiles as close to the origin as possible.
@@ -22,15 +25,14 @@ public class CloseAiPlayer extends AiPlayer {
 		super(game);
 	}
 	
-	public final void makeMove() {
+	public final Action makeMove() {
 		final Tile current = this.game.getCurrentTile();
 		
 		final Map<Position, List<Integer>> validTilePlacements = this.game.getBoard().getValidTilePlacements(current);
 
 		// no possible move; simply pass our turn (not what's actually supposed to happen)
 		if (validTilePlacements.isEmpty()) {
-			System.out.println("no moves, skipping :(");
-			return;
+			return new PassAction();
 		}
 
 		// Get closest placement to origin
@@ -67,7 +69,7 @@ public class CloseAiPlayer extends AiPlayer {
 			setLatestZone(5);
 			i = 5;
 		}
-		else if(current.hasAnimal()) {
+		else if (current.hasAnimal()) {
 			for (i = 1; i < 10; i++) {
 				if (current.getZone(i) == 'l') {
 					boolean isValid = this.game.getBoard().validTigerPlacement(closest, i, false);
@@ -81,6 +83,8 @@ public class CloseAiPlayer extends AiPlayer {
 			}
 			i = (i == 10) ? -1 : i;
 		}
+		
+		return new TilePlacementAction(closest, current);
 	}
 
 	public Tile getLatestTile() {

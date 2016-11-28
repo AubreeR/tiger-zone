@@ -8,6 +8,9 @@ import tiger_zone.Player;
 import tiger_zone.Position;
 import tiger_zone.Tiger;
 import tiger_zone.Tile;
+import tiger_zone.action.Action;
+import tiger_zone.action.PassAction;
+import tiger_zone.action.TilePlacementAction;
 
 /**
  * A pretty bad AI player which simply makes the first possible move found. This exists simply to demonstrate how an AI
@@ -27,15 +30,14 @@ public class PoorAiPlayer extends AiPlayer {
 	 * Have this AI player place a tile on the board. To maximize points, AI places its tigers on the first available
 	 * den or unique animal tile.
 	 */
-	public final void makeMove() {
+	public final Action makeMove() {
 		final Tile current = this.game.getCurrentTile();
 		
 		final Map<Position, List<Integer>> validTilePlacements = this.game.getBoard().getValidTilePlacements(current);
 
 		// no possible move; simply pass our turn (not what's actually supposed to happen)
 		if (validTilePlacements.isEmpty()) {
-			System.out.println("no moves, skipping :(");
-			return;
+			return new PassAction();
 		}
 		
 		// Get first valid tile placement
@@ -74,5 +76,7 @@ public class PoorAiPlayer extends AiPlayer {
 			}
 			i = (i == 10) ? -1 : i;
 		}
+		
+		return new TilePlacementAction(p, current);
 	}
 }

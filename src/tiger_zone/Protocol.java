@@ -7,6 +7,13 @@ import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import tiger_zone.action.Action;
+import tiger_zone.action.CrocodilePlacementAction;
+import tiger_zone.action.PassAction;
+import tiger_zone.action.TigerRetrievalAction;
+import tiger_zone.action.TigerAdditionAction;
+import tiger_zone.action.TigerPlacementAction;
+import tiger_zone.action.TilePlacementAction;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.CloseAiPlayer;
 import tiger_zone.ai.NetworkAiPlayer;
@@ -348,38 +355,45 @@ public class Protocol extends Client {
 					aiPlayers.add(new CloseAiPlayer(game));
 				}
 				
-				games.put(moveGid, game);
+				game.setPlayers(players);
+				game.setAiPlayers(aiPlayers);
+				
+				this.games.put(moveGid, game);
 			}
 			
-			//SEND OUR MOVE HERE
-			//getMove() we need x, y, rotation, and tigerzone
+			final Action action = this.games.get(moveGid).conductTurn();
+			
 			String input = "";
-			switch(0/*getMoveValue*/)
-			{
-			case 0 : 
+			if (action instanceof TilePlacementAction) {
+				TilePlacementAction tpa = (TilePlacementAction) action;
 				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
-						+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
-				break;
-			case 1 : 
+						+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " "
+						+ tpa.getTile().getRotation() + " NONE ";
+			}
+			else if (action instanceof CrocodilePlacementAction) {
 				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
 						+ moveX + " " + moveY +  " " + moveOrientation + " CROCODILE ";
-				break;	
-			case 2 : 
+			}
+			else if (action instanceof TigerPlacementAction) {
 				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
 						+ moveX + " " + moveY +  " " + moveOrientation + " TIGER " + moveZone + " ";
-				break;
-			case 3 : 
+			}
+			else if (action instanceof PassAction) {
 				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE PASS";
-				break;
-			case 4 : 
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE RETRIEVE TIGER AT "
-						+ moveX + " " + moveY + " ";
-				break;
-			case 5 : 
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE ADD ANOTHER TIGER TO "
-						+ moveX + " " + moveY + " ";
-				break;
-			default:
+			}
+			else if (action instanceof TigerRetrievalAction) {
+				TigerRetrievalAction tra = (TigerRetrievalAction) action;
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile
+						+ " UNPLACEABLE RETRIEVE TIGER AT " + tra.getPosition().getX() + " "
+						+ tra.getPosition().getY() + " ";
+			}
+			else if (action instanceof TigerAdditionAction) {
+				TigerAdditionAction taa = (TigerAdditionAction) action;
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile
+						+ " UNPLACEABLE ADD ANOTHER TIGER TO " + taa.getPosition().getX() + " "
+						+ taa.getPosition().getY() + " ";
+			}
+			else {
 				input = "GAME " + moveGid + " MOVE " + moveNumber +" PLACE " + moveTile + " AT " 
 						+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
 			}

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
+import tiger_zone.action.Action;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.NetworkAiPlayer;
 
@@ -116,14 +117,14 @@ public class Game {
 		}
 	}
 
-	public final void conductTurn() {
+	public final Action conductTurn() {
 		// TODO: consider if this check is best done elsewhere
 		if (this.board.getPile().size() == 0) {
 			this.isOver = true;
 		}
 
 		if (this.isOver) {
-			return;
+			return null;
 		}
 
 		this.turnNumber++;
@@ -134,7 +135,7 @@ public class Game {
 		// It is our AiPlayer's turn. Make our move, send it to the server, and then conduct next turn.
 		if (!(currentAiPlayer instanceof NetworkAiPlayer)) {
 			final long start = System.currentTimeMillis();
-			currentAiPlayer.makeMove();
+			Action action = currentAiPlayer.makeMove();
 
 			System.out.printf("(#%d) %s placed %s at position %s", this.turnNumber, this.currentPlayer,
 					this.currentTile, this.board.getLatest());
@@ -144,10 +145,11 @@ public class Game {
 			System.out.printf(" in %d ms\n", System.currentTimeMillis() - start);
 
 			this.nextPlayer();
-			this.conductTurn();
+			return action;
 		}
 		
 		// Otherwise, the current turn is the NetworkAiPlayer's. We cannot ask for a move here.
+		return null;
 	}
 
 	public String getGid() {

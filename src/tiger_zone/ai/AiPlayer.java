@@ -2,6 +2,7 @@ package tiger_zone.ai;
 
 import tiger_zone.Game;
 import tiger_zone.Player;
+import tiger_zone.action.Action;
 
 /**
  * Abstract class for AI players to extend.
@@ -37,7 +38,8 @@ public abstract class AiPlayer {
 	/**
 	 * Have this AI player make a move on the board.
 	 */
-	public void makeMove() {
+	public Action makeMove() {
 		// TODO: figure out if an implementation should be here?
+		return null;
 	}
 }
