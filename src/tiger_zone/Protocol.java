@@ -1,5 +1,7 @@
 package tiger_zone;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
@@ -17,6 +19,27 @@ public class Protocol extends Client {
 		setTournamentPassword(tPassword);
 		setUserName(userName);
 		setPassword(password);
+	}
+	
+	public final void makeMove(Tile current, int x, int y, int rotation, String gid) {
+		Position pos = new Position(x,y);
+		Game gameAlias = null;
+		
+		if(gid.equals(game1.getGid())){
+			gameAlias = game1;
+		}
+		
+		else if(gid.equals(game2.getGid())){
+			gameAlias = game2;
+		}
+		
+		
+		while(current.getRotation() != rotation){
+			current.rotate();
+		}
+		
+		gameAlias.getBoard().addTile(pos, current);
+		
 	}
 	
 	
