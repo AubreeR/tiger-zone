@@ -24,12 +24,12 @@ public class Main {
 		
 		////
 		//Protocol p = new Protocol(null,0,null,null,null); 
-		//Protocol p = new Protocol("10.138.30.56",8000,"tpass","Steven","Remington");
+		Protocol p = new Protocol("0.0.0.0",52000,"tpass","Steven","Remington");
 //		if(args.length > 0){
 //			p = new Protocol(args[0], Integer.parseInt(args[1]),args[2], args[3], args[4]);
 //		}
 		
-//		p.tournamentProtocol(); 
+		p.tournamentProtocol(); 
 //		String tileStrings = p.getTiles();
 //		String[] parseTiles = tileStrings.split("\\s+"); 
 //		

@@ -62,13 +62,14 @@ public class Protocol extends Client {
 		String fromServer = this.receiveFromServer();
 		// THIS IS SPARTA! only called once
 		System.out.println("Server: " + fromServer);
-		if (fromServer.equals("THIS IS SPARTA!")) {
-			authenticationProtocol(fromServer);
-		}
+		
+		authenticationProtocol(fromServer);
+		
 	}
 	
 	public void authenticationProtocol(String fromServer)
 	{
+		
 		//send username and password
 		String toServer = "Join " + this.getTournamentPassword();
 		sendToServer(toServer);
@@ -274,6 +275,7 @@ public class Protocol extends Client {
 		System.out.println("Time till match: " + time);
 		
 		Stack<Tile> pile = new Stack<Tile>();
+		Board.createDefaultStack();
 		for (String s : tiles) {
 			pile.push(Board.tileMap.get(s.toLowerCase()).clone());
 		}
@@ -444,8 +446,10 @@ public class Protocol extends Client {
 						moveX = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveX;
 						moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
 						moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
-						strTok.nextToken();//tiger
-						moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
+						if(strTok.hasMoreTokens()){
+							strTok.nextToken();//tiger
+							moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
+						}
 					}
 				}
 				else 
