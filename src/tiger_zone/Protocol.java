@@ -175,7 +175,7 @@ public class Protocol extends Client {
 			switch(i)
 			{
 			case 3 : 
-				tile = tok;
+				tile = tok.toLowerCase();
 				break;
 			case 5 :
 				x = Integer.parseInt(tok);
@@ -243,14 +243,14 @@ public class Protocol extends Client {
 			pile.push(Board.tileMap.get(s.toLowerCase()).clone());
 		}
 		
-		Board board = new Board((Stack<Tile>)pile.clone());
-		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
 		
-		while (startingTile.getRotation() != orientation) {
+		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
+		Board board = new Board((Stack<Tile>)pile.clone(), startingTile,x,y, orientation );
+		/*while (startingTile.getRotation() != orientation) {
 			startingTile.rotate();
 		}
 		
-		board.addTileWithNoValidation(new Position(x, y), startingTile);
+		board.addTileWithNoValidation(new Position(x, y), startingTile);*/
 		game1 = new Game(board.clone());
 		game2 = new Game(board.clone());
 		

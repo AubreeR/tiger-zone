@@ -23,13 +23,11 @@ public class Board implements Cloneable{
 	 *
 	 * @param pile Stack of unplaced tiles.
 	 */
-	public Board(final Stack<Tile> pile) {
+	public Board(final Stack<Tile> pile, Tile startingTile, final int x, final int y, final int rotation) {
 		this.pile = pile;
-		char[] Ssides = {'t','l','t','j'};
-		char[] Stigers = {'j','t','j','=','=','l','=','=','='};
-		char[] Scrocs = {'=','t','j','=','=','=','=','=','='};
-		Tile init = new Tile( Ssides, '-', Stigers, Scrocs, "./src/resources/tile19.png");
-		this.gameGrid.put(new Position(0, 0), init);
+		while(startingTile.getRotation() != rotation)
+			startingTile.rotate();
+		this.gameGrid.put(new Position(x, y), startingTile);
 	}
 
 	/**
