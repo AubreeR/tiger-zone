@@ -438,10 +438,14 @@ public class Protocol extends Client {
 			case 6:
 				if(!tok.equals("FORFEITED"))
 				{
-					moveX = tok;
-					moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
-					moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
-					moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
+					if(tok.equals("PLACED"))
+					{
+						moveTile = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveTile;
+						moveX = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveX;
+						moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
+						moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
+						moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
+					}
 				}
 				else 
 					forfeit = true;
