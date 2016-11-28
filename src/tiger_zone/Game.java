@@ -123,7 +123,7 @@ public class Game {
 		AiPlayer currentAiPlayer = this.aiPlayers.get(this.currentPlayer.getIndex());
 		this.currentTile = this.board.getPile().pop();
 		
-		Player me = new Player(1, "s1");
+		Player me = new Player(1, "p1");
 
 		// It is our AiPlayer's turn. Make our move, send it to the server, and then conduct next turn.
 		if (currentAiPlayer instanceof PoorAiPlayer || currentAiPlayer instanceof CloseAiPlayer) {

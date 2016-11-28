@@ -98,8 +98,8 @@ public class Player {
 		//check if any lakes are completed
 		//updatedScores += checkForLake(lastTileX, lastTileY, updatedScores, boardState);
 		//trash{totalScore, p1Tiger, p2Tiger, deer, boar, buffalo, croc, the null check}
-		lakeScore = recursiveLake(testedTiles, position, boardState);
-		System.err.println("lakeScore = " + lakeScore[0] + " " + lakeScore[1] + " " + lakeScore[2] + " " + lakeScore[3] + " " + lakeScore[4] + " " + lakeScore[5] + " " + lakeScore[6] + " " + lakeScore[7]);
+		lakeScore = recursiveLake(testedTiles, position, boardState, -1);
+		System.err.println("lakeScore = " + lakeScore[0] + " " + lakeScore[1] + " " + lakeScore[2] + " " + lakeScore[3] + " " + lakeScore[4] + " " + lakeScore[5] + " " + lakeScore[6] + " " + lakeScore[7] + "Tile:" + lastTileX + " " + lastTileY);
 		if(lakeScore[7] == 0){
 			int uniques = 0;
 			if(lakeScore[3] > 0){
@@ -118,12 +118,12 @@ public class Player {
 			}
 			//System.err.println("tiles: " + totalScore + "uniques: " + uniques );
 			if(lakeScore[1] >= lakeScore[2] && lakeScore[1] != 0){
-				System.err.println("tiles: " + lakeScore[0] + " uniques: " + uniques + " Score: " + (((2*lakeScore[0])*(1+uniques)) + updatedScores));
+				System.err.println("tiles: " + lakeScore[0] + " uniques: " + uniques + " Score: " + (((2*lakeScore[0])*(1+uniques)) + updatedScores + " Tile: " + lastTileX + " " + lastTileY));
 				updatedScores = ((2*lakeScore[0])*(1+uniques)) + updatedScores;
 			}
-			else if(lakeScore[2] >= lakeScore[1] && lakeScore[2] != 0){
-				System.err.println("tiles: " + lakeScore[0] + " uniques: " + uniques + " Score: " + ((((2*lakeScore[0])*(1+uniques))+100) + updatedScores));
-				updatedScores = (((2*lakeScore[0])*(1+uniques))+100) + updatedScores;
+			if(lakeScore[2] >= lakeScore[1] && lakeScore[2] != 0){
+				System.err.println("tiles: " + lakeScore[0] + " uniques: " + uniques + " Score: " + ((((2*lakeScore[0])*(1+uniques))*-1) + updatedScores + " Tile: " + lastTileX + " " + lastTileY));
+				updatedScores = (((2*lakeScore[0])*(1+uniques))*-1) + updatedScores;
 			}
 			else{
 				updatedScores += 0;
@@ -156,12 +156,12 @@ public class Player {
 						&& (boardState.getTile(x-1,y+1) != null)
 						&& (boardState.getTile(x-1,y-1) != null)){
 					//assign score values based on which player's tiger is there
-					System.err.println("Den Completed at: " + x + " " + y);
 					tigerOwner = checkTile.getTigerOwner().pid;
+					System.err.println("Den Completed at: " + x + " " + y + " " + tigerOwner + " " + checkTile.getTigerOwner().pid);
 					if(tigerOwner.equals(getPid())){
 						pointsEarned = 9;
 					}
-					else{pointsEarned = 109;} //+100 for other player to differentiate
+					else{pointsEarned = -9;} //+100 for other player to differentiate
 				}
 				
 			}
@@ -549,11 +549,13 @@ public class Player {
 	}
 	
 	
-	public int[] recursiveLake(Set<Position> testedTiles, Position position, Board boardState) { 
+	public int[] recursiveLake(Set<Position> testedTiles, Position position, Board boardState, int side) { 
 		//trash{totalScore, p1Tiger, p2Tiger, deer, boar, buffalo, croc}
+		Boolean special = false;
 		int[] trash = {0,0,0,0,0,0,0,0};
 		int[] recieved;
 		String owner;
+		String original;
 		if(boardState.getTile(position) == null) {
 			trash[7] = -1;
 			return trash;
@@ -585,6 +587,97 @@ public class Player {
 				}
 		}
 		
+		original = boardState.getTile(position).getOriginalSides();
+		if(original.equals("jllj") || original.equals("ljlj")){
+			if(side == -1){
+				for (int i = 0; i < 4; i++) {
+					if (boardState.getTile(position).getSide(i) == 'l') {
+						if(!testedTiles.contains(position)) {
+							testedTiles.add(position);
+						}
+						switch(i) {
+							case 0:	
+								recieved = recursiveLake(testedTiles, position.north(), boardState, 2);
+								if(recieved[7] < 0){
+									for(int k = 0; i < 8; i++){
+										recieved[k] = 0;
+									}
+								}
+								
+								trash[0] += recieved[0];
+								trash[1] += recieved[1];
+								trash[2] += recieved[2];
+								trash[3] += recieved[3];
+								trash[4] += recieved[4];
+								trash[5] += recieved[5];
+								trash[6] += recieved[6];
+								trash[7] += recieved[7];
+								
+								break;
+							case 1: 
+								recieved = recursiveLake(testedTiles, position.east(), boardState, 3);
+								if(recieved[7] < 0){
+									for(int k = 0; i < 8; i++){
+										recieved[k] = 0;
+									}
+								}
+								
+								trash[0] += recieved[0];
+								trash[1] += recieved[1];
+								trash[2] += recieved[2];
+								trash[3] += recieved[3];
+								trash[4] += recieved[4];
+								trash[5] += recieved[5];
+								trash[6] += recieved[6];
+								trash[7] += recieved[7];
+								
+								break;
+							case 2: 
+								recieved = recursiveLake(testedTiles, position.south(), boardState, 0);
+								if(recieved[7] < 0){
+									for(int k = 0; i < 8; i++){
+										recieved[k] = 0;
+									}
+								}
+								
+								trash[0] += recieved[0];
+								trash[1] += recieved[1];
+								trash[2] += recieved[2];
+								trash[3] += recieved[3];
+								trash[4] += recieved[4];
+								trash[5] += recieved[5];
+								trash[6] += recieved[6];
+								trash[7] += recieved[7];
+								
+								break;
+							case 3: 
+								recieved = recursiveLake(testedTiles, position.west(), boardState, 1);
+								if(recieved[7] < 0){
+									for(int k = 0; i < 8; i++){
+										recieved[k] = 0;
+									}
+								}
+								
+								trash[0] += recieved[0];
+								trash[1] += recieved[1];
+								trash[2] += recieved[2];
+								trash[3] += recieved[3];
+								trash[4] += recieved[4];
+								trash[5] += recieved[5];
+								trash[6] += recieved[6];
+								trash[7] += recieved[7];
+								
+								break;
+							default:
+								break;	
+						}	
+					}
+				}
+			}
+			else if(side != -1){
+				special = true;
+			}
+		}
 		
 		if(boardState.getTile(position).getCenter() == 'p'){ //count up the animals
 			trash[4]++;
@@ -600,60 +693,61 @@ public class Player {
 		}
 		
 		trash[0]++;
-		
-		for (int i = 0; i < 4; i++) {
-			if (boardState.getTile(position).getSide(i) == 'l') {
-				if(!testedTiles.contains(position)) {
-					testedTiles.add(position);
+		if(special == false){
+			for (int i = 0; i < 4; i++) {
+				if (boardState.getTile(position).getSide(i) == 'l') {
+					if(!testedTiles.contains(position)) {
+						testedTiles.add(position);
+					}
+					switch(i) {
+						case 0:	
+							recieved = recursiveLake(testedTiles, position.north(), boardState, 2);
+							trash[0] += recieved[0];
+							trash[1] += recieved[1];
+							trash[2] += recieved[2];
+							trash[3] += recieved[3];
+							trash[4] += recieved[4];
+							trash[5] += recieved[5];
+							trash[6] += recieved[6];
+							trash[7] += recieved[7];
+							break;
+						case 1: 
+							recieved = recursiveLake(testedTiles, position.east(), boardState, 3);
+							trash[0] += recieved[0];
+							trash[1] += recieved[1];
+							trash[2] += recieved[2];
+							trash[3] += recieved[3];
+							trash[4] += recieved[4];
+							trash[5] += recieved[5];
+							trash[6] += recieved[6];
+							trash[7] += recieved[7];
+							break;
+						case 2: 
+							recieved = recursiveLake(testedTiles, position.south(), boardState, 0);
+							trash[0] += recieved[0];
+							trash[1] += recieved[1];
+							trash[2] += recieved[2];
+							trash[3] += recieved[3];
+							trash[4] += recieved[4];
+							trash[5] += recieved[5];
+							trash[6] += recieved[6];
+							trash[7] += recieved[7];
+							break;
+						case 3: 
+							recieved = recursiveLake(testedTiles, position.west(), boardState, 1);
+							trash[0] += recieved[0];
+							trash[1] += recieved[1];
+							trash[2] += recieved[2];
+							trash[3] += recieved[3];
+							trash[4] += recieved[4];
+							trash[5] += recieved[5];
+							trash[6] += recieved[6];
+							trash[7] += recieved[7];
+							break;
+						default:
+							break;	
+					}	
 				}
-				switch(i) {
-					case 0:	
-						recieved = recursiveLake(testedTiles, position.north(), boardState);
-						trash[0] += recieved[0];
-						trash[1] += recieved[1];
-						trash[2] += recieved[2];
-						trash[3] += recieved[3];
-						trash[4] += recieved[4];
-						trash[5] += recieved[5];
-						trash[6] += recieved[6];
-						trash[7] += recieved[7];
-						break;
-					case 1: 
-						recieved = recursiveLake(testedTiles, position.east(), boardState);
-						trash[0] += recieved[0];
-						trash[1] += recieved[1];
-						trash[2] += recieved[2];
-						trash[3] += recieved[3];
-						trash[4] += recieved[4];
-						trash[5] += recieved[5];
-						trash[6] += recieved[6];
-						trash[7] += recieved[7];
-						break;
-					case 2: 
-						recieved = recursiveLake(testedTiles, position.south(), boardState);
-						trash[0] += recieved[0];
-						trash[1] += recieved[1];
-						trash[2] += recieved[2];
-						trash[3] += recieved[3];
-						trash[4] += recieved[4];
-						trash[5] += recieved[5];
-						trash[6] += recieved[6];
-						trash[7] += recieved[7];
-						break;
-					case 3: 
-						recieved = recursiveLake(testedTiles, position.west(), boardState);
-						trash[0] += recieved[0];
-						trash[1] += recieved[1];
-						trash[2] += recieved[2];
-						trash[3] += recieved[3];
-						trash[4] += recieved[4];
-						trash[5] += recieved[5];
-						trash[6] += recieved[6];
-						trash[7] += recieved[7];
-						break;
-					default:
-						break;	
-				}	
 			}
 		}
 		return trash;
