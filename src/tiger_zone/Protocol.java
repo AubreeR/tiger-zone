@@ -441,9 +441,11 @@ public class Protocol extends Client {
 					if(tok.equals("PLACED"))
 					{
 						moveTile = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveTile;
+						strTok.nextToken();//AT
 						moveX = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveX;
 						moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
 						moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
+						strTok.nextToken();//tiger
 						moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
 					}
 				}
