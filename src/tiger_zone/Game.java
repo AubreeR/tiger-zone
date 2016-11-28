@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Stack;
 
 import tiger_zone.action.Action;
+import tiger_zone.action.PassAction;
+import tiger_zone.action.TilePlacementAction;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.NetworkAiPlayer;
 
@@ -83,6 +85,15 @@ public class Game {
 	}
 
 	/**
+	 * Returns true if game is over. Otherwise returns false.
+	 *
+	 * @return is game over?
+	 */
+	public final boolean isOver() {
+		return this.isOver;
+	}
+
+	/**
 	 * Sets the players of this game.
 	 *
 	 * @param players List of players.
@@ -137,10 +148,15 @@ public class Game {
 			final long start = System.currentTimeMillis();
 			Action action = currentAiPlayer.makeMove();
 
-			System.out.printf("(#%d) %s placed %s at position %s", this.turnNumber, this.currentPlayer,
-					this.currentTile, this.board.getLatest());
-			if (this.currentTile.hasTiger()) {
-				System.out.printf(" and tiger at position %d", this.currentTile.getTigerPosition());
+			System.out.printf("(#%d) %s", this.turnNumber, this.currentPlayer);
+			if (action instanceof TilePlacementAction) {
+				System.out.printf(" placed %s at position %s", this.currentTile, this.board.getLatest());
+				if (this.currentTile.hasTiger()) {
+					System.out.printf(" and tiger at position %d", this.currentTile.getTigerPosition());
+				}
+			}
+			else if (action instanceof PassAction) {
+				System.out.printf(" passed their turn");
 			}
 			System.out.printf(" in %d ms\n", System.currentTimeMillis() - start);
 

@@ -16,7 +16,7 @@ public class Board implements Cloneable{
 	private final Stack<Tile> pile;
 	private final RuleEngine placementEngine = new RuleEngine();
 	private Position latest;
-	static Map<String, Tile> tileMap = new HashMap<String, Tile>();
+	public static Map<String, Tile> tileMap = new HashMap<String, Tile>();
 
 	/**
 	 * Creates an empty board with a particular stack of tiles.

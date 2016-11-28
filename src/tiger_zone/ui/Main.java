@@ -1,25 +1,21 @@
 package tiger_zone.ui;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Stack;
 
 import javax.swing.JFrame;
 
 import tiger_zone.Board;
-
-import tiger_zone.Client;
 import tiger_zone.Game;
 import tiger_zone.Player;
+import tiger_zone.Position;
+import tiger_zone.Protocol;
 import tiger_zone.Tile;
-import tiger_zone.UnionFind;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.CloseAiPlayer;
 import tiger_zone.ai.PoorAiPlayer;
-import tiger_zone.Protocol;
 
 public class Main {
 	
@@ -43,12 +39,11 @@ public class Main {
 		
 		
 		Stack<Tile> pile = Board.createDefaultStack();
-//		Map tileMap = Board.getMap(); 
-//		Tile t = (Tile)tileMap.get("tltj-");
-//		System.out.println(t.getImagePath());
-//	    
+		Tile t = Board.tileMap.get("tltj-");
+
 		Collections.shuffle(pile);
 		Game game = new Game(pile);
+		game.getBoard().addTileWithNoValidation(new Position(0, 0), t);
 
 		// Protocol p = new Protocol("10.138.7.222",8000,"tpass","user","pass");
 		// p.tournamentProtocol();
@@ -65,7 +60,10 @@ public class Main {
 		ai.add(skynet1);
 		ai.add(skynet2);
 		game.setAiPlayers(ai);
-		game.conductTurn();
+
+		while (!game.isOver()) {
+			game.conductTurn();
+		}
 
 		BoardFrame bf = new BoardFrame(game);
 		bf.setSize(900, 900);
