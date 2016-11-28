@@ -296,12 +296,52 @@ public class Protocol extends Client {
 		for (int i = 0; i <= Integer.parseInt(number_tiles); i++) {
 			moveProtocol(receiveFromServer());
 		}
+		String gameOverGid = "";
+		boolean gameOver = false;
 		//get first game score
 		fromServer = receiveFromServer();		
 		System.out.println("Server: " + fromServer);
+		
+		strTok = new StringTokenizer(fromServer, " ");
+		for(int i = 0;strTok.hasMoreTokens(); i++)
+		{
+			tok = strTok.nextToken();
+			
+			switch(i)
+			{
+			case 2 : 
+				gameOverGid = tok;
+				break;
+			case 3:
+				gameOver = tok.equals("OVER");
+				break;
+			default:
+				break;
+			}
+		}
 		//get second game score
 		fromServer = receiveFromServer();		
 		System.out.println("Server: " + fromServer);
+		
+		gameOverGid = "";
+		gameOver = false;
+		strTok = new StringTokenizer(fromServer, " ");
+		for(int i = 0;strTok.hasMoreTokens(); i++)
+		{
+			tok = strTok.nextToken();
+			
+			switch(i)
+			{
+			case 2 : 
+				gameOverGid = tok;
+				break;
+			case 3:
+				gameOver = tok.equals("OVER");
+				break;
+			default:
+				break;
+			}
+		}
 	}
 	
 	
