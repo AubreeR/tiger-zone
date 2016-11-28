@@ -47,7 +47,7 @@ public class Protocol extends Client {
 		gameAlias.nextPlayer();
 		Tiger tiger = null;
 		
-		if (zoneIndex.equals("")) {
+		if (zoneIndex.equals("movezone")) {
 			return;
 		}
 		else {
@@ -137,6 +137,7 @@ public class Protocol extends Client {
 		
 		//END OF CHALLENGES or PLEASE WAIT FOR NEXT CHALLEGE
 		fromServer = receiveFromServer();
+		System.out.println("Server: " + fromServer);
 		strTok = new StringTokenizer(fromServer, " ");
 		int count = strTok.countTokens();
 		if(count < 4)
@@ -173,6 +174,9 @@ public class Protocol extends Client {
 		{
 			matchProtocol(receiveFromServer());
 		}
+		
+		fromServer = receiveFromServer();
+		System.out.println("Server: " + fromServer);
 			
 	}
 	
@@ -283,7 +287,7 @@ public class Protocol extends Client {
 		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
 		this.board = new Board((Stack<Tile>)pile.clone(), startingTile, new Position(x, y), orientation);
 		
-		for (int i = 0; i < Integer.parseInt(number_tiles); i++) {
+		for (int i = 0; i <= Integer.parseInt(number_tiles); i++) {
 			moveProtocol(receiveFromServer());
 		}
 		//get first game score

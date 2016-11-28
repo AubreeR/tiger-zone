@@ -24,7 +24,7 @@ public class Main {
 		
 		////
 		//Protocol p = new Protocol(null,0,null,null,null); 
-		Protocol p = new Protocol("0.0.0.0",52000,"tpass","Steven","Remington");
+		Protocol p = new Protocol("0.0.0.0",52003,"tpass","Steven","Remington");
 //		if(args.length > 0){
 //			p = new Protocol(args[0], Integer.parseInt(args[1]),args[2], args[3], args[4]);
 //		}
@@ -38,7 +38,7 @@ public class Main {
 //		}
 		
 		
-		Stack<Tile> pile = Board.createDefaultStack();
+		/*Stack<Tile> pile = Board.createDefaultStack();
 		Tile t = Board.tileMap.get("tltj-");
 
 		Collections.shuffle(pile);
@@ -68,6 +68,6 @@ public class Main {
 		BoardFrame bf = new BoardFrame(game);
 		bf.setSize(900, 900);
 		bf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		bf.setVisible(true);
+		bf.setVisible(true);*/
 	}
 }
