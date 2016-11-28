@@ -2,6 +2,7 @@ package tiger_zone;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
@@ -42,5 +43,19 @@ public class BoardTest {
 	@Test
 	public void createDefaultStackTest() {
 		assertEquals(76, Board.createDefaultStack().size());
+	}
+	
+	@Test
+	public void cloneTest() {
+		char[] sides = {'t','j','t','j'};
+		Tile t = new Tile(sides, 't', "./src/resources/tile5.png");
+		assertTrue(board.addTile(new Position(0, 1), t));
+		
+		Board copy = board.clone();
+		assertNotSame(board, copy);
+		assertNotSame(board.getPile(), copy.getPile());
+		assertEquals(board.getPile().size(), copy.getPile().size());
+		assertTrue(copy.getTile(new Position(0, 0)) != null);
+		assertTrue(copy.getTile(new Position(0, 1)) != null);
 	}
 }

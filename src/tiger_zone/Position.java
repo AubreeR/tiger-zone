@@ -4,7 +4,7 @@ package tiger_zone;
  * The <code>Position</code> class represents a position on the <code>Board</code>. This is a "value object", which
  * means it is completely immutable and equality between Positions is determined solely by their (x, y) values.
  */
-public class Position {
+public class Position implements Cloneable {
 	private final int x;
 	private final int y;
 
@@ -110,6 +110,11 @@ public class Position {
 	@Override
 	public final boolean equals(Object p) {
 		return p instanceof Position && this.x == ((Position)p).getX() && this.y == ((Position)p).getY();
+	}
+	
+	@Override
+	public final Position clone() {
+		return new Position(this.x, this.y);
 	}
 	
 	@Override

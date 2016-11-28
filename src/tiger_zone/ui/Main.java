@@ -51,8 +51,8 @@ public class Main {
 		players.add(new Player(1, "p2"));
 		game.setPlayers(players);
 
-		BetterAiPlayer skynet1 = new BetterAiPlayer(game, "s1");
-		BetterAiPlayer skynet2 = new BetterAiPlayer(game, "s2");
+		BetterAiPlayer skynet1 = new BetterAiPlayer(game);
+		BetterAiPlayer skynet2 = new BetterAiPlayer(game);
 		
 		List<AiPlayer> ai = new ArrayList<AiPlayer>();
 		ai.add(skynet1);

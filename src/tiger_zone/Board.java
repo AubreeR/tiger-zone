@@ -2,9 +2,11 @@ package tiger_zone;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.Stack;
 
 /**
@@ -12,9 +14,9 @@ import java.util.Stack;
  * been placed.
  */
 public class Board implements Cloneable{
-	private final Map<Position, Tile> gameGrid = new HashMap<Position, Tile>();
+	private final Map<Position, Tile> gameGrid;
 	private final Stack<Tile> pile;
-	private final RuleEngine placementEngine = new RuleEngine();
+	private final RuleEngine placementEngine;
 	private Position latest;
 	static Map<String, Tile> tileMap = new HashMap<String, Tile>();
 
@@ -23,13 +25,9 @@ public class Board implements Cloneable{
 	 *
 	 * @param pile Stack of unplaced tiles.
 	 */
-	public Board(BoardCell[][] brd, Stack<Tile> pile, int origin)
-	{
-		this.gameGrid= brd;
-		this.pile=pile;
-		this.origin=origin;
-	}
 	public Board(final Stack<Tile> pile) {
+		this.gameGrid = new HashMap<Position, Tile>();
+		this.placementEngine = new RuleEngine();
 		this.pile = pile;
 		char[] Ssides = {'t','l','t','j'};
 		char[] Stigers = {'j','t','j','=','=','l','=','=','='};
@@ -60,6 +58,7 @@ public class Board implements Cloneable{
 	public final boolean addTile(final Position position, final Tile tile) {
 		if (this.validTilePlacement(position, tile, false)) {
 			this.gameGrid.put(position, tile);
+			System.out.println("Board: setting latest to " + position);
 			this.latest = position;
 			return true;
 		}
@@ -155,8 +154,8 @@ public class Board implements Cloneable{
 	 *
 	 * @return open positions
 	 */
-	public final List<Position> getOpenPositions() {
-		List<Position> openPositions = new ArrayList<Position>();
+	public final Set<Position> getOpenPositions() {
+		Set<Position> openPositions = new HashSet<Position>();
 		for (Position p : this.gameGrid.keySet()) {
 			if (this.gameGrid.get(p.north()) == null) {
 				openPositions.add(p.north());
@@ -192,8 +191,8 @@ public class Board implements Cloneable{
 	public final Map<Position, List<Integer>> getValidTilePlacements(final Tile tile) {
 		Map<Position, List<Integer>> validTilePlacements = new HashMap<Position, List<Integer>>();
 
-		// get list of empty positions
-		List<Position> openPositions = this.getOpenPositions();
+		// get set of empty positions
+		Set<Position> openPositions = this.getOpenPositions();
 
 		// save tile's original rotation for later
 		int originalRotation = tile.getRotation();
@@ -219,6 +218,10 @@ public class Board implements Cloneable{
 		return validTilePlacements;
 	}
 
+	public final void setLatest(final Position p) {
+		this.latest = p;
+	}
+	
 	public static void buildStack(Stack<Tile> pile, char[] edges, char center, char[] tigerSpots,
 			char[] crocSpots, String file, int tileCount){
 		String str = ("" + edges[0] + edges[1] + edges[2] + edges[3] + center).trim();
@@ -370,6 +373,10 @@ public class Board implements Cloneable{
 		// copy over placed tiles
 		for (Entry<Position, Tile> p : this.gameGrid.entrySet()) {
 			copy.addTileWithNoValidation(p.getKey(), p.getValue().clone());
+		}
+		
+		if (this.latest != null) {
+			copy.setLatest(this.latest.clone());
 		}
 		
 		return copy;

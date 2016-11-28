@@ -1,247 +1,217 @@
 package tiger_zone.ai;
 
 import tiger_zone.Game;
-import tiger_zone.PossibleMovesRule;
+import tiger_zone.Position;
 import tiger_zone.Tile;
 import tiger_zone.Board;
-import tiger_zone.BoardCell;
 import java.util.Stack;
-import java.util.ArrayList;
-
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class BetterAiPlayer extends AiPlayer {
-	private int move_num = 1;
 	/**
 	 * Create a new instance of <code>BetterAiPlayer</code>.
 	 * 
 	 * @param game The game instance.
 	 */
-	public BetterAiPlayer(Game game, String pid) {
-		super(game, pid);
+	public BetterAiPlayer(Game game) {
+		super(game);
 	}
 
 	/**
 	 * Have this AI player place a tile on the Game.
 	 */
 	public final void makeMove() {
-		long millis = System.currentTimeMillis();
+		Tile current = this.game.getCurrentTile();
+		
 		//tempmove[] consists of coordinates, rotation, tiger placement, evaluation number(default set to 0)--0 won't work need other
 		//move[] consists of coordinates: (x,y), rotation, tiger placement
-		BoardCell[][] temp= Clone2D(game.getBoard().getGameGrid());
-		Stack<Tile> temptile= new Stack<Tile>();
-		temptile=(Stack<Tile>)game.getBoard().getPile().clone();
-		int[] tempmove= MiniMax(temp, 0, true, temptile);
-		int[] move= new int[tempmove.length-1];
-		for(int i=0; i<move.length; i++)
-		{
-			move[i]=tempmove[i];
+		Board temp = this.game.getBoard().clone();
+		Stack<Tile> temptile = temp.getPile();
+		temptile.push(current.clone());
+		
+		/*System.out.print("empty: ");
+		for (Position p : temp.getOpenPositions()) {
+			System.out.printf("%s ", p);
 		}
-		Tile current = this.game.getBoard().getPile().pop();
-		int size=this.game.getBoard().getPile().size();
+		System.out.println();*/
+		
+		final int[] move = MiniMax(temp, 0);
+
 		while (current.getRotation() != move[2]) {
 			current.rotate();
 		}
-		game.getBoard().addTile(move[0], move[1], current);
-		millis = System.currentTimeMillis() - millis;
-		System.out.println("Move: " + move_num++ + " \tCoor: (" + move[0] +"," + move[1] +") \ttile: " 
-				+ current.getSide(0)+current.getSide(1)+current.getSide(2)+current.getSide(3) 
-				+ "\tTiger Locations: "  + (-1)
-				+ "\tElapsed Time: " + millis);
+		
+		System.out.println("BetterAiPlayer: placing tile at " + new Position(move[0], move[1]));
+		this.game.getBoard().addTile(new Position(move[0], move[1]), current);
 	}
-	
-	public int[] MiniMax(BoardCell[][] tempgm, int loop, boolean current, Stack<Tile> StackTile)
-	{
-		BoardCell[][] gm= Clone2D(tempgm);
-		Stack<Tile> TileStack=new Stack<Tile>();
-		TileStack= (Stack<Tile>)StackTile.clone();
-		if(loop != 0) TileStack.pop();
-		int[] move= new int[5];//single move
-		ArrayList<int[]> possiblemoves = new ArrayList<int[]>();
+
+	private final int[] MiniMax(final Board gm, int depth) {
+		boolean current = depth % 2 == 0;
+		
+		Stack<Tile> TileStack = gm.getPile();
+		
+		if (depth != 0) {
+			TileStack.pop();
+		}
+
+		final int[] move= new int[5];//single move
+
 		//array of all possible moves
 		//current==true => max
 		//evaluation of final matrix, compare to next,
-		int evalmax=Integer.MIN_VALUE;
-		int evalmin=Integer.MAX_VALUE;
-		possiblemoves=GetPossibleMoves(gm, TileStack);
-		int numberleft= TileStack.size();
+		int evalmax = Integer.MIN_VALUE;
+		int evalmin = Integer.MAX_VALUE;
+
+		Map<Position, List<Integer>> possiblemoves = gm.getValidTilePlacements(TileStack.peek());
+		
+		/*System.out.print("possible: ");
+		for (Position p : possiblemoves.keySet()) {
+			System.out.print(p + " ");
+		}
+		System.out.println();*/
+		
+		if (possiblemoves.isEmpty()) {
+			System.out.println("no possible moves :(");
+			move[0] = 0;
+			move[1] = 0;
+			move[2] = 0;
+			move[3] = 0;
+			return move;
+		}
+
+		int numberleft = TileStack.size();
 		//make tile stack check to see number of remaining tiles
 		//if 1=>eval
 		//if 2=> 1 min and 1 max
-		int x=0;
-		if(numberleft==1 && current)
-		{
-			while(x<5 && x<possiblemoves.size()) //#of rows
-			{
-				int newevalmax;
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
-				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
-				newevalmax=Evaluation(nextGame, possiblemoves.get(x));//send row
-				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmax; //set last column as evaluation number
-				if(newevalmax>evalmax)//if there is new max
-				{
-					evalmax=newevalmax;//set max
-					move=possiblemoves.get(x);//set move
+
+		if (numberleft == 1 && current) {
+			for (Entry<Position, List<Integer>> p : possiblemoves.entrySet()) {
+				for (Integer rotation : p.getValue()) {
+					Board debug = gm.clone();
+					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
+						continue;
+					}
+					int newevalmax = Evaluation(debug);
+					if (newevalmax > evalmax) {
+						evalmax = newevalmax;
+						move[0] = p.getKey().getX();
+						move[1] = p.getKey().getY();
+						move[2] = rotation;
+						move[4] = evalmax;
+					}
 				}
-			x++;	
 			}
+			System.out.println("1 left, current: " + new Position(move[0], move[1]));
 			return move;
 		}
-		if(numberleft==1 && !current)
-		{
-			while(x<5 && x<possiblemoves.size())  //#of rows
-			{
-				int newevalmin;
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
-				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thatplayer);
-				newevalmin=Evaluation(nextGame, possiblemoves.get(x));//send row
-				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmin; //set last column as evaluation number
-				if(newevalmin<evalmax)//if there is new min
-				{
-					evalmax=newevalmin;//set min
-					move=possiblemoves.get(x);//set move
+		
+		if (numberleft == 1 && !current) {
+			for (Entry<Position, List<Integer>> p : possiblemoves.entrySet()) {
+				for (Integer rotation : p.getValue()) {
+					Board debug = gm.clone();
+					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
+						continue;
+					}
+					int newevalmin = Evaluation(debug);
+					if (newevalmin < evalmin) {
+						evalmin = newevalmin;
+						move[0] = p.getKey().getX();
+						move[1] = p.getKey().getY();
+						move[2] = rotation;
+						move[4] = evalmin;
+					}
 				}
-			x++;
 			}
-		}
-		if(loop==2 && current)
-		{
-			while(x<5 && x<possiblemoves.size())  //#of rows
-			{
-				int newevalmax;
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
-				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
-				newevalmax=Evaluation(nextGame, possiblemoves.get(x));//send row
-				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmax; //set last column as evaluation number
-				if(newevalmax>evalmax)//if there is new max
-				{
-					evalmax=newevalmax;//set max
-					move=possiblemoves.get(x);//set move
-				}
-			x++;	
-			}
+			System.out.println("1 left, !current: " + new Position(move[0], move[1]));
 			return move;
 		}
-		if(loop==2 && !current)
-		{
-			while(x<5 && x<possiblemoves.size())  //#of rows
-			{
-				int newevalmin;
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
-				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
-				newevalmin=Evaluation(nextGame, possiblemoves.get(x));//send row
-				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmin; //set last column as evaluation number
-				if(newevalmin<evalmin)//if there is new max
-				{
-					evalmin=newevalmin;//set max
-					move=possiblemoves.get(x);//set move
+		
+		if (depth == 2) {
+			for (Entry<Position, List<Integer>> p : possiblemoves.entrySet()) {
+				for (Integer rotation : p.getValue()) {
+					Board debug = gm.clone();
+					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
+						continue;
+					}
+					int newevalmax = Evaluation(debug);
+					if (newevalmax > evalmax) {
+						evalmax = newevalmax;
+						move[0] = p.getKey().getX();
+						move[1] = p.getKey().getY();
+						move[2] = rotation;
+						move[3] = -1;
+						move[4] = evalmax;
+					}
 				}
-			x++;	
 			}
+			System.out.println("2 depth: " + new Position(move[0], move[1]));
 			return move;
 		}
-		boolean next= !current; //switch max to min && min to max
-		loop++;
-		if(current)
-		{
-			while(x<5 && x<possiblemoves.size())
-			{
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
-				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thisplayer);
-				//call MiniMax, new eval = last column
-				int[] temp=MiniMax(nextGame, loop, next, TileStack); //get eval #
-				int newevalmax=temp[temp.length-1];//set eval #
-				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmax; //set eval # for returning move
-				if(newevalmax>evalmax) //if there is a new max
-				{
-					evalmax=newevalmax;//set max
-					move=possiblemoves.get(x);//set move
+
+		depth++;
+		
+		if (current) {
+			for (Entry<Position, List<Integer>> p : possiblemoves.entrySet()) {
+				for (Integer rotation : p.getValue()) {
+					Board debug = gm.clone();
+					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
+						continue;
+					}
+					int[] temp = MiniMax(debug, depth);
+					int newevalmax = temp[temp.length - 1];
+					if (newevalmax > evalmax) {
+						evalmax = newevalmax;
+						move[0] = p.getKey().getX();
+						move[1] = p.getKey().getY();
+						move[2] = rotation;
+						move[3] = -1;
+					}
 				}
-			x++;
 			}
-		return move;
+			System.out.println("current: " + new Position(move[0], move[1]));
+			move[4] = evalmax;
+			return move;
 		}
-		else
-		{
-			while(x<5 && x<possiblemoves.size())
-			{
-				BoardCell[][] debug=Clone2D(gm);
-				BoardCell[][] nextGame=apply(debug, possiblemoves.get(x), TileStack);
-				//updateScore(possiblemoves.get(i)[0], possiblemoves.get(i)[1], thatplayer);
-				//call MiniMax, new eval = last column
-				int[] temp=MiniMax(nextGame, loop, next, TileStack);//get eval #
-				int newevalmin=temp[temp.length-1];//set eval #
-				possiblemoves.get(x)[possiblemoves.get(x).length-1]=newevalmin;//set eval # for move
-				if(newevalmin<evalmin) //if there is new min
-				{
-					evalmin=newevalmin; //set min
-					move=possiblemoves.get(x);//set move
+		else {
+			for (Entry<Position, List<Integer>> p : possiblemoves.entrySet()) {
+				for (Integer rotation : p.getValue()) {
+					Board debug = gm.clone();
+					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
+						continue;
+					}
+					int[] temp = MiniMax(debug.clone(), depth);
+					int newevalmin = temp[temp.length - 1];
+					if (newevalmin < evalmin) {
+						evalmin = newevalmin;
+						move[0] = p.getKey().getX();
+						move[1] = p.getKey().getY();
+						move[2] = rotation;
+						move[4] = evalmin;
+					}
 				}
-			x++;
 			}
+			System.out.println("!current: " + new Position(move[0], move[1]));
 			return move;
 		}
 	}
-	
-	public int Evaluation(BoardCell[][] nextGame, int[] move)
-	{
-		//ai score-opponent score?
+
+	private int Evaluation(Board nextGame) {
+		// ai score-opponent score?
 		int eval;
 		int aiscore=0;//thisplayer.getPoints();//thisplayer=ai
 		int oppscore=0;//thatplayer.getPoint();//thatplayer=opponent
-		eval= aiscore-oppscore;
+		eval = aiscore-oppscore;
 		return eval;
 	}
-	
-	public ArrayList<int[]> GetPossibleMoves(BoardCell[][] tempgm, Stack<Tile> StackTile)
-	{	
-		BoardCell[][] gm=Clone2D(tempgm);
-		Board brd=new Board(gm, game.getBoard().getPile(), game.getBoard().getOrigin());
-		ArrayList<int[]> allpossiblemoves = new ArrayList<int[]>(); 
-		//iterate through Game and find all legal moves
-		PossibleMovesRule pmr = new PossibleMovesRule(brd, 0, 0, StackTile.peek(), false);
-		pmr.evaluate();
-		allpossiblemoves=pmr.getAllPossibleMoves();
-		for(int i=0; i<allpossiblemoves.size(); i++)
-		{
-			int[] tempmove= new int[5];
-			tempmove[0]=allpossiblemoves.get(i)[0];
-			tempmove[1]=allpossiblemoves.get(i)[1];
-			tempmove[2]=allpossiblemoves.get(i)[2];
-			tempmove[3]=-1;
-			allpossiblemoves.set(i, tempmove);
-		}
-		return allpossiblemoves;
-	}
 
+	private boolean apply(final Board board, final Position position, final int orientation, Tile current) {
+		final Tile current2 = current.clone();
+		while (current2.getRotation() != orientation) {
+			current2.rotate();
+		}
 
-	public BoardCell[][] apply(BoardCell[][] gm, int[] move, Stack<Tile> StackTile)
-	{
-		BoardCell[][] NextGame= Clone2D(gm);
-		Tile current = StackTile.peek();
-		while (current.getRotation() != move[2]) {
-			current.rotate();
-		}
-		NextGame[game.getBoard().getOrigin()+move[0]][game.getBoard().getOrigin()-move[1]].setTile(current);
-		//apply move to Game
-		return NextGame;
-	}
-	
-	public BoardCell[][] Clone2D(BoardCell[][] Grid)
-	{
-		BoardCell[][] GameGrid = new BoardCell[Grid.length][Grid.length];
-		for(int i=0; i<Grid.length; i++)
-		{
-			for(int j=0; j<Grid[i].length; j++)
-			{
-				GameGrid[i][j]=new BoardCell(Grid[i][j].getXCoord(), Grid[i][j].getYCoord());
-				GameGrid[i][j].setTile(Grid[i][j].getTile());
-			}
-		}
-		return GameGrid;
+		return board.addTile(position, current2);
 	}
 }

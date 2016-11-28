@@ -142,7 +142,7 @@ public class Game {
 			if (this.currentTile.hasTiger()) {
 				System.out.printf(" and tiger at position %d", this.currentTile.getTigerPosition());
 			}
-			System.out.printf(" in %d ms\n", System.currentTimeMillis() - start);
+			System.out.printf(" in %d ms\n\n", System.currentTimeMillis() - start);
 
 			this.nextPlayer();
 			this.conductTurn();
