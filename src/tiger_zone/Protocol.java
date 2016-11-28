@@ -377,8 +377,10 @@ public class Protocol extends Client {
 						+ moveX + " " + moveY +  " " + moveOrientation + " CROCODILE ";
 			}
 			else if (action instanceof TigerPlacementAction) {
+				TigerPlacementAction tpa = (TigerPlacementAction) action;
 				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
-						+ moveX + " " + moveY +  " " + moveOrientation + " TIGER " + moveZone + " ";
+						+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " " + tpa.getTile().getRotation()
+						+ " TIGER " + tpa.getZone() + " ";
 			}
 			else if (action instanceof PassAction) {
 				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE PASS";
