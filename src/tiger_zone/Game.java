@@ -28,7 +28,7 @@ public class Game {
 	 * Creates a new instance of <code>Game</code> with the default tile stack being the pile.
 	 */
 	public Game() {
-		board = new Board(Board.createDefaultStack());
+		this.board = new Board(Board.createDefaultStack());
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class Game {
 	 * @param pile Stack of tiles.
 	 */
 	public Game(Stack<Tile> pile) {
-		board = new Board(pile);
+		this.board = new Board(pile);
 	}
 	
 	/**
@@ -150,7 +150,9 @@ public class Game {
 
 			System.out.printf("(#%d) %s", this.turnNumber, this.currentPlayer);
 			if (action instanceof TilePlacementAction || action instanceof TigerPlacementAction) {
-				System.out.printf(" placed %s at position %s", ((TilePlacementAction) action).getTile(), ((TilePlacementAction) action).getPosition());
+				System.out.printf(" placed %s at position %s (%d°)", ((TilePlacementAction) action).getTile(),
+						((TilePlacementAction) action).getPosition(),
+						((TilePlacementAction) action).getTile().getRotation());
 			}
 			if (action instanceof TigerPlacementAction) {
 				System.out.printf(" and tiger at zone %d", ((TigerPlacementAction) action).getZone());
