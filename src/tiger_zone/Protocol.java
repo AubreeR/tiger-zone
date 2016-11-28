@@ -102,13 +102,18 @@ public class Protocol extends Client {
 			}
 		}
 		
-		while(challengeProtocol(receiveFromServer()))
-		{}
+		challengeProtocol();
+		fromServer = receiveFromServer();
+		System.out.println("Server: "  + fromServer);
+		
 	}
 	
-	public boolean challengeProtocol(String fromServer)
+	public void challengeProtocol()
 	{
-	
+		int count = 0;
+		do{
+			
+		String fromServer =	receiveFromServer();
 		System.out.println("Server: " + fromServer);
 		StringTokenizer strTok = new StringTokenizer(fromServer," ");
 		String tok = "";
@@ -139,10 +144,10 @@ public class Protocol extends Client {
 		fromServer = receiveFromServer();
 		System.out.println("Server: " + fromServer);
 		strTok = new StringTokenizer(fromServer, " ");
-		int count = strTok.countTokens();
-		if(count < 4)
-			return false;//no more challenges
-		return true;
+		count = strTok.countTokens();
+		}
+		while(count >=5);
+
 		
 	}
 	
