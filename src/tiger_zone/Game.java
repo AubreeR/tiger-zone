@@ -126,6 +126,7 @@ public class Game {
 		else {
 			this.currentPlayer = this.players.get(0);
 		}
+		this.turnNumber++;
 	}
 
 	public final Action conductTurn() {
@@ -137,8 +138,6 @@ public class Game {
 		if (this.isOver) {
 			return null;
 		}
-
-		this.turnNumber++;
 
 		AiPlayer currentAiPlayer = this.aiPlayers.get(this.currentPlayer.getIndex());
 		this.currentTile = this.board.getPile().pop();
