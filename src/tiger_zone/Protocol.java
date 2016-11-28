@@ -17,6 +17,7 @@ import tiger_zone.action.TilePlacementAction;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.CloseAiPlayer;
 import tiger_zone.ai.NetworkAiPlayer;
+import tiger_zone.ui.Main;
 
 public class Protocol extends Client {
 	private String tPassword, pid, opid, gid, cid, rounds, rid, number_tiles, time, userName, password;
@@ -342,6 +343,8 @@ public class Protocol extends Client {
 				break;
 			}
 		}
+		Main.displayGame(games.get(gameOverGid));
+		games.remove(gameOverGid);
 	}
 	
 	
@@ -523,6 +526,7 @@ public class Protocol extends Client {
 		}
 		
 		if(forfeit) {
+			Main.displayGame(games.get(moveGid));
 			games.remove(moveGid);
 		}
 		if(!movePid.equals(pid))
