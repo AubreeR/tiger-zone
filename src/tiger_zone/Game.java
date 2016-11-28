@@ -148,4 +148,12 @@ public class Game {
 			this.conductTurn();
 		}
 	}
+
+	public String getGid() {
+		return gid;
+	}
+
+	public void setGid(String gid) {
+		this.gid = gid;
+	}
 }
