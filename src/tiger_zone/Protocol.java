@@ -1,55 +1,46 @@
 package tiger_zone;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 import java.util.StringTokenizer;
 
+import tiger_zone.ai.AiPlayer;
+import tiger_zone.ai.CloseAiPlayer;
+import tiger_zone.ai.NetworkAiPlayer;
+
 public class Protocol extends Client {
 	private String tPassword, pid, opid, gid, cid, rounds, rid, number_tiles, time, userName, password;
 	private String[] tiles;
-	private Game game1 = null;
-	private Game game2 = null;
+	private Board board;
+	private Stack<Tile> pile;
+	private final Map<String, Game> games = new HashMap<String, Game>();
 	
-	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password)
-	{
+	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password) {
 		super(serverName, portNumber);
-		setPid("-1");
-
-		setTournamentPassword(tPassword);
-		setUserName(userName);
-		setPassword(password);
+		this.setPid("-1");
+		this.setTournamentPassword(tPassword);
+		this.setUserName(userName);
+		this.setPassword(password);
 	}
 	
-	public final void makeMove(Tile current, int x, int y, int rotation, String gid) {
-		Position pos = new Position(x,y);
-		Game gameAlias = null;
-		
-		if(gid.equals(game1.getGid())){
-			gameAlias = game1;
-		}
-		
-		else if(gid.equals(game2.getGid())){
-			gameAlias = game2;
-		}
-		
-		
-		while(current.getRotation() != rotation){
+	public final void makeMove(Tile current, Position pos, int rotation, String gid) {
+		while(current.getRotation() != rotation) {
 			current.rotate();
 		}
 		
-		gameAlias.getBoard().addTile(pos, current);
-		
+		games.get(gid).getBoard().addTile(pos, current);
 	}
 	
 	
 	public void tournamentProtocol()
 	{
 		String fromServer = this.receiveFromServer();
-		//THIS IS SPARTA! only caleld once
+		// THIS IS SPARTA! only called once
 		System.out.println("Server: " + fromServer);
-		if(fromServer.equals("THIS IS SPARTA!"))
-		{
+		if (fromServer.equals("THIS IS SPARTA!")) {
 			authenticationProtocol(fromServer);
 		}
 	}
@@ -261,20 +252,14 @@ public class Protocol extends Client {
 		System.out.println("Time till match: " + time);
 		
 		Stack<Tile> pile = new Stack<Tile>();
-		
 		for (String s : tiles) {
 			pile.push(Board.tileMap.get(s.toLowerCase()).clone());
 		}
-		
-		
-		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
-		Board board = new Board((Stack<Tile>)pile.clone(), startingTile, new Position(x, y), orientation);
 
-		game1 = new Game(board.clone());
-		game2 = new Game(board.clone());
+		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
+		this.board = new Board((Stack<Tile>)pile.clone(), startingTile, new Position(x, y), orientation);
 		
-		for(int i = 0; i < Integer.parseInt(number_tiles); i++)
-		{
+		for (int i = 0; i < Integer.parseInt(number_tiles); i++) {
 			moveProtocol(receiveFromServer());
 		}
 		//get first game score
@@ -301,37 +286,54 @@ public class Protocol extends Client {
 		System.out.println("Server: " + moveInstruction);
 		StringTokenizer strTok = new StringTokenizer(moveInstruction, " ");
 		String tok = strTok.nextToken();
-		if(!tok.equals("MAKE"))
-		{
+		if (!tok.equals("MAKE")) {
 			analyzeMove(moveInstruction);
-			
 		}
-		else
-		{
-		
-			for(int i = 1; strTok.hasMoreTokens(); i++)
-			{
+		else {
+			for (int i = 1; strTok.hasMoreTokens(); i++) {
 				tok = strTok.nextToken();
 				switch(i)
 				{
-				case 5:
-					moveGid = tok;
-					break;
-				case 7:
-					moveTime = tok;
-					break;
-				case 10:
-					moveNumber = tok;
-					break;
-				case 12:
-					moveTile = tok;
-					break;
-				default:
+					case 5:
+						moveGid = tok;
 						break;
+					case 7:
+						moveTime = tok;
+						break;
+					case 10:
+						moveNumber = tok;
+						break;
+					case 12:
+						moveTile = tok;
+						break;
+					default:
+							break;
 				}
 			}
 			System.out.println("moveGid: " + moveGid + " moveTime: " + moveTime + " moveNumber: " + moveNumber + " moveTile: " + moveTile);
 			
+			// we do not have an instance of Game for this gid
+			if (!games.containsKey(moveGid)) {
+				Game game = new Game(this.board.clone());
+				
+				List<Player> players = new ArrayList<Player>(2);
+				List<AiPlayer> aiPlayers = new ArrayList<AiPlayer>(2);
+				
+				if (games.isEmpty()) {
+					players.add(new Player(0, this.pid));
+					players.add(new Player(1, this.opid));
+					aiPlayers.add(new CloseAiPlayer(game));
+					aiPlayers.add(new NetworkAiPlayer(game));
+				}
+				else {
+					players.add(new Player(0, this.opid));
+					players.add(new Player(1, this.pid));
+					aiPlayers.add(new NetworkAiPlayer(game));
+					aiPlayers.add(new CloseAiPlayer(game));
+				}
+				
+				games.put(moveGid, game);
+			}
 			
 			//SEND OUR MOVE HERE
 			//getMove() we need x, y, rotation, and tigerzone
@@ -365,21 +367,13 @@ public class Protocol extends Client {
 				input = "GAME " + moveGid + " MOVE " + moveNumber +" PLACE " + moveTile + " AT " 
 						+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
 			}
+			
 			sendToServer(input);
 			
-			if(game1 != null && game2 != null)
-			{
-				analyzeMove(receiveFromServer());	
-				analyzeMove(receiveFromServer());
+			for (int i = 0; i < games.size(); i++) {
+				this.analyzeMove(this.receiveFromServer());
 			}
-			else if(( game1 != null || game2 != null)&& !(game1 != null && game2 != null))
-			{
-				analyzeMove(receiveFromServer());
-			}
-			else if(game1 == null && game2 == null)
-			{}
 		}
-		
 	}
 	
 	public void analyzeMove(String fromServer)
@@ -426,12 +420,8 @@ public class Protocol extends Client {
 				break;
 			}
 		}
-		if(forfeit)
-		{
-			if(game1 != null && game1.getGid().equals(moveGid))
-				game1 = null;
-			else if(game2 != null && game2.getGid().equals(moveGid))
-				game2 = null;
+		if(forfeit) {
+			games.remove(moveGid);
 		}
 		if(!movePid.equals(pid))
 		{

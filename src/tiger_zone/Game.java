@@ -5,8 +5,7 @@ import java.util.List;
 import java.util.Stack;
 
 import tiger_zone.ai.AiPlayer;
-import tiger_zone.ai.CloseAiPlayer;
-import tiger_zone.ai.PoorAiPlayer;
+import tiger_zone.ai.NetworkAiPlayer;
 
 /**
  * The <code>Game</code> class unites the board and the players, and handles the current turn/phase of the game.
@@ -133,7 +132,7 @@ public class Game {
 		this.currentTile = this.board.getPile().pop();
 
 		// It is our AiPlayer's turn. Make our move, send it to the server, and then conduct next turn.
-		if (currentAiPlayer instanceof PoorAiPlayer || currentAiPlayer instanceof CloseAiPlayer) {
+		if (!(currentAiPlayer instanceof NetworkAiPlayer)) {
 			final long start = System.currentTimeMillis();
 			currentAiPlayer.makeMove();
 
@@ -147,6 +146,8 @@ public class Game {
 			this.nextPlayer();
 			this.conductTurn();
 		}
+		
+		// Otherwise, the current turn is the NetworkAiPlayer's. We cannot ask for a move here.
 	}
 
 	public String getGid() {
