@@ -240,11 +240,11 @@ public class Protocol extends Client {
 		Stack<Tile> pile = new Stack<Tile>();
 		
 		for (String s : tiles) {
-			pile.push(Board.tileMap.get(s).clone());
+			pile.push(Board.tileMap.get(s.toLowerCase()).clone());
 		}
 		
 		Board board = new Board((Stack<Tile>)pile.clone());
-		Tile startingTile = Board.tileMap.get(tile).clone();
+		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
 		
 		while (startingTile.getRotation() != orientation) {
 			startingTile.rotate();
