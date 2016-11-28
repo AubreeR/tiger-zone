@@ -22,14 +22,14 @@ public class BoardTest {
 
 	@Test
 	public void initialTileTest() {
-		assertTrue(board.getTile(new Position(0, 0)) != null);
+		assertTrue(board.getTile(new Position(0, 0)) == null);
 	}
 	
 	@Test
 	public void addGetTileTest() {
 		char[] sides = {'t','j','t','j'};
 		Tile t = new Tile(sides, 't', "./src/resources/tile5.png");
-		assertTrue(board.addTile(new Position(0, -1), t));
+		board.addTileWithNoValidation(new Position(0, -1), t);
 		assertSame(t, board.getTile(new Position(0, -1)));
 		assertFalse(board.addTile(new Position(0, -1), t));
 	}
