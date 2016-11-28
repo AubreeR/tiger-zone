@@ -38,6 +38,11 @@ public class BetterAiPlayer extends AiPlayer {
 		System.out.println();*/
 		
 		final int[] move = MiniMax(temp, 0);
+		if( move[3] ==0)
+		{
+			System.out.println("No moves, Skipping :(");
+			return;
+		}
 
 		while (current.getRotation() != move[2]) {
 			current.rotate();
@@ -78,6 +83,7 @@ public class BetterAiPlayer extends AiPlayer {
 			move[1] = 0;
 			move[2] = 0;
 			move[3] = 0;
+			move[4] = 0;
 			return move;
 		}
 
@@ -85,7 +91,7 @@ public class BetterAiPlayer extends AiPlayer {
 		//make tile stack check to see number of remaining tiles
 		//if 1=>eval
 		//if 2=> 1 min and 1 max
-
+		int x=0;
 		if (numberleft == 1 && current) {
 			for (Entry<Position, List<Integer>> p : possiblemoves.entrySet()) {
 				for (Integer rotation : p.getValue()) {
@@ -99,9 +105,15 @@ public class BetterAiPlayer extends AiPlayer {
 						move[0] = p.getKey().getX();
 						move[1] = p.getKey().getY();
 						move[2] = rotation;
+						move[3] = -1;
 						move[4] = evalmax;
 					}
 				}
+				if(x==possiblemoves.size()/4)
+				{
+					break;
+				}
+				x++;
 			}
 			//System.out.println("1 left, current: " + new Position(move[0], move[1]));
 			return move;
@@ -120,9 +132,15 @@ public class BetterAiPlayer extends AiPlayer {
 						move[0] = p.getKey().getX();
 						move[1] = p.getKey().getY();
 						move[2] = rotation;
+						move[3] = -1;
 						move[4] = evalmin;
 					}
 				}
+				if(x==possiblemoves.size()/4)
+				{
+					break;
+				}
+				x++;
 			}
 			//System.out.println("1 left, !current: " + new Position(move[0], move[1]));
 			return move;
@@ -145,6 +163,11 @@ public class BetterAiPlayer extends AiPlayer {
 						move[4] = evalmax;
 					}
 				}
+				if(x==possiblemoves.size()/4)
+				{
+					break;
+				}
+				x++;
 			}
 			//System.out.println("2 depth: " + new Position(move[0], move[1]));
 			return move;
@@ -169,7 +192,13 @@ public class BetterAiPlayer extends AiPlayer {
 						move[3] = -1;
 						move[4] = evalmax;
 					}
+				
 				}
+				if(x==possiblemoves.size()/4)
+				{
+					break;
+				}
+				x++;
 			}
 			//System.out.println("current: " + new Position(move[0], move[1]));
 			return move;
@@ -189,9 +218,15 @@ public class BetterAiPlayer extends AiPlayer {
 						move[0] = p.getKey().getX();
 						move[1] = p.getKey().getY();
 						move[2] = rotation;
+						move[3] = -1;
 						move[4] = evalmin;
 					}
 				}
+				if(x==possiblemoves.size()/4)
+				{
+					break;
+				}
+				x++;
 			}
 			//System.out.println("!current: " + new Position(move[0], move[1]));
 			return move;
