@@ -343,18 +343,10 @@ public class Protocol extends Client {
 				List<Player> players = new ArrayList<Player>(2);
 				List<AiPlayer> aiPlayers = new ArrayList<AiPlayer>(2);
 				
-				if (games.isEmpty()) {
-					players.add(new Player(0, this.pid));
-					players.add(new Player(1, this.opid));
-					aiPlayers.add(new CloseAiPlayer(game));
-					aiPlayers.add(new NetworkAiPlayer(game));
-				}
-				else {
-					players.add(new Player(0, this.opid));
-					players.add(new Player(1, this.pid));
-					aiPlayers.add(new NetworkAiPlayer(game));
-					aiPlayers.add(new CloseAiPlayer(game));
-				}
+				players.add(new Player(0, this.pid));
+				players.add(new Player(1, this.opid));
+				aiPlayers.add(new CloseAiPlayer(game));
+				aiPlayers.add(new NetworkAiPlayer(game));
 				
 				game.setPlayers(players);
 				game.setAiPlayers(aiPlayers);
@@ -459,6 +451,25 @@ public class Protocol extends Client {
 				break;
 			}
 		}
+		
+		// we do not have an instance of Game for this gid
+		if (!games.containsKey(moveGid)) {
+			Game game = new Game(this.board.clone());
+			
+			List<Player> players = new ArrayList<Player>(2);
+			List<AiPlayer> aiPlayers = new ArrayList<AiPlayer>(2);
+			
+			players.add(new Player(0, this.opid));
+			players.add(new Player(1, this.pid));
+			aiPlayers.add(new NetworkAiPlayer(game));
+			aiPlayers.add(new CloseAiPlayer(game));
+			
+			game.setPlayers(players);
+			game.setAiPlayers(aiPlayers);
+			
+			this.games.put(moveGid, game);
+		}
+		
 		if(forfeit) {
 			games.remove(moveGid);
 		}
