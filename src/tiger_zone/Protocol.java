@@ -42,7 +42,7 @@ public class Protocol extends Client {
 		while(current.getRotation() != Integer.parseInt(orientation)){
 			current.rotate();
 		}
-		
+		gameAlias.getBoard().getPile().pop();
 		gameAlias.getBoard().addTile(pos, current);
 		gameAlias.nextPlayer();
 		Tiger tiger = null;
@@ -105,6 +105,7 @@ public class Protocol extends Client {
 		challengeProtocol();
 		fromServer = receiveFromServer();
 		System.out.println("Server: "  + fromServer);
+		
 		
 	}
 	
