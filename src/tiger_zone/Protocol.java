@@ -335,7 +335,7 @@ public class Protocol extends Client {
 					+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
 		}
 		sendToServer(input);
-		
+		boolean forfeit = false;
 		String fromServer = receiveFromServer();		
 		System.out.println("Server: " + fromServer);
 		strTok = new StringTokenizer(fromServer, " ");
@@ -350,11 +350,29 @@ public class Protocol extends Client {
 			case 3: 
 				moveNumber = tok;
 				break;
+			case 5:
+				movePid = tok;
+				break;
+			case 6:
+				if(!tok.equals("FORFEITED"))
+				{
+					
+					moveX = tok;
+					moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
+					moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
+					moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
+				}
+				else
+					forfeit = true;
+				break;
 			default:
 				break;
 			}
 		}
+		if(!movePid.equals(this.pid))
+		{}//do opponent move
 		
+		forfeit = false;
 		fromServer = receiveFromServer();		
 		System.out.println("Server: " + fromServer);
 		strTok = new StringTokenizer(fromServer, " ");
@@ -378,12 +396,17 @@ public class Protocol extends Client {
 					moveX = tok;
 					moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
 					moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
+					moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
 				}
+				else 
+					forfeit = true;
 				break;
 			default:
 				break;
 			}
 		}
+		if(!movePid.equals(this.pid))
+		{}////do opponent move
 		
 	}
 
