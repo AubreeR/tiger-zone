@@ -6,6 +6,7 @@ import java.util.Stack;
 
 import tiger_zone.action.Action;
 import tiger_zone.action.PassAction;
+import tiger_zone.action.TigerPlacementAction;
 import tiger_zone.action.TilePlacementAction;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.NetworkAiPlayer;
@@ -148,13 +149,13 @@ public class Game {
 			Action action = currentAiPlayer.makeMove();
 
 			System.out.printf("(#%d) %s", this.turnNumber, this.currentPlayer);
-			if (action instanceof TilePlacementAction) {
-				System.out.printf(" placed %s at position %s", this.currentTile, this.board.getLatest());
-				if (this.currentTile.hasTiger()) {
-					System.out.printf(" and tiger at position %d", this.currentTile.getTigerPosition());
-				}
+			if (action instanceof TilePlacementAction || action instanceof TigerPlacementAction) {
+				System.out.printf(" placed %s at position %s", ((TilePlacementAction) action).getTile(), ((TilePlacementAction) action).getPosition());
 			}
-			else if (action instanceof PassAction) {
+			if (action instanceof TigerPlacementAction) {
+				System.out.printf(" and tiger at zone %d", ((TigerPlacementAction) action).getZone());
+			}
+			if (action instanceof PassAction) {
 				System.out.printf(" passed their turn");
 			}
 			System.out.printf(" in %d ms\n", System.currentTimeMillis() - start);

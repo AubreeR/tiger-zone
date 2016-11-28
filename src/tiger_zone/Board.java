@@ -370,6 +370,7 @@ public class Board implements Cloneable{
 	@Override
 	public final Board clone() {
 		// copy over pile
+		@SuppressWarnings("unchecked")
 		Board copy = new Board((Stack<Tile>)this.pile.clone());
 		
 		// copy over placed tiles

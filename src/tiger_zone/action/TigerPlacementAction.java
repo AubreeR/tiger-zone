@@ -1,29 +1,30 @@
 package tiger_zone.action;
 
 import tiger_zone.Position;
+import tiger_zone.Tile;
 
 /**
  * Represents the action of placing a tile+tiger.
  */
-public class TigerPlacementAction extends Action {
-	private final Position position;
-	
+public class TigerPlacementAction extends TilePlacementAction {
+	private final int zone;
+
 	/**
-	 * Creates a new instance of <code>TigerPlacementAction</code> for placing a tiger+tile at the specified position.
-	 * 
-	 * @param position
+	 * @param position Position where tile was placed.
+	 * @param tile The tile placed.
+	 * @param zone Zone where tiger was placed.
 	 */
-	public TigerPlacementAction(final Position position) {
-		super();
-		this.position = position;
+	public TigerPlacementAction(final Position position, final Tile tile, final int zone) {
+		super(position, tile);
+		this.zone = zone;
 	}
 	
 	/**
-	 * Returns the position of the tile that was placed with the tiger.
+	 * Returns the zone where the tiger was placed.
 	 * 
-	 * @return position
+	 * @return zone
 	 */
-	public final Position getPosition() {
-		return this.position;
+	public final int getZone() {
+		return this.zone;
 	}
 }

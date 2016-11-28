@@ -10,6 +10,7 @@ import tiger_zone.Tiger;
 import tiger_zone.Tile;
 import tiger_zone.action.Action;
 import tiger_zone.action.PassAction;
+import tiger_zone.action.TigerPlacementAction;
 import tiger_zone.action.TilePlacementAction;
 
 /**
@@ -77,6 +78,9 @@ public class PoorAiPlayer extends AiPlayer {
 			i = (i == 10) ? -1 : i;
 		}
 		
+		if (i >= 1 && i <= 9) {
+			return new TigerPlacementAction(p, current, i);
+		}
 		return new TilePlacementAction(p, current);
 	}
 }
