@@ -277,105 +277,103 @@ public class Protocol extends Client {
 		//LINE 1 -- MAKE YOUR MOVE IN GAME <gid> WITHIN <moveTime> SECOND/SECONDS: MOVE <moveNumber> PLACE <moveTile>
 		System.out.println("Server: " + moveInstruction);
 		StringTokenizer strTok = new StringTokenizer(moveInstruction, " ");
-		String tok = "";
-		for(int i = 0; strTok.hasMoreTokens(); i++)
+		String tok = strTok.nextToken();
+		if(!tok.equals("MAKE"))
 		{
-			tok = strTok.nextToken();
-			switch(i)
-			{
-			case 5:
-				moveGid = tok;
-				break;
-			case 7:
-				moveTime = tok;
-				break;
-			case 10:
-				moveNumber = tok;
-				break;
-			case 12:
-				moveTile = tok;
-				break;
-			default:
-					break;
-			}
+			analyzeMove(moveInstruction);
+			
 		}
-		System.out.println("moveGid: " + moveGid + " moveTime: " + moveTime + " moveNumber: " + moveNumber + " moveTile: " + moveTile);
-		
-		
-		//SEND OUR MOVE
-		//getMove()
-		String input = "";
-		switch(0/*getMoveValue*/)
+		else
 		{
-		case 0 : 
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
-					+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
-			break;
-		case 1 : 
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
-					+ moveX + " " + moveY +  " " + moveOrientation + " CROCODILE ";
-			break;	
-		case 2 : 
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
-					+ moveX + " " + moveY +  " " + moveOrientation + " TIGER " + moveZone + " ";
-			break;
-		case 3 : 
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE PASS";
-			break;
-		case 4 : 
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE RETRIEVE TIGER AT "
-					+ moveX + " " + moveY + " ";
-			break;
-		case 5 : 
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE ADD ANOTHER TIGER TO "
-					+ moveX + " " + moveY + " ";
-			break;
-		default:
-			input = "GAME " + moveGid + " MOVE " + moveNumber +" PLACE " + moveTile + " AT " 
-					+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
-		}
-		sendToServer(input);
-		boolean forfeit = false;
-		String fromServer = receiveFromServer();		
-		System.out.println("Server: " + fromServer);
-		strTok = new StringTokenizer(fromServer, " ");
-		for(int i = 0; strTok.hasMoreTokens(); i++)
-		{
-			tok = strTok.nextToken();
-			switch(i)
+		
+			for(int i = 1; strTok.hasMoreTokens(); i++)
 			{
-			case 1: 
-				moveGid = tok;
-				break;
-			case 3: 
-				moveNumber = tok;
-				break;
-			case 5:
-				movePid = tok;
-				break;
-			case 6:
-				if(!tok.equals("FORFEITED"))
+				tok = strTok.nextToken();
+				switch(i)
 				{
-					
-					moveX = tok;
-					moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
-					moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
-					moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
+				case 5:
+					moveGid = tok;
+					break;
+				case 7:
+					moveTime = tok;
+					break;
+				case 10:
+					moveNumber = tok;
+					break;
+				case 12:
+					moveTile = tok;
+					break;
+				default:
+						break;
 				}
-				else
-					forfeit = true;
+			}
+			System.out.println("moveGid: " + moveGid + " moveTime: " + moveTime + " moveNumber: " + moveNumber + " moveTile: " + moveTile);
+			
+			
+			//SEND OUR MOVE HERE
+			//getMove() we need x, y, rotation, and tigerzone
+			String input = "";
+			switch(0/*getMoveValue*/)
+			{
+			case 0 : 
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
+						+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
+				break;
+			case 1 : 
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
+						+ moveX + " " + moveY +  " " + moveOrientation + " CROCODILE ";
+				break;	
+			case 2 : 
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT " 
+						+ moveX + " " + moveY +  " " + moveOrientation + " TIGER " + moveZone + " ";
+				break;
+			case 3 : 
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE PASS";
+				break;
+			case 4 : 
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE RETRIEVE TIGER AT "
+						+ moveX + " " + moveY + " ";
+				break;
+			case 5 : 
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE ADD ANOTHER TIGER TO "
+						+ moveX + " " + moveY + " ";
 				break;
 			default:
-				break;
+				input = "GAME " + moveGid + " MOVE " + moveNumber +" PLACE " + moveTile + " AT " 
+						+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
 			}
+			sendToServer(input);
+			
+			if(game1 != null && game2 != null)
+			{
+				analyzeMove(receiveFromServer());	
+				analyzeMove(receiveFromServer());
+			}
+			else if(( game1 != null || game2 != null)&& !(game1 != null && game2 != null))
+			{
+				analyzeMove(receiveFromServer());
+			}
+			else if(game1 == null && game2 == null)
+			{}
 		}
-		if(!movePid.equals(this.pid))
-		{}//do opponent move
 		
-		forfeit = false;
-		fromServer = receiveFromServer();		
+	}
+	
+	public void analyzeMove(String fromServer)
+	{
+		String tok = "";
+		String moveNumber = "movenumber";
+		String moveTile = "movetile";
+		String moveGid = "movegid";
+		String movePid = "movepid";
+		String moveTime  = "movetime";
+		String moveX = "movex";
+		String moveY = "movey";
+		String moveOrientation = "moveorientation";
+		String moveZone = "movezone";
+		boolean forfeit = false;
 		System.out.println("Server: " + fromServer);
-		strTok = new StringTokenizer(fromServer, " ");
+		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
 		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
 			tok = strTok.nextToken();
@@ -405,9 +403,17 @@ public class Protocol extends Client {
 				break;
 			}
 		}
-		if(!movePid.equals(this.pid))
-		{}////do opponent move
-		
+		if(forfeit)
+		{
+			if(game1 != null && game1.getGid().equals(moveGid))
+				game1 = null;
+			else if(game2 != null && game2.getGid().equals(moveGid))
+				game2 = null;
+		}
+		if(!movePid.equals(pid))
+		{
+			//MAKE MOVE HERE
+		}
 	}
 
 	public String getPid() {
