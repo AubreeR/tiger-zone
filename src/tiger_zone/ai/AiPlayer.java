@@ -33,6 +33,16 @@ public abstract class AiPlayer {
 		}
 		return null;
 	}
+	protected final Player getOtherPlayer() {
+		int i = 0;
+		for (AiPlayer player : this.game.getAiPlayers()) {
+			if (!player.equals(this)) {
+				return this.game.getPlayers().get(i);
+			}
+			i++;
+		}
+		return null;
+	}
 	
 	/**
 	 * Have this AI player make a move on the board.

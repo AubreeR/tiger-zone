@@ -99,7 +99,7 @@ public class Player {
 		//updatedScores += checkForLake(lastTileX, lastTileY, updatedScores, boardState);
 		//trash{totalScore, p1Tiger, p2Tiger, deer, boar, buffalo, croc, the null check}
 		lakeScore = recursiveLake(testedTiles, position, boardState, -1);
-		System.err.println("lakeScore = " + lakeScore[0] + " " + lakeScore[1] + " " + lakeScore[2] + " " + lakeScore[3] + " " + lakeScore[4] + " " + lakeScore[5] + " " + lakeScore[6] + " " + lakeScore[7] + "Tile:" + lastTileX + " " + lastTileY);
+		//System.err.println("lakeScore = " + lakeScore[0] + " " + lakeScore[1] + " " + lakeScore[2] + " " + lakeScore[3] + " " + lakeScore[4] + " " + lakeScore[5] + " " + lakeScore[6] + " " + lakeScore[7] + "Tile:" + lastTileX + " " + lastTileY);
 		if(lakeScore[7] == 0){
 			int uniques = 0;
 			if(lakeScore[3] > 0){
@@ -118,11 +118,11 @@ public class Player {
 			}
 			//System.err.println("tiles: " + totalScore + "uniques: " + uniques );
 			if(lakeScore[1] >= lakeScore[2] && lakeScore[1] != 0){
-				System.err.println("tiles: " + lakeScore[0] + " uniques: " + uniques + " Score: " + (((2*lakeScore[0])*(1+uniques)) + updatedScores + " Tile: " + lastTileX + " " + lastTileY));
+				//System.err.println("tiles: " + lakeScore[0] + " uniques: " + uniques + " Score: " + (((2*lakeScore[0])*(1+uniques)) + updatedScores + " Tile: " + lastTileX + " " + lastTileY));
 				updatedScores = ((2*lakeScore[0])*(1+uniques)) + updatedScores;
 			}
 			if(lakeScore[2] >= lakeScore[1] && lakeScore[2] != 0){
-				System.err.println("tiles: " + lakeScore[0] + " uniques: " + uniques + " Score: " + ((((2*lakeScore[0])*(1+uniques))*-1) + updatedScores + " Tile: " + lastTileX + " " + lastTileY));
+				//System.err.println("tiles: " + lakeScore[0] + " uniques: " + uniques + " Score: " + ((((2*lakeScore[0])*(1+uniques))*-1) + updatedScores + " Tile: " + lastTileX + " " + lastTileY));
 				updatedScores = (((2*lakeScore[0])*(1+uniques))*-1) + updatedScores;
 			}
 			else{
@@ -157,7 +157,7 @@ public class Player {
 						&& (boardState.getTile(x-1,y-1) != null)){
 					//assign score values based on which player's tiger is there
 					tigerOwner = checkTile.getTigerOwner().pid;
-					System.err.println("Den Completed at: " + x + " " + y + " " + tigerOwner + " " + checkTile.getTigerOwner().pid);
+					//System.err.println("Den Completed at: " + x + " " + y + " " + tigerOwner + " " + checkTile.getTigerOwner().pid);
 					if(tigerOwner.equals(getPid())){
 						pointsEarned = 9;
 					}

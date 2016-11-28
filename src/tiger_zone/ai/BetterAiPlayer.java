@@ -2,12 +2,14 @@ package tiger_zone.ai;
 
 import tiger_zone.Game;
 import tiger_zone.Position;
+import tiger_zone.Tiger;
 import tiger_zone.Tile;
 import tiger_zone.Board;
 import java.util.Stack;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import tiger_zone.Player;
 
 public class BetterAiPlayer extends AiPlayer {
 	/**
@@ -37,7 +39,7 @@ public class BetterAiPlayer extends AiPlayer {
 		}
 		System.out.println();*/
 		
-		final int[] move = MiniMax(temp, 0);
+		final int[] move = MiniMax(temp, 0, 0, 0);
 		if( move[3] ==0)
 		{
 			System.out.println("No moves, Skipping :(");
@@ -52,7 +54,7 @@ public class BetterAiPlayer extends AiPlayer {
 		this.game.getBoard().addTile(new Position(move[0], move[1]), current);
 	}
 
-	private final int[] MiniMax(final Board gm, int depth) {
+	private final int[] MiniMax(final Board gm, int depth, int currentscore, int otherscore) {
 		boolean current = depth % 2 == 0;
 		
 		Stack<Tile> TileStack = gm.getPile();
@@ -99,7 +101,16 @@ public class BetterAiPlayer extends AiPlayer {
 					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
 						continue;
 					}
-					int newevalmax = Evaluation(debug);
+					int newscore= this.getPlayer().updateScore(debug, debug.getLatest());
+					if(newscore<0)
+					{
+						otherscore= otherscore-newscore;
+					}
+					if(newscore>0)
+					{
+						currentscore=currentscore+newscore;
+					}
+					int newevalmax =currentscore- otherscore;
 					if (newevalmax > evalmax) {
 						evalmax = newevalmax;
 						move[0] = p.getKey().getX();
@@ -126,7 +137,16 @@ public class BetterAiPlayer extends AiPlayer {
 					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
 						continue;
 					}
-					int newevalmin = Evaluation(debug);
+					int newscore= this.getOtherPlayer().updateScore(debug, debug.getLatest());
+					if(newscore<0)
+					{
+						otherscore= otherscore-newscore;
+					}
+					if(newscore>0)
+					{
+						currentscore=currentscore+newscore;
+					}
+					int newevalmin =currentscore- otherscore;
 					if (newevalmin < evalmin) {
 						evalmin = newevalmin;
 						move[0] = p.getKey().getX();
@@ -153,7 +173,16 @@ public class BetterAiPlayer extends AiPlayer {
 					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
 						continue;
 					}
-					int newevalmax = Evaluation(debug);
+					int newscore= this.getPlayer().updateScore(debug, debug.getLatest());
+					if(newscore<0)
+					{
+						otherscore= otherscore-newscore;
+					}
+					if(newscore>0)
+					{
+						currentscore=currentscore+newscore;
+					}
+					int newevalmax =currentscore- otherscore;
 					if (newevalmax > evalmax) {
 						evalmax = newevalmax;
 						move[0] = p.getKey().getX();
@@ -182,14 +211,42 @@ public class BetterAiPlayer extends AiPlayer {
 					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
 						continue;
 					}
-					int[] temp = MiniMax(debug, depth);
-					int newevalmax = temp[temp.length - 1];
+					int i=-1;
+					if (TileStack.peek().hasDen() && this.getPlayer().getTigers().size() > 0) {
+						Tiger tiger = this.getPlayer().getTigers().pop();
+						TileStack.peek().addTiger(5, tiger);
+						i = 5;
+					}
+					else if(TileStack.peek().hasAnimal()) {
+						for (i = 1; i < 10; i++) {
+							if (TileStack.peek().getZone(i) == 'l') {
+								boolean isValid = debug.validTigerPlacement(debug.getLatest(), i, false);
+								if (isValid && this.getPlayer().getTigers().size() > 0) {
+									Tiger tiger = this.getPlayer().getTigers().pop();
+									TileStack.peek().addTiger(i, tiger);
+									break;
+								}
+							}
+						}
+						i = (i == 10) ? -1 : i;
+					}
+					int newscore= this.getPlayer().updateScore(debug, debug.getLatest());
+					if(newscore<0)
+					{
+						otherscore= otherscore-newscore;
+					}
+					if(newscore>0)
+					{
+						currentscore=currentscore+newscore;
+					}
+					int[] temp = MiniMax(debug, depth, otherscore, currentscore);
+					int newevalmax =currentscore- otherscore+ temp[temp.length - 1];
 					if (newevalmax > evalmax) {
 						evalmax = newevalmax;
 						move[0] = p.getKey().getX();
 						move[1] = p.getKey().getY();
 						move[2] = rotation;
-						move[3] = -1;
+						move[3] = i;
 						move[4] = evalmax;
 					}
 				
@@ -211,14 +268,42 @@ public class BetterAiPlayer extends AiPlayer {
 					if (!apply(debug, p.getKey(), rotation, TileStack.peek())) {
 						continue;
 					}
-					int[] temp = MiniMax(debug.clone(), depth);
-					int newevalmin = temp[temp.length - 1];
+					int i=-1;
+					if (TileStack.peek().hasDen() && this.getOtherPlayer().getTigers().size() > 0) {
+						Tiger tiger = this.getOtherPlayer().getTigers().pop();
+						TileStack.peek().addTiger(5, tiger);
+						i = 5;
+					}
+					else if(TileStack.peek().hasAnimal()) {
+						for (i = 1; i < 10; i++) {
+							if (TileStack.peek().getZone(i) == 'l') {
+								boolean isValid = debug.validTigerPlacement(debug.getLatest(), i, false);
+								if (isValid && this.getOtherPlayer().getTigers().size() > 0) {
+									Tiger tiger = this.getOtherPlayer().getTigers().pop();
+									TileStack.peek().addTiger(i, tiger);
+									break;
+								}
+							}
+						}
+						i = (i == 10) ? -1 : i;
+					}
+					int newscore= this.getOtherPlayer().updateScore(debug, debug.getLatest());
+					if(newscore<0)
+					{
+						otherscore= otherscore-newscore;
+					}
+					if(newscore>0)
+					{
+						currentscore=currentscore+newscore;
+					}
+					int[] temp = MiniMax(debug, depth, otherscore, currentscore);
+					int newevalmin =currentscore- otherscore+ temp[temp.length - 1];
 					if (newevalmin < evalmin) {
 						evalmin = newevalmin;
 						move[0] = p.getKey().getX();
 						move[1] = p.getKey().getY();
 						move[2] = rotation;
-						move[3] = -1;
+						move[3] = i;
 						move[4] = evalmin;
 					}
 				}
