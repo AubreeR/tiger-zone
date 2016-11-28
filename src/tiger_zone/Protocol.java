@@ -34,7 +34,7 @@ public class Protocol extends Client {
 	}
 	
 	public final void makeMove(Tile current, String x, String y, String orientation, String zoneIndex, String gid) {
-		Position pos = new Position(Integer.parseInt(x),Integer.parseInt(y));
+		Position pos = new Position(Integer.parseInt(x), Integer.parseInt(y));
 		Game gameAlias = null;
 		
 		gameAlias = games.get(gid);
@@ -44,17 +44,16 @@ public class Protocol extends Client {
 		}
 		
 		gameAlias.getBoard().addTile(pos, current);
+		gameAlias.nextPlayer();
 		Tiger tiger = null;
 		
-		if(zoneIndex.equals("")){
+		if (zoneIndex.equals("")) {
 			return;
 		}
-		else{
+		else {
 			current.addTiger(current.getZone(Integer.parseInt(zoneIndex)), tiger);
 			return;
 		}
-		
-
 	}
 	
 	

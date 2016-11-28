@@ -86,13 +86,13 @@ public class Game {
 
 	/**
 	 * Returns true if game is over. Otherwise returns false.
-	 *
+	 * 
 	 * @return is game over?
 	 */
 	public final boolean isOver() {
 		return this.isOver;
 	}
-
+	
 	/**
 	 * Sets the players of this game.
 	 *
@@ -119,7 +119,7 @@ public class Game {
 	/**
 	 * Set current player to the next player.
 	 */
-	private final void nextPlayer() {
+	public final void nextPlayer() {
 		if (this.currentPlayer.getIndex() == 0) {
 			this.currentPlayer = this.players.get(1);
 		}
