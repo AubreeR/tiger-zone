@@ -13,6 +13,11 @@ import tiger_zone.Tile;
  * A sample AiPlayer which places tiles as close to the origin as possible.
  */
 public class CloseAiPlayer extends AiPlayer {
+	private Tile latestTile;
+	private Position latestPosition; 
+	private int latestRot;
+	private int latestZone; 
+	
 	public CloseAiPlayer(Game game) {
 		super(game);
 	}
@@ -47,6 +52,9 @@ public class CloseAiPlayer extends AiPlayer {
 		}
 		
 		game.getBoard().addTile(closest, current);
+		setLatestTile(current);
+		setLatestPosition(closest);
+		setLatestRot(current.getRotation()); 
 		
 		final Player currentPlayer = this.getPlayer();
 		
@@ -56,6 +64,7 @@ public class CloseAiPlayer extends AiPlayer {
 		if (current.hasDen() && currentPlayer.getTigers().size() > 0) {
 			Tiger tiger = currentPlayer.getTigers().pop();
 			current.addTiger(5, tiger);
+			setLatestZone(5);
 			i = 5;
 		}
 		else if(current.hasAnimal()) {
@@ -65,11 +74,44 @@ public class CloseAiPlayer extends AiPlayer {
 					if (isValid && currentPlayer.getTigers().size() > 0) {
 						Tiger tiger = currentPlayer.getTigers().pop();
 						current.addTiger(i, tiger);
+						setLatestZone(i); 
 						break;
 					}
 				}
 			}
 			i = (i == 10) ? -1 : i;
 		}
+	}
+
+	public Tile getLatestTile() {
+		return latestTile;
+	}
+
+	public void setLatestTile(Tile latestTile) {
+		this.latestTile = latestTile;
+	}
+
+	public Position getLatestPosition() {
+		return latestPosition;
+	}
+
+	public void setLatestPosition(Position latestPosition) {
+		this.latestPosition = latestPosition;
+	}
+
+	public int getLatestRot() {
+		return latestRot;
+	}
+
+	public void setLatestRot(int latestRot) {
+		this.latestRot = latestRot;
+	}
+
+	public int getLatestZone() {
+		return latestZone;
+	}
+
+	public void setLatestZone(int latestZone) {
+		this.latestZone = latestZone;
 	}
 }
