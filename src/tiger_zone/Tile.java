@@ -9,8 +9,8 @@ public class Tile implements Cloneable {
 	private final char center;
 	private final String imagePath;
 	private int rotation = 0;
-	private final char[] tigerSpots; 
-	private final char[] crocSpots;
+	private char[] tigerSpots; 
+	private char[] crocSpots;
 	private int tigerPosition = -1;
 	private Tiger placedTiger = null;
 	
@@ -42,8 +42,12 @@ public class Tile implements Cloneable {
 	public Tile(char[] sides, char center, char[] tigerSpots, char[] crocSpots, String imagePath) {
 		this.originalSides = sides.clone();
 		this.sides = sides.clone();
-		this.tigerSpots = tigerSpots.clone();
-		this.crocSpots = crocSpots.clone();
+		this.tigerSpots = null;
+		this.crocSpots = null;
+		if (tigerSpots != null && crocSpots != null) {
+			this.tigerSpots = tigerSpots.clone();
+			this.crocSpots = crocSpots.clone();
+		}
 		this.center = center;
 		this.imagePath = imagePath;
 	}
