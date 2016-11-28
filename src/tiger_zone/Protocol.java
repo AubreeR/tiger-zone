@@ -455,7 +455,7 @@ public class Protocol extends Client {
 		}
 		if(!movePid.equals(pid))
 		{
-			makeMove();
+			makeMove(Board.tileMap.get(moveTile.toLowerCase()).clone(),moveX,moveY,moveOrientation,moveZone, moveGid);
 		}
 	}
 
