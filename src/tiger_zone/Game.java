@@ -21,7 +21,7 @@ public class Game {
 	private Player currentPlayer;
 	private boolean isOver = false;
 	private String gid;
-	private int turnNumber = 0;
+	private int turnNumber = 1;
 
 	/**
 	 * Creates a new instance of <code>Game</code> with the default tile stack being the pile.
