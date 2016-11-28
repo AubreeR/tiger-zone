@@ -18,7 +18,12 @@ import tiger_zone.ai.CloseAiPlayer;
 import tiger_zone.ai.PoorAiPlayer;
 
 public class Main {
-	
+	public static void displayGame(Game game) {
+		BoardFrame bf = new BoardFrame(game);
+		bf.setSize(900, 900);
+		bf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		bf.setVisible(true);
+	}
 	
 	public static void main(String[] args) {
 		
@@ -65,9 +70,6 @@ public class Main {
 			game.conductTurn();
 		}
 
-		BoardFrame bf = new BoardFrame(game);
-		bf.setSize(900, 900);
-		bf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		bf.setVisible(true);*/
+		Main.displayGame(game);
 	}
 }
