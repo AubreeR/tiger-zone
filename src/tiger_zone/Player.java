@@ -578,7 +578,7 @@ public class Player {
 					|| (tigerPos == 6 && sides[1] == 'l')
 					|| (tigerPos == 8 && sides[2] == 'l'))
 				{
-					if(boardState.getTile(position).getTigerOwner().equals(getPid())){
+					if(owner.equals(getPid())){
 						trash[1]++;
 					}
 					else{
