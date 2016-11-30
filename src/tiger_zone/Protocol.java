@@ -36,9 +36,7 @@ public class Protocol extends Client {
 
 	public final void makeMove(Tile current, String x, String y, String orientation, String zoneIndex, String gid) {
 		Position pos = new Position(Integer.parseInt(x), Integer.parseInt(y));
-		Game gameAlias = null;
-
-		gameAlias = games.get(gid);
+		Game gameAlias = games.get(gid);
 
 		while(current.getRotation() != Integer.parseInt(orientation)){
 			current.rotate();
@@ -46,15 +44,16 @@ public class Protocol extends Client {
 		gameAlias.getBoard().getPile().pop();
 		gameAlias.getBoard().addTile(pos, current);
 		gameAlias.nextPlayer();
-		Tiger tiger = null;
+
+		System.out.printf("(game %s should now be our move)\n", gid);
 
 		if (zoneIndex.equals("movezone")) {
 			return;
 		}
-		else {
-			current.addTiger(current.getZone(Integer.parseInt(zoneIndex)), tiger);
-			return;
-		}
+
+		Tiger tiger = null;
+
+		current.addTiger(current.getZone(Integer.parseInt(zoneIndex)), tiger);
 	}
 
 
@@ -62,7 +61,6 @@ public class Protocol extends Client {
 	{
 		String fromServer = this.receiveFromServer();
 		// THIS IS SPARTA! only called once
-		System.out.println("Server: " + fromServer);
 
 		authenticationProtocol(fromServer);
 
@@ -77,7 +75,6 @@ public class Protocol extends Client {
 		System.out.println("Client: " + toServer);
 		//hello
 		fromServer = receiveFromServer();
-		System.out.println("Server: "  + fromServer);
 
 		//identifying ourself
 		toServer = "I AM " + getUserName() + " " + getPassword();
@@ -89,7 +86,6 @@ public class Protocol extends Client {
 		fromServer = receiveFromServer();
 		strTok = new StringTokenizer(fromServer, " ");
 		String tok = "";
-		System.out.println("Server: "  + fromServer);
 		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
 			tok = strTok.nextToken();
@@ -105,9 +101,6 @@ public class Protocol extends Client {
 
 		challengeProtocol();
 		fromServer = receiveFromServer();
-		System.out.println("Server: "  + fromServer);
-
-
 	}
 
 	public void challengeProtocol()
@@ -115,48 +108,56 @@ public class Protocol extends Client {
 		int count = 0;
 		do{
 
-		String fromServer =	receiveFromServer();
-		System.out.println("Server: " + fromServer);
-		StringTokenizer strTok = new StringTokenizer(fromServer," ");
-		String tok = "";
-		for(int i = 0; strTok.hasMoreTokens(); i++)
-		{
-			tok = strTok.nextToken();
-			switch(i)
+			String fromServer =	receiveFromServer();
+			StringTokenizer strTok = new StringTokenizer(fromServer," ");
+			String tok = "";
+			for(int i = 0; strTok.hasMoreTokens(); i++)
 			{
-			case 2 :
-				cid = tok;
-				break;
-			case 6 :
-				rounds = tok;
-				break;
-			default:
-				break;
+				tok = strTok.nextToken();
+				switch(i)
+				{
+				case 2 :
+					cid = tok;
+					break;
+				case 6 :
+					rounds = tok;
+					break;
+				default:
+					break;
+				}
+
+			}
+			System.out.println("CID: " + cid + " ROUNDS: " + rounds);
+
+			for(int i = 0; i < Integer.parseInt(rounds); i++)
+			{
+				roundProtocol(receiveFromServer());
 			}
 
-		}
-		System.out.println("CID: " + cid + " ROUNDS: " + rounds);
-
-		for(int i = 0; i < Integer.parseInt(rounds); i++)
-		{
-			roundProtocol(receiveFromServer());
-		}
-
-		//END OF CHALLENGES or PLEASE WAIT FOR NEXT CHALLEGE
-		fromServer = receiveFromServer();
-		System.out.println("Server: " + fromServer);
-		strTok = new StringTokenizer(fromServer, " ");
-		count = strTok.countTokens();
+			//END OF CHALLENGES or PLEASE WAIT FOR NEXT CHALLEGE
+			fromServer = receiveFromServer();
+			strTok = new StringTokenizer(fromServer, " ");
+			count = strTok.countTokens();
 		}
 		while(count >=5);
 
 
 	}
 
-	public void roundProtocol(String fromServer)
-	{
-
-		System.out.println("Server: " + fromServer);
+	/**
+	 * Parses round protocol messages:
+	 *
+	 * <pre>
+	 * BEGIN ROUND <rid> OF <rounds>
+	 * (match protocol)
+ 	 * END OF ROUND <rid> OF <rounds>
+ 	 * (or)
+     * END OF ROUND <rid> OF <rounds> PLEASE WAIT FOR THE NEXT MATCH
+	 * </pre>
+	 * @param fromServer
+	 */
+	public void roundProtocol(String fromServer) {
+		// BEGIN ROUND <rid> OF <rounds>
 		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
 		String tok = "";
 		for(int i = 0;strTok.hasMoreTokens(); i++)
@@ -177,43 +178,61 @@ public class Protocol extends Client {
 
 		System.out.println("rid: " + rid + ", rounds = " + rounds);
 
-		for(int i = 0; i < Integer.parseInt(rounds); i++)
-		{
+		for(int i = 0; i < Integer.parseInt(rounds); i++) {
+			// Receive subsequent "BEGIN ROUND" messages (first one has already been parsed above, hence why we begin at
+			// index 1.
+			if (i > 0) {
+				this.receiveFromServer();
+			}
+
 			matchProtocol(receiveFromServer());
+
+			// END OF ROUND <rid> OF <rounds>
+			// (or)
+			// END OF ROUND <rid> OF <rounds> PLEASE WAIT FOR THE NEXT MATCH
+			fromServer = receiveFromServer();
+			System.out.println(i);
 		}
-
-		fromServer = receiveFromServer();
-		System.out.println("Server: " + fromServer);
-
 	}
 
+	/**
+	 * Parses the following messages:
+	 *
+	 * <pre>
+	 * YOUR OPPONENT IS PLAYER <pid>
+	 * STARTING TILE IS <tile> AT <x> <y> <orientation>
+	 * THE REMAINING <number_tiles> TILES ARE [ <tiles> ]
+	 * MATCH BEGINS IN <timeplan> SECONDS
+	 * (move protocol repeated <number_tiles> times, alternating the <gid>)
+	 * GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
+	 * GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
+	 * </pre>
+	 *
+	 * @param fromServer
+	 */
 	public void matchProtocol(String fromServer)
 	{
-		System.out.println("Server: " + fromServer);
+		// YOUR OPPONENT IS PLAYER <pid>
 		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
 		String tok = "";
 
-		for(int i = 0; strTok.hasMoreTokens(); i++)
-		{
+		for (int i = 0; strTok.hasMoreTokens(); i++) {
 			tok = strTok.nextToken();
-			switch(i)
-			{
-			case 4 :
+			switch(i) {
+			case 4:
 				opid  = tok;
 				break;
 			default:
 				break;
 			}
-
 		}
+
 		System.out.println("opid: " + opid);
 
-		///// Line 2 - Get tile, x, y, and orientation //////
-
+		// STARTING TILE IS <tile> AT <x> <y> <orientation>
 		fromServer = receiveFromServer();
-		System.out.println("Server: " + fromServer);
 		strTok = new StringTokenizer(fromServer, " ");
-		String tile = null;
+		String tile = "";
 		int x = 0;
 		int y = 0;
 		int orientation = 0;
@@ -239,26 +258,23 @@ public class Protocol extends Client {
 			}
 
 		}
+
 		System.out.println("tile: " + tile + ", x: " + x + ", y: " + y + ", orientation: " + orientation);
 
-		////// Line 3 - Get number of tiles and tile stack //////
-
+		// THE REMAINING <number_tiles> TILES ARE [ <tiles> ]
 		fromServer = receiveFromServer();
-		System.out.println("Server: " + fromServer);
 		strTok = new StringTokenizer(fromServer, " ");
-		for(int i = 0; strTok.hasMoreTokens(); i++)
-		{
+		for (int i = 0; strTok.hasMoreTokens(); i++) {
 			tok = strTok.nextToken();
-			switch(i)
-			{
-			case 2 :
+			switch(i) {
+			case 2:
 				number_tiles = tok;
 				tiles = new String[Integer.parseInt(number_tiles)];
 				break;
-
 			default:
-				if(i >= 6 && i - 6 < tiles.length)
+				if(i >= 6 && i - 6 < tiles.length) {
 					tiles[i-6] = tok;
+				}
 				break;
 			}
 		}
@@ -266,9 +282,9 @@ public class Protocol extends Client {
 		for(String s : tiles)
 			System.out.print(s + " ");
 		System.out.println("");
-		////// Line 4 - Getting time until match start //////
+
+		// MATCH BEGINS IN <timeplan> SECONDS
 		fromServer = receiveFromServer();
-		System.out.println("Server: " + fromServer);
 		strTok = new StringTokenizer(fromServer, " ");
 		for(int i = 0;strTok.hasMoreTokens(); i++)
 		{
@@ -294,14 +310,59 @@ public class Protocol extends Client {
 		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
 		this.board = new Board((Stack<Tile>)pile.clone(), startingTile, new Position(x, y), orientation);
 
-		for (int i = 0; i <= Integer.parseInt(number_tiles); i++) {
-			moveProtocol(receiveFromServer());
+		// (move protocol repeated <number_tiles> times, alternating the <gid>)
+		String result = "";
+		for (int i = 0; i < Integer.parseInt(number_tiles) && result.length() == 0; i++) {
+			result = moveProtocol(receiveFromServer());
 		}
+
 		String gameOverGid = "";
-		boolean gameOver = false;
-		//get first game score
+
+		if (result.length() > 0) {
+			// GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
+			fromServer = receiveFromServer();
+			strTok = new StringTokenizer(fromServer, " ");
+			for(int i = 0;strTok.hasMoreTokens(); i++) {
+				tok = strTok.nextToken();
+
+				switch(i) {
+				case 1:
+					gameOverGid = tok;
+					break;
+				default:
+					break;
+				}
+			}
+
+			// delete first game
+			games.remove(gameOverGid);
+
+			// GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
+			fromServer = receiveFromServer();
+
+			strTok = new StringTokenizer(fromServer, " ");
+			for(int i = 0;strTok.hasMoreTokens(); i++) {
+				tok = strTok.nextToken();
+
+				switch(i)
+				{
+				case 1 :
+					gameOverGid = tok;
+					break;
+				default:
+					break;
+				}
+			}
+
+			// delete second game
+			games.remove(gameOverGid);
+
+			// return early since we just handled both game overs
+			return;
+		}
+
+		// GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
 		fromServer = receiveFromServer();
-		System.out.println("Server: " + fromServer);
 
 		strTok = new StringTokenizer(fromServer, " ");
 		for(int i = 0;strTok.hasMoreTokens(); i++)
@@ -313,19 +374,18 @@ public class Protocol extends Client {
 			case 1 :
 				gameOverGid = tok;
 				break;
-			case 2:
-				gameOver = tok.equals("OVER");
-				break;
 			default:
 				break;
 			}
 		}
-		//get second game score
+
+		// delete first game
+		games.remove(gameOverGid);
+
+		// GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
 		fromServer = receiveFromServer();
-		System.out.println("Server: " + fromServer);
 
 		gameOverGid = "";
-		gameOver = false;
 		strTok = new StringTokenizer(fromServer, " ");
 		for(int i = 0;strTok.hasMoreTokens(); i++)
 		{
@@ -336,19 +396,23 @@ public class Protocol extends Client {
 			case 1 :
 				gameOverGid = tok;
 				break;
-			case 2:
-				gameOver = tok.equals("OVER");
-				break;
 			default:
 				break;
 			}
 		}
-		// Main.displayGame(games.get(gameOverGid));
+
+		// delete second game
 		games.remove(gameOverGid);
 	}
 
 
-	public void moveProtocol(String moveInstruction){
+	/**
+	 * Parses move protocol messages.
+	 *
+	 * @param moveInstruction
+	 * @return
+	 */
+	public String moveProtocol(String moveInstruction){
 		String moveNumber = "movenumber";
 		String moveTile = "movetile";
 		String moveGid = "movegid";
@@ -359,32 +423,45 @@ public class Protocol extends Client {
 		String moveOrientation = "moveorientation";
 		String moveZone = "movezone";
 
-		//LINE 1 -- MAKE YOUR MOVE IN GAME <gid> WITHIN <moveTime> SECOND/SECONDS: MOVE <moveNumber> PLACE <moveTile>
-		System.out.println("Server: " + moveInstruction);
+		// MAKE YOUR MOVE IN GAME <gid> WITHIN <moveTime> SECOND/SECONDS: MOVE <moveNumber> PLACE <moveTile>
 		StringTokenizer strTok = new StringTokenizer(moveInstruction, " ");
-		String tok = strTok.nextToken();
-		if (!tok.equals("MAKE")) {
+		String tok = "";
+		boolean gameOver = false;
+		String overGid = "";
+		String firstWord = strTok.nextToken();
+		String secondWord = strTok.nextToken();
+		String thirdWord = strTok.nextToken();
+
+		// If we get a Forfeited message now, it is time to go back to Match Protocol
+		if (moveInstruction.contains("FORFEITED:")) {
+			return moveInstruction;
+		}
+
+		// Otherwise, it's opponent's move
+		else if (!(firstWord.equals("MAKE"))) {
 			analyzeMove(moveInstruction);
 		}
+
+		// or our own move -- MAKE MOVE
 		else {
-			for (int i = 1; strTok.hasMoreTokens(); i++) {
+			for (int i = 3; strTok.hasMoreTokens(); i++) {
 				tok = strTok.nextToken();
 				switch(i)
 				{
-					case 5:
-						moveGid = tok;
-						break;
-					case 7:
-						moveTime = tok;
-						break;
-					case 10:
-						moveNumber = tok;
-						break;
-					case 12:
-						moveTile = tok;
-						break;
-					default:
-							break;
+				case 5:
+					moveGid = tok;
+					break;
+				case 7:
+					moveTime = tok;
+					break;
+				case 10:
+					moveNumber = tok;
+					break;
+				case 12:
+					moveTile = tok;
+					break;
+				default:
+					break;
 				}
 			}
 			System.out.println("moveGid: " + moveGid + " moveTime: " + moveTime + " moveNumber: " + moveNumber + " moveTile: " + moveTile);
@@ -410,13 +487,9 @@ public class Protocol extends Client {
 			final Action action = this.games.get(moveGid).conductTurn();
 
 			String input = "";
-			if (action instanceof TilePlacementAction) {
-				TilePlacementAction tpa = (TilePlacementAction) action;
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
-						+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " "
-						+ tpa.getTile().getRotation() + " NONE ";
-			}
-			else if (action instanceof CrocodilePlacementAction) {
+
+			// CrocodilePlacement and TigerPlacement should be above TilePlacement here
+			if (action instanceof CrocodilePlacementAction) {
 				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
 						+ moveX + " " + moveY +  " " + moveOrientation + " CROCODILE ";
 			}
@@ -427,7 +500,7 @@ public class Protocol extends Client {
 						+ " TIGER " + tpa.getZone() + " ";
 			}
 			else if (action instanceof PassAction) {
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " UNPLACEABLE PASS";
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " TILE " + moveTile + " UNPLACEABLE PASS";
 			}
 			else if (action instanceof TigerRetrievalAction) {
 				TigerRetrievalAction tra = (TigerRetrievalAction) action;
@@ -441,9 +514,19 @@ public class Protocol extends Client {
 						+ " UNPLACEABLE ADD ANOTHER TIGER TO " + taa.getPosition().getX() + " "
 						+ taa.getPosition().getY() + " ";
 			}
+			else if (action instanceof TilePlacementAction) {
+				TilePlacementAction tpa = (TilePlacementAction) action;
+				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
+						+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " "
+						+ tpa.getTile().getRotation() + " NONE ";
+			}
 			else {
-				input = "GAME " + moveGid + " MOVE " + moveNumber +" PLACE " + moveTile + " AT "
-						+ moveX + " " + moveY +  " " + moveOrientation + " NONE ";
+				if (action == null) {
+					System.err.printf("null action recevied\n");
+				}
+				else {
+					System.err.println("unknown action type");
+				}
 			}
 
 			System.out.println("Client: " + input);
@@ -453,6 +536,7 @@ public class Protocol extends Client {
 				this.analyzeMove(this.receiveFromServer());
 			}
 		}
+		return "";
 	}
 
 	public void analyzeMove(String fromServer)
@@ -468,7 +552,6 @@ public class Protocol extends Client {
 		String moveOrientation = "moveorientation";
 		String moveZone = "movezone";
 		boolean forfeit = false;
-		System.out.println("Server: " + fromServer);
 		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
 		for(int i = 0; strTok.hasMoreTokens(); i++)
 		{
@@ -531,8 +614,11 @@ public class Protocol extends Client {
 			games.remove(moveGid);
 			return;
 		}
-		if(!movePid.equals(pid))
+
+		// TODO: figure out why we need containsKey here; any game overs should not make it this far
+		if(!movePid.equals(pid) && games.containsKey(moveGid))
 		{
+			System.out.printf("(about to makeMove, moveTile must be defined: %s)\n", moveTile);
 			makeMove(Board.tileMap.get(moveTile.toLowerCase()).clone(),moveX,moveY,moveOrientation,moveZone, moveGid);
 		}
 	}
