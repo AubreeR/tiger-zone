@@ -485,7 +485,7 @@ public class Protocol extends Client {
 				movePid = tok;
 				break;
 			case 6:
-				if(!tok.equals("FORFEITED"))
+				if(!tok.equals("FORFEITED:"))
 				{
 					if(tok.equals("PLACED"))
 					{
