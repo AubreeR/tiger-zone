@@ -113,7 +113,9 @@ public class Client {
 	public String receiveFromServer()
 	{
 		try{
-			return input.readLine().trim();
+			String response = input.readLine().trim();
+			System.out.printf("Server: %s\n", response);
+			return response;
 		}
 		catch(IOException io)
 		{
