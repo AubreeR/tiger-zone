@@ -3,16 +3,18 @@ package tiger_zone.ui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 
 import javax.swing.JFrame;
+
+import org.docopt.Docopt;
 
 import tiger_zone.Board;
 import tiger_zone.Game;
 import tiger_zone.NFAStateMachine;
 import tiger_zone.Player;
 import tiger_zone.Position;
-import tiger_zone.Protocol;
 import tiger_zone.Tile;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.CloseAiPlayer;
@@ -25,54 +27,49 @@ public class Main {
 		bf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		bf.setVisible(true);
 	}
-	
+
 	public static void main(String[] args) {
-		
-		
-		NFAStateMachine n = new NFAStateMachine("10.136.28.60", 4444, "TIGERZONE", "TEAMI", "IAMI");
-		/*NFAStateMachine n = new NFAStateMachine("0.0.0.0", 4444);*/
-		////
+		final String cliDoc =
+			    "Tiger Zone\n"
+	    	    + "\n"
+	    	    + "Usage:\n"
+	    	    + "  tigerzone connect <ip> <port> <tournament-password> <username> <password>\n"
+	    	    + "  tigerzone localduel\n"
+	    	    + "  tigerzone (-h | --help)\n"
+	    	    + "\n"
+	    	    + "Options:\n"
+	    	    + "  -h --help     Show this screen.\n"
+	    	    + "\n";
 
-//		if(args.length > 0){
-//			p = new Protocol(args[0], Integer.parseInt(args[1]),args[2], args[3], args[4]);
-//		}
+		Map<String, Object> opts = new Docopt(cliDoc).parse(args);
 		
-		//p.tournamentProtocol(); 
-//		String tileStrings = p.getTiles();
-//		String[] parseTiles = tileStrings.split("\\s+"); 
-//		
-//		for(int j = 0; j < parseTiles.length; j++){
-//			System.out.println(".." + parseTiles[j] + "..");
-//		}
-		
-		
-		/*Stack<Tile> pile = Board.createDefaultStack();
-		Tile t = Board.tileMap.get("tltj-");
-
-		Collections.shuffle(pile);
-		Game game = new Game(pile);
-		game.getBoard().addTileWithNoValidation(new Position(0, 0), t);
-
-		// Protocol p = new Protocol("10.138.7.222",8000,"tpass","user","pass");
-		// p.tournamentProtocol();
-
-		List<Player> players = new ArrayList<Player>(2);
-		players.add(new Player(0, "p1"));
-		players.add(new Player(1, "p2"));
-		game.setPlayers(players);
-
-		AiPlayer skynet1 = new CloseAiPlayer(game);
-		AiPlayer skynet2 = new PoorAiPlayer(game);
-		
-		List<AiPlayer> ai = new ArrayList<AiPlayer>();
-		ai.add(skynet1);
-		ai.add(skynet2);
-		game.setAiPlayers(ai);
-
-		while (!game.isOver()) {
-			game.conductTurn();
+		if ((boolean) opts.get("connect")) {
+			new NFAStateMachine((String) opts.get("<ip>"), Integer.parseInt((String) opts.get("<port>")),
+					(String) opts.get("<tournament-password>"), (String) opts.get("<username>"), (String) opts.get("<password>"));
 		}
+		else if ((boolean) opts.get("localduel")) {
+			Stack<Tile> pile = Board.createDefaultStack();
+			Tile t = Board.tileMap.get("tltj-");
 
-		Main.displayGame(game);*/
+			Collections.shuffle(pile);
+			Game game = new Game(pile);
+			game.getBoard().addTileWithNoValidation(new Position(0, 0), t);
+
+			List<Player> players = new ArrayList<Player>(2);
+			players.add(new Player(0, "p1"));
+			players.add(new Player(1, "p2"));
+			game.setPlayers(players);
+
+			List<AiPlayer> ai = new ArrayList<AiPlayer>();
+			ai.add(new CloseAiPlayer(game));
+			ai.add(new PoorAiPlayer(game));
+			game.setAiPlayers(ai);
+
+			while (!game.isOver()) {
+				game.conductTurn();
+			}
+
+			Main.displayGame(game);
+		}
 	}
 }
