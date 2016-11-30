@@ -54,10 +54,15 @@ public class NFAStateMachine {
 		boolean ref = firstWord(fromServer);
 		do
 		{
-			
-			fromServer = c.receiveFromServer();
-		
-			ref = firstWord(fromServer);
+			try{
+				fromServer = c.receiveFromServer();
+				ref = firstWord(fromServer);
+			}
+			catch(Exception ex)
+			{
+				System.err.println(ex);
+				System.err.println("Erroneous string: " + fromServer);
+			}
 		}while(ref);
 		//tournament is over, disconnect from server
 		c.disconnect();
@@ -98,6 +103,8 @@ public class NFAStateMachine {
 			break;
 		case "GAME": gameProtocol(str);
 			break;
+		default: System.err.println("Syntax Exception in String: " + protocol + " unexpected token received: " + token);
+			return true;
 		}
 		return true;
 	}
@@ -143,12 +150,14 @@ public class NFAStateMachine {
 			break;
 		case "ROUND":roundProtocol(strTok);
 			break;
+		default: System.err.println("Syntax Exception in End protocol, unexpected token received: " + challenge_round);
+			break;
 		}
 	}
 	
 	public void challengesProtocol(StringTokenizer strTok)
 	{
-		System.out.println("#########################please kill challenges loop");
+		//System.out.println("#########################please kill challenges loop");
 	}
 	
 	public void roundProtocol(StringTokenizer strTok)
@@ -156,8 +165,8 @@ public class NFAStateMachine {
 		this.currentRound = strTok.hasMoreTokens()?strTok.nextToken():"";
 		if(strTok.hasMoreTokens())strTok.nextToken();
 		this.maxRounds = strTok.hasMoreTokens()?strTok.nextToken():"";
-		if(strTok.hasMoreTokens())
-			{}
+		while(strTok.hasMoreTokens())
+			{strTok.nextToken();}
 	}
 	
 ///////////////////////////////////////////
@@ -322,6 +331,7 @@ public class NFAStateMachine {
 			break;
 		case "MOVE": moveProtocol(strTok, currentGid);
 			break;
+		default: System.err.println("Syntax Exception in game protocol, unexpected token received: " + over_move);
 		}
 	}
 	
@@ -366,6 +376,9 @@ public class NFAStateMachine {
 			case "FORFEITED:": forfeitedProtocol(currentGid);
 				break;
 			case "TILE": unplaceableProtocol(strTok, currentGid, playerPid);
+				break;
+			default:
+				System.err.println("Syntax Exception in game->move protocol, unexpected token received: " + placed_forfeited);
 			}
 		}
 		
@@ -391,10 +404,12 @@ public class NFAStateMachine {
 		case "TIGER": tigerProtocol(strTok, currentGid, playerPid, moveTile, moveX, moveY, moveOrientation);
 			break;
 		case "CROCODILE":
-		default:
+		case "NONE":
 			Board.createDefaultStack();
 			makeMove(Board.tileMap.get(moveTile.toLowerCase()), moveX, moveY, moveOrientation,"",  currentGid);
 			break;
+		default:
+			System.err.println("Syntax Exception in game-move->subMove protocol, unexpected token received: " + none_tiger);
 		}
 		
 	}
