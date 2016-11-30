@@ -62,6 +62,7 @@ public class NFAStateMachine {
 			{
 				System.err.println(ex);
 				System.err.println("Erroneous string: " + fromServer);
+				break;
 			}
 		}while(ref);
 		//tournament is over, disconnect from server
@@ -162,6 +163,7 @@ public class NFAStateMachine {
 	
 	public void roundProtocol(StringTokenizer strTok)
 	{
+		games.clear();
 		this.currentRound = strTok.hasMoreTokens()?strTok.nextToken():"";
 		if(strTok.hasMoreTokens())strTok.nextToken();
 		this.maxRounds = strTok.hasMoreTokens()?strTok.nextToken():"";
