@@ -1,10 +1,13 @@
 package tiger_zone;
 
-import java.io.*;
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
 
 public class Client {
-
 	protected String serverName;//ip address of server
 	protected int portNumber;//server port
 
@@ -23,7 +26,6 @@ public class Client {
 		output = null;
 		input = null;
 		stdIn = null;
-
 	}
 
 	/**
@@ -51,7 +53,7 @@ public class Client {
 	/**
 	 * attempts to make the connection with the server provided a name and port
 	 * @param serverName the IP address of the given server
-	 * @param portNumber the port that the tcp socket communicates with 
+	 * @param portNumber the port that the tcp socket communicates with
 	 * @return true if the connection was successful, false if it failed
 	 */
 	public boolean connect(String serverName, int portNumber)
@@ -76,9 +78,6 @@ public class Client {
 			System.err.println("Couldn't get I/O for the connection to: " + serverName);
 			return false;
 		}
-
-
-
 	}
 
 	/**
@@ -86,7 +85,6 @@ public class Client {
 	 */
 	public void disconnect()
 	{
-
 		try{
 			output.close();
 			input.close();
@@ -115,9 +113,7 @@ public class Client {
 	public String receiveFromServer()
 	{
 		try{
-
 			return input.readLine().trim();
-
 		}
 		catch(IOException io)
 		{
@@ -133,7 +129,7 @@ public class Client {
 		return echoSocket.isConnected() && (!echoSocket.isClosed());
 	}
 
-	public String getServerName() 
+	public String getServerName()
 	{
 		return serverName;
 	}
@@ -142,9 +138,4 @@ public class Client {
 	{
 		return portNumber;
 	}
-
-
-
-
-
 }
