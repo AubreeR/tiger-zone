@@ -44,8 +44,10 @@ public class Main {
 		Map<String, Object> opts = new Docopt(cliDoc).parse(args);
 		
 		if ((boolean) opts.get("connect")) {
+			long milli = System.currentTimeMillis();
 			new NFAStateMachine((String) opts.get("<ip>"), Integer.parseInt((String) opts.get("<port>")),
 					(String) opts.get("<tournament-password>"), (String) opts.get("<username>"), (String) opts.get("<password>"));
+			System.out.println("Elapsed Time: " + (System.currentTimeMillis() - milli));
 		}
 		else if ((boolean) opts.get("localduel")) {
 			Stack<Tile> pile = Board.createDefaultStack();

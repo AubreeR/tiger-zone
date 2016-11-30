@@ -118,8 +118,10 @@ public class Board implements Cloneable{
 			// case 't': placementEngine.addRule(new TigerTrailRule(this, x, y, tile, zone));
 			case 'l': this.placementEngine.addRule(new TigerLakeRule(this, position, tile, zone, trace));
 				break;
-			case 'x': return true;
-			default: return false;
+			case 'x': 
+				return true;
+			default: 
+				return false;
 		}
 
 		return placementEngine.evaluateRules();

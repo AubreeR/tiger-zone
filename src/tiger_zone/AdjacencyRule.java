@@ -5,7 +5,10 @@ public class AdjacencyRule extends PlacementRule {
 		super(boardState, position, trace);
 		super.setRuleName("Adjacency Rule");
 	}
-
+	
+	/**
+	 * @returns true if the selected tile coordinate is next to another, false if it isnt
+	 */
 	@Override
 	public boolean evaluate() {
 		boolean checkUp = false;
@@ -44,6 +47,9 @@ public class AdjacencyRule extends PlacementRule {
 		return false;
 	}
 	
+	/**
+	 * @throws Exception for a failed case
+	 */
 	@Override
 	public void testFailure() throws Exception {
 		throw new Exception(super.getName() + " failed under test condition that the tile was attempted to be placed in a non adjacent to another tile.");

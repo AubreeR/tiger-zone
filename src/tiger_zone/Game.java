@@ -102,7 +102,7 @@ public class Game {
 	public final void setPlayers(List<Player> players) {
 		this.players = players;
 
-		// TODO: probably set currentPlayer elsewhere
+		
 		if (this.players.size() > 0) {
 			this.currentPlayer = this.players.get(0);
 		}
@@ -150,7 +150,7 @@ public class Game {
 
 			System.out.printf("(#%d) %s", this.turnNumber, this.currentPlayer);
 			if (action instanceof TilePlacementAction || action instanceof TigerPlacementAction) {
-				System.out.printf(" placed %s at position %s (%d°)", ((TilePlacementAction) action).getTile(),
+				System.out.printf(" placed %s at position %s (%d)", ((TilePlacementAction) action).getTile(),
 						((TilePlacementAction) action).getPosition(),
 						((TilePlacementAction) action).getTile().getRotation());
 			}

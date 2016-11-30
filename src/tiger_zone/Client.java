@@ -123,7 +123,11 @@ public class Client {
 			return null;
 		}
 	}
-
+	
+	/**
+	 * isConnected tests if the socket connection is still usable
+	 * @return true if socket connection is usable, false if it is dead
+	 */
 	public boolean isConnected()
 	{
 		//a socket will remain "connected" state if it is just closed
@@ -131,6 +135,10 @@ public class Client {
 		return echoSocket.isConnected() && (!echoSocket.isClosed());
 	}
 
+	/**
+	 * 
+	 * @return the name of the active 
+	 */
 	public String getServerName()
 	{
 		return serverName;

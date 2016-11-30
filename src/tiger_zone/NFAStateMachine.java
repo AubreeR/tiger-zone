@@ -59,6 +59,8 @@ public class NFAStateMachine {
 		
 			ref = firstWord(fromServer);
 		}while(ref);
+		//tournament is over, disconnect from server
+		c.disconnect();
 	}
 	
 	public boolean firstWord(String protocol)
@@ -99,6 +101,7 @@ public class NFAStateMachine {
 		}
 		return true;
 	}
+	
 	
 	public void thisProtocol()
 	{
@@ -150,9 +153,9 @@ public class NFAStateMachine {
 	
 	public void roundProtocol(StringTokenizer strTok)
 	{
-		this.currentRound = strTok.nextToken();
-		strTok.nextToken();
-		this.maxRounds = strTok.nextToken();
+		this.currentRound = strTok.hasMoreTokens()?strTok.nextToken():"";
+		if(strTok.hasMoreTokens())strTok.nextToken();
+		this.maxRounds = strTok.hasMoreTokens()?strTok.nextToken():"";
 		if(strTok.hasMoreTokens())
 			{}
 	}
@@ -160,13 +163,9 @@ public class NFAStateMachine {
 ///////////////////////////////////////////
 	public void pleaseProtocol(StringTokenizer strTok)
 	{
-		strTok.nextToken();//WAIT
-		strTok.nextToken();//FOR
-		strTok.nextToken();//THE
-		strTok.nextToken();//NEXT
-		strTok.nextToken();//CHALLENGE
-		strTok.nextToken();//TO
-		strTok.nextToken();//BEGIN
+		while(strTok.hasMoreTokens())
+			strTok.nextToken();//WAIT FOR THE NEXT CHALLENGE TO BEGIN
+
 		
 	}
 ////////////////////////////////////////////
@@ -430,10 +429,11 @@ public class NFAStateMachine {
 		while(current.getRotation() != Integer.parseInt(orientation)){
 			current.rotate();
 		}
-		gameAlias.getBoard().getPile().pop();
+		if(!gameAlias.getBoard().getPile().isEmpty())
+			gameAlias.getBoard().getPile().pop();
 		gameAlias.getBoard().addTile(pos, current);
 		gameAlias.nextPlayer();
-		System.out.println("(game " + gid + " should be our move)");
+		
 		Tiger tiger = null;
 
 		if (zoneIndex.equals("")) {
