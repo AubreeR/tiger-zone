@@ -21,10 +21,10 @@ import tiger_zone.ui.Main;
 
 
 public class NFAStateMachine {
-	final String tournamentPassword = "TIGERZONE";
-	final String userName = "TEAMW";
-	final String password = "IAMW";
-		  String ourPid = "";
+	final String tournamentPassword;
+	final String userName;
+	final String password;
+			String ourPid = "";
 		  String opponentPid = "";
 		  String currentRound = "";
 		  String maxRounds = "";
@@ -41,8 +41,13 @@ public class NFAStateMachine {
 		  Client c;
 		  
 		  
-	public NFAStateMachine(String server, int port) {
-		// TODO Auto-generated method stub
+	public NFAStateMachine(String server, int port, String tournamentPassword, String userName, String password) {
+		
+		this.tournamentPassword = tournamentPassword;
+		this.userName = userName;
+		this.password = password;
+		
+		
 		c = new Client(server, port);
 		String fromServer = c.receiveFromServer();
 	
