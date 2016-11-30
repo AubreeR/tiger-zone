@@ -32,14 +32,15 @@ public class NFAStateMachine {
 		  String stackSize = "";
 		  String startingTile = "";//<tile>
 			
-			String startingX = "";
-			String startingY = "";
-			String startingOrientation = "";
+		  String startingX = "";
+		  String startingY = "";
+		  String startingOrientation = "";
 		  String tileStack[];
 		  private Board board;
-		  private Stack<Tile> pile;
 		  private final Map<String, Game> games = new HashMap<String, Game>();
 		  Client c;
+		  
+		  
 	public NFAStateMachine(String server, int port) {
 		// TODO Auto-generated method stub
 		c = new Client(server, port);
@@ -350,14 +351,18 @@ public class NFAStateMachine {
 		String moveNumber = strTok.nextToken();
 		strTok.nextToken();//PLAYER
 		String playerPid = strTok.nextToken();
-		String placed_forfeited = strTok.nextToken();//MOVE
-		
-		switch(placed_forfeited)
+		String placed_forfeited = strTok.nextToken();//PLACED, TILE, FORFEITED
+		//check to make sure we don't process our own move
+		if(!this.ourPid.equals(playerPid))
 		{
-		case "PLACED": subMoveProtocol(strTok, currentGid, playerPid);
-			break;
-		case "FORFEITED:": forfeitedProtocol(currentGid);
-			break;
+			switch(placed_forfeited)
+			{
+			case "PLACED": subMoveProtocol(strTok, currentGid, playerPid);
+				break;
+			case "FORFEITED:": forfeitedProtocol(currentGid);
+				break;
+			case "TILE": unplaceableProtocol(strTok, currentGid, playerPid);
+			}
 		}
 		
 	
@@ -376,7 +381,7 @@ public class NFAStateMachine {
 		String moveY = strTok.nextToken();
 		String moveOrientation = strTok.nextToken();
 		String none_tiger = (strTok.hasMoreTokens()) ? strTok.nextToken():"";
-		if(!playerPid.equals(this.ourPid))
+		
 		switch(none_tiger)
 		{
 		case "TIGER": tigerProtocol(strTok, currentGid, playerPid, moveTile, moveX, moveY, moveOrientation);
@@ -387,8 +392,23 @@ public class NFAStateMachine {
 			makeMove(Board.tileMap.get(moveTile.toLowerCase()), moveX, moveY, moveOrientation,"",  currentGid);
 			break;
 		}
+		
 	}
+	public void unplaceableProtocol(StringTokenizer strTok, String currentGid, String playerPid)
+	{
+		String unplaceableTile = strTok.nextToken();
+		strTok.nextToken();//unplaceable
+		strTok.nextToken();//pass
+		
+		Game gameAlias = null;
+
+		gameAlias = games.get(currentGid);
+		gameAlias.getBoard().getPile().pop();
 	
+		gameAlias.nextPlayer();
+	
+		
+	}
 	public void tigerProtocol(StringTokenizer strTok, String currentGid, String playerPid, String moveTile, String moveX, String moveY, String moveRot )
 	{
 		String tigerZone = strTok.nextToken();
