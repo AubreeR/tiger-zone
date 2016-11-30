@@ -17,12 +17,13 @@ import tiger_zone.action.TilePlacementAction;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.CloseAiPlayer;
 import tiger_zone.ai.NetworkAiPlayer;
+import tiger_zone.ui.Main;
 
 
 public class NFAStateMachine {
 	final String tournamentPassword = "TIGERZONE";
-	final String userName = "TEAMJ";
-	final String password = "IAMJ";
+	final String userName = "TEAMW";
+	final String password = "IAMW";
 		  String ourPid = "";
 		  String opponentPid = "";
 		  String currentRound = "";
@@ -43,13 +44,13 @@ public class NFAStateMachine {
 		// TODO Auto-generated method stub
 		c = new Client(server, port);
 		String fromServer = c.receiveFromServer();
-		System.out.println("Server: "  + fromServer);
+	
 		boolean ref = firstWord(fromServer);
 		do
 		{
 			
 			fromServer = c.receiveFromServer();
-			System.out.println("Server: "  + fromServer);
+		
 			ref = firstWord(fromServer);
 		}while(ref);
 	}
@@ -260,13 +261,8 @@ public class NFAStateMachine {
 		final Action action = this.games.get(moveGid).conductTurn();
 
 		String input = "";
-		if (action instanceof TilePlacementAction) {
-			TilePlacementAction tpa = (TilePlacementAction) action;
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
-					+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " "
-					+ tpa.getTile().getRotation() + " NONE ";
-		}
-		else if (action instanceof CrocodilePlacementAction) {
+		// CrocodilePlacement and TigerPlacement should be above TilePlacement here
+		if (action instanceof CrocodilePlacementAction) {
 			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
 					+ "moveX" + " " + "moveY" +  " " + "moveOrientation" + " CROCODILE ";
 		}
@@ -281,19 +277,29 @@ public class NFAStateMachine {
 		}
 		else if (action instanceof TigerRetrievalAction) {
 			TigerRetrievalAction tra = (TigerRetrievalAction) action;
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " TILE " + moveTile
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile
 					+ " UNPLACEABLE RETRIEVE TIGER AT " + tra.getPosition().getX() + " "
 					+ tra.getPosition().getY() + " ";
 		}
 		else if (action instanceof TigerAdditionAction) {
 			TigerAdditionAction taa = (TigerAdditionAction) action;
-			input = "GAME " + moveGid + " MOVE " + moveNumber + " TILE " + moveTile
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile
 					+ " UNPLACEABLE ADD ANOTHER TIGER TO " + taa.getPosition().getX() + " "
 					+ taa.getPosition().getY() + " ";
 		}
+		else if (action instanceof TilePlacementAction) {
+			TilePlacementAction tpa = (TilePlacementAction) action;
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
+					+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " "
+					+ tpa.getTile().getRotation() + " NONE ";
+		}
 		else {
-			input = "GAME " + moveGid + " MOVE " + moveNumber +" PLACE " + moveTile + " AT "
-					+ "moveX" + " " + "moveY" +  " " + "moveOrientation" + " NONE ";
+			if (action == null) {
+				System.err.printf("null action recevied\n");
+			}
+			else {
+				System.err.println("unknown action type");
+			}
 		}
 		System.out.println("Client: " + input);
 		c.sendToServer(input);
@@ -303,6 +309,7 @@ public class NFAStateMachine {
 	public void gameProtocol(StringTokenizer strTok)
 	{
 		String currentGid = strTok.nextToken();
+		
 		String over_move = strTok.nextToken();
 		switch(over_move)
 		{
@@ -317,6 +324,7 @@ public class NFAStateMachine {
 	{
 		strTok.nextToken();//PLAYER
 		String gamePid =  strTok.nextToken();
+		
 		games.remove(currentGid);
 		//we don't care about scores
 	}
@@ -328,11 +336,11 @@ public class NFAStateMachine {
 
 			List<Player> players = new ArrayList<Player>(2);
 			List<AiPlayer> aiPlayers = new ArrayList<AiPlayer>(2);
-
-			players.add(new Player(0, this.ourPid));
-			players.add(new Player(1, this.opponentPid));
-			aiPlayers.add(new CloseAiPlayer(game));
+			players.add(new Player(0, this.opponentPid));
+			players.add(new Player(1, this.ourPid));
 			aiPlayers.add(new NetworkAiPlayer(game));
+			aiPlayers.add(new CloseAiPlayer(game));
+			
 
 			game.setPlayers(players);
 			game.setAiPlayers(aiPlayers);
@@ -400,6 +408,7 @@ public class NFAStateMachine {
 		gameAlias.getBoard().getPile().pop();
 		gameAlias.getBoard().addTile(pos, current);
 		gameAlias.nextPlayer();
+		System.out.println("(game " + gid + " should be our move)");
 		Tiger tiger = null;
 
 		if (zoneIndex.equals("")) {

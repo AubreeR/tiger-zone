@@ -30,7 +30,7 @@ public class Main {
 		
 		
 		NFAStateMachine n = new NFAStateMachine("10.136.28.60", 4444);
-		
+		/*NFAStateMachine n = new NFAStateMachine("0.0.0.0", 4444);*/
 		////
 		//Protocol p = new Protocol(null,0,null,null,null); 
 		//Protocol p = new Protocol("0.0.0.0",52005,"tpass","Steven","Remington");
