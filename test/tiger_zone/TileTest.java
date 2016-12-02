@@ -1,7 +1,9 @@
 package tiger_zone;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertArrayEquals;
 
 import org.junit.BeforeClass;
@@ -60,7 +62,13 @@ public class TileTest {
 		assertArrayEquals(rotatedSides1, tile.getSides());
 		assertArrayEquals(originalSides, sides);
 	}
-	
+
+	@Test
+	public void hasAnimalTest() {
+		assertFalse(tile.hasAnimal());
+		assertTrue(Board.tileMap.get("tlltb").hasAnimal());
+	}
+
 	@Test
 	public void cloneTest() {
 		Tile copy = tile.clone();

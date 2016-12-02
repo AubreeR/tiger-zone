@@ -268,7 +268,7 @@ public class Tile implements Cloneable {
 	 */
 	public final boolean hasAnimal() {
 		char ch = this.getCenter();
-		return ch == 'b' && ch == 'd' && ch == 'p';
+		return ch == 'b' || ch == 'd' || ch == 'p';
 	}
 
 	/**
