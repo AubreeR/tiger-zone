@@ -306,6 +306,11 @@ public class Tile implements Cloneable {
 		}
 	}
 	
+	/**
+	 * Returns true if this tile has a prey animal on it. Otherwise returns false.
+	 * 
+	 * @return has prey animal?
+	 */
 	public final boolean hasAnimal() {
 		char ch = this.getCenter();
 		return ch == 'b' && ch == 'd' && ch == 'p';
