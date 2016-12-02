@@ -72,14 +72,12 @@ public class CloseAiPlayer extends AiPlayer {
 		}
 		else if (current.hasAnimal()) {
 			for (i = 1; i < 10; i++) {
-				if (current.getZone(i) == 'l') {
-					boolean isValid = this.game.getBoard().validTigerPlacement(closest, i, false);
-					if (isValid && currentPlayer.getTigers().size() > 0) {
-						Tiger tiger = currentPlayer.getTigers().pop();
-						current.addTiger(i, tiger);
-						setLatestZone(i); 
-						break;
-					}
+				boolean isValid = this.game.getBoard().validTigerPlacement(closest, i, false);
+				if (isValid && currentPlayer.getTigers().size() > 0) {
+					Tiger tiger = currentPlayer.getTigers().pop();
+					current.addTiger(i, tiger);
+					setLatestZone(i); 
+					break;
 				}
 			}
 			i = (i == 10) ? -1 : i;
