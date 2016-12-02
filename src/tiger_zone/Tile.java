@@ -130,10 +130,6 @@ public class Tile implements Cloneable {
 		
 	}
 
-	public char[] getTigerSpots() {
-		return tigerSpots;
-	}
-
 	/**
 	 * Returns the zone of the tiger on this tile. Returns -1 if no tile exists on this tile.
 	 * 
@@ -153,7 +149,7 @@ public class Tile implements Cloneable {
 	 */
 	public boolean addTiger(int gridPos, Tiger tiger) {
 		if (gridPos >= 1 && gridPos <= 9) {
-			this.getTigerSpots()[gridPos-1] = 'q';
+			this.tigerSpots[gridPos-1] = 'q';
 			this.tigerPosition = gridPos; 
 			this.placedTiger = tiger;
 			return true;
