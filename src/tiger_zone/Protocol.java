@@ -17,714 +17,449 @@ import tiger_zone.action.TilePlacementAction;
 import tiger_zone.ai.AiPlayer;
 import tiger_zone.ai.CloseAiPlayer;
 import tiger_zone.ai.NetworkAiPlayer;
-// import tiger_zone.ui.Main;
-
-public class Protocol extends Client {
-	private String tPassword, pid, opid, gid, cid, rounds, rid, number_tiles, time, userName, password;
-	private String[] tiles;
-	private Board board;
-	private Stack<Tile> pile;
-	private final Map<String, Game> games = new HashMap<String, Game>();
-
-	public Protocol(String serverName, int portNumber, String tPassword, String userName, String password) {
-		super(serverName, portNumber);
-		this.setPid("-1");
-		this.setTournamentPassword(tPassword);
-		this.setUserName(userName);
-		this.setPassword(password);
-	}
-
-	public final void makeMove(Tile current, String x, String y, String orientation, String zoneIndex, String gid) {
-		Position pos = new Position(Integer.parseInt(x), Integer.parseInt(y));
-		Game gameAlias = games.get(gid);
-
-		while(current.getRotation() != Integer.parseInt(orientation)){
-			current.rotate();
-		}
-		gameAlias.getBoard().getPile().pop();
-		gameAlias.getBoard().addTile(pos, current);
-		gameAlias.nextPlayer();
-
-		System.out.printf("(game %s should now be our move)\n", gid);
-
-		if (zoneIndex.equals("movezone")) {
-			return;
-		}
-
-		Tiger tiger = null;
-
-		current.addTiger(current.getZone(Integer.parseInt(zoneIndex)), tiger);
-	}
+import tiger_zone.ui.Main;
 
 
-	public void tournamentProtocol()
-	{
-		String fromServer = this.receiveFromServer();
-		// THIS IS SPARTA! only called once
-
-		authenticationProtocol(fromServer);
-
-	}
-
-	public void authenticationProtocol(String fromServer)
-	{
-
-		//send username and password
-		String toServer = "JOIN " + this.getTournamentPassword();
-		sendToServer(toServer);
-		System.out.println("Client: " + toServer);
-		//hello
-		fromServer = receiveFromServer();
-
-		//identifying ourself
-		toServer = "I AM " + getUserName() + " " + getPassword();
-		sendToServer(toServer);
-		System.out.println("Client: " + toServer);
-
-		StringTokenizer strTok;
-		//WELCOME <pid> PLEASE WAIT FOR THE NEXT CHALLENGE
-		fromServer = receiveFromServer();
-		strTok = new StringTokenizer(fromServer, " ");
-		String tok = "";
-		for(int i = 0; strTok.hasMoreTokens(); i++)
+public class Protocol {
+	final String tournamentPassword;
+	final String userName;
+	final String password;
+			String ourPid = "";
+		  String opponentPid = "";
+		  String currentRound = "";
+		  String maxRounds = "";
+		  String challengeId = "";
+		  String stackSize = "";
+		  String startingTile = "";//<tile>
+			
+		  String startingX = "";
+		  String startingY = "";
+		  String startingOrientation = "";
+		  String tileStack[];
+		  private Board board;
+		  private final Map<String, Game> games = new HashMap<String, Game>();
+		  Client c;
+		  
+		  
+	public Protocol(String server, int port, String tournamentPassword, String userName, String password) {
+		
+		this.tournamentPassword = tournamentPassword;
+		this.userName = userName;
+		this.password = password;
+		
+		
+		c = new Client(server, port);
+		String fromServer = c.receiveFromServer();
+	
+		boolean ref = firstWord(fromServer);
+		do
 		{
-			tok = strTok.nextToken();
-			switch(i)
+			try{
+				fromServer = c.receiveFromServer();
+				ref = firstWord(fromServer);
+			}
+			catch(Exception ex)
 			{
-			case 1:
-				pid = tok;
-				break;
-			default:
+				System.err.println(ex);
+				System.err.println("Erroneous string: " + fromServer);
 				break;
 			}
-		}
-
-		challengeProtocol();
-		fromServer = receiveFromServer();
+		}while(ref);
+		//tournament is over, disconnect from server
+		c.disconnect();
 	}
-
-	public void challengeProtocol()
+	
+	public boolean firstWord(String protocol)
 	{
-		int count = 0;
-		do{
-
-			String fromServer =	receiveFromServer();
-			StringTokenizer strTok = new StringTokenizer(fromServer," ");
-			String tok = "";
-			for(int i = 0; strTok.hasMoreTokens(); i++)
-			{
-				tok = strTok.nextToken();
-				switch(i)
-				{
-				case 2 :
-					cid = tok;
-					break;
-				case 6 :
-					rounds = tok;
-					break;
-				default:
-					break;
-				}
-
-			}
-			System.out.println("CID: " + cid + " ROUNDS: " + rounds);
-
-			for(int i = 0; i < Integer.parseInt(rounds); i++)
-			{
-				roundProtocol(receiveFromServer());
-			}
-
-			//END OF CHALLENGES or PLEASE WAIT FOR NEXT CHALLEGE
-			fromServer = receiveFromServer();
-			strTok = new StringTokenizer(fromServer, " ");
-			count = strTok.countTokens();
-		}
-		while(count >=5);
-
-
-	}
-
-	/**
-	 * Parses round protocol messages:
-	 *
-	 * <pre>
-	 * BEGIN ROUND <rid> OF <rounds>
-	 * (match protocol)
- 	 * END OF ROUND <rid> OF <rounds>
- 	 * (or)
-     * END OF ROUND <rid> OF <rounds> PLEASE WAIT FOR THE NEXT MATCH
-	 * </pre>
-	 * @param fromServer
-	 */
-	public void roundProtocol(String fromServer) {
-		// BEGIN ROUND <rid> OF <rounds>
-		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
-		String tok = "";
-		for(int i = 0;strTok.hasMoreTokens(); i++)
+		StringTokenizer str = new StringTokenizer(protocol, " ");
+		String token = str.nextToken();
+		switch(token)
 		{
-			tok = strTok.nextToken();
-			switch(i)
-			{
-			case 2 :
-				rid = tok;
-				break;
-			case 5 :
-				rounds = tok;
-				break;
-			default:
-				break;
-			}
+		case "THANK"://end of the game
+			return false;
+			
+		case "THIS": thisProtocol();
+			break;
+		case "HELLO!": helloProtocol();
+			break;
+		case "WELCOME": welcomeProtocol(str);
+			break;
+		case "NEW": newProtocol(str);
+			break;
+		case "END": endProtocol(str);
+			break;
+		case "PLEASE": pleaseProtocol(str);
+			break;
+		case "BEGIN": beginProtocol(str);
+			break;
+		case "YOUR": yourProtocol(str);
+			break;
+		case "STARTING": startingProtocol(str);
+			break;
+		case "THE": theProtocol(str);
+			break;
+		case "MATCH": matchProtocol(str);
+			break;
+		case "MAKE": makeProtocol(str);
+			break;
+		case "GAME": gameProtocol(str);
+			break;
+		default: System.err.println("Syntax Exception in String: " + protocol + " unexpected token received: " + token);
+			return true;
 		}
-
-		System.out.println("rid: " + rid + ", rounds = " + rounds);
-
-		for(int i = 0; i < Integer.parseInt(rounds); i++) {
-			// Receive subsequent "BEGIN ROUND" messages (first one has already been parsed above, hence why we begin at
-			// index 1.
-			if (i > 0) {
-				this.receiveFromServer();
-			}
-
-			matchProtocol(receiveFromServer());
-
-			// END OF ROUND <rid> OF <rounds>
-			// (or)
-			// END OF ROUND <rid> OF <rounds> PLEASE WAIT FOR THE NEXT MATCH
-			fromServer = receiveFromServer();
-			System.out.println(i);
-		}
+		return true;
 	}
-
-	/**
-	 * Parses the following messages:
-	 *
-	 * <pre>
-	 * YOUR OPPONENT IS PLAYER <pid>
-	 * STARTING TILE IS <tile> AT <x> <y> <orientation>
-	 * THE REMAINING <number_tiles> TILES ARE [ <tiles> ]
-	 * MATCH BEGINS IN <timeplan> SECONDS
-	 * (move protocol repeated <number_tiles> times, alternating the <gid>)
-	 * GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
-	 * GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
-	 * </pre>
-	 *
-	 * @param fromServer
-	 */
-	public void matchProtocol(String fromServer)
+	
+	
+	public void thisProtocol()
 	{
-		// YOUR OPPONENT IS PLAYER <pid>
-		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
-		String tok = "";
-
-		for (int i = 0; strTok.hasMoreTokens(); i++) {
-			tok = strTok.nextToken();
-			switch(i) {
-			case 4:
-				opid  = tok;
-				break;
-			default:
-				break;
-			}
-		}
-
-		System.out.println("opid: " + opid);
-
-		// STARTING TILE IS <tile> AT <x> <y> <orientation>
-		fromServer = receiveFromServer();
-		strTok = new StringTokenizer(fromServer, " ");
-		String tile = "";
-		int x = 0;
-		int y = 0;
-		int orientation = 0;
-		for(int i = 0; strTok.hasMoreTokens(); i++)
+		System.out.println("JOIN " + tournamentPassword);
+		c.sendToServer("JOIN " + tournamentPassword);
+	}
+//////////////////////////////////////////////////////
+	public void helloProtocol()
+	{
+		System.out.println("I AM " + userName + " " + password);
+		c.sendToServer("I AM " + userName + " " + password);
+	}
+//////////////////////////////////////////////	
+	public void welcomeProtocol(StringTokenizer strTok)
+	{
+		//<pid> .... leftover
+		this.ourPid = strTok.nextToken();
+	}
+/////////////////////////////////////////////////
+	public void newProtocol(StringTokenizer strTok)
+	{
+		strTok.nextToken();//CHALLENGES
+		this.challengeId = strTok.nextToken();//<cid>
+		strTok.nextToken();//YOU
+		strTok.nextToken();//WILL
+		strTok.nextToken();//PLAY
+		this.maxRounds = strTok.nextToken();//<rounds>
+		strTok.nextToken();//Match or matches
+		
+	}
+///////////////////////////////////////	
+	public void endProtocol(StringTokenizer strTok)
+	{
+		String of = strTok.nextToken();//should be of can ignore
+		String challenge_round = strTok.nextToken();
+		switch(challenge_round)
 		{
-			tok = strTok.nextToken();
-			switch(i)
-			{
-			case 3 :
-				tile = tok.toLowerCase();
-				break;
-			case 5 :
-				x = Integer.parseInt(tok);
-				break;
-			case 6 :
-				y = Integer.parseInt(tok);
-				break;
-			case 7 :
-				orientation = Integer.parseInt(tok);
-				break;
-			default:
-				break;
-			}
-
+		case "CHALLENGES":challengesProtocol(strTok);
+			break;
+		case "ROUND":roundProtocol(strTok);
+			break;
+		default: System.err.println("Syntax Exception in End protocol, unexpected token received: " + challenge_round);
+			break;
 		}
+	}
+	
+	public void challengesProtocol(StringTokenizer strTok)
+	{
+		//System.out.println("#########################please kill challenges loop");
+	}
+	
+	public void roundProtocol(StringTokenizer strTok)
+	{
+		games.clear();
+		this.currentRound = strTok.hasMoreTokens()?strTok.nextToken():"";
+		if(strTok.hasMoreTokens())strTok.nextToken();
+		this.maxRounds = strTok.hasMoreTokens()?strTok.nextToken():"";
+		while(strTok.hasMoreTokens())
+			{strTok.nextToken();}
+	}
+	
+///////////////////////////////////////////
+	public void pleaseProtocol(StringTokenizer strTok)
+	{
+		while(strTok.hasMoreTokens())
+			strTok.nextToken();//WAIT FOR THE NEXT CHALLENGE TO BEGIN
 
-		System.out.println("tile: " + tile + ", x: " + x + ", y: " + y + ", orientation: " + orientation);
+		
+	}
+////////////////////////////////////////////
+	public void beginProtocol(StringTokenizer strTok)
+	{
+		strTok.nextToken();//ROUND
+		this.currentRound = strTok.nextToken();//rid
+		strTok.nextToken();//OF
+		this.maxRounds = strTok.nextToken();//maxROunds
+	}
+//////////////////////////////////////////
+	public void yourProtocol(StringTokenizer strTok)
+	{
+		strTok.nextToken();//opponent
+		strTok.nextToken();//IS
+		strTok.nextToken();//PLAYER
+		this.opponentPid = strTok.nextToken();//<pid>	
+	}
+/////////////////////////////////////////
+	public void startingProtocol(StringTokenizer strTok)
+	{
+		strTok.nextToken();//TILE
+		strTok.nextToken();//IS
+		this.startingTile = strTok.nextToken();//<tile>
+		strTok.nextToken();//AT
+		this.startingX = strTok.nextToken();
+		this.startingY = strTok.nextToken();
+		this.startingOrientation = strTok.nextToken();
 
-		// THE REMAINING <number_tiles> TILES ARE [ <tiles> ]
-		fromServer = receiveFromServer();
-		strTok = new StringTokenizer(fromServer, " ");
-		for (int i = 0; strTok.hasMoreTokens(); i++) {
-			tok = strTok.nextToken();
-			switch(i) {
-			case 2:
-				number_tiles = tok;
-				tiles = new String[Integer.parseInt(number_tiles)];
-				break;
-			default:
-				if(i >= 6 && i - 6 < tiles.length) {
-					tiles[i-6] = tok;
-				}
-				break;
-			}
-		}
-		System.out.print("Tile #: " + number_tiles+ ", Tile stack: ");
-		for(String s : tiles)
-			System.out.print(s + " ");
-		System.out.println("");
-
-		// MATCH BEGINS IN <timeplan> SECONDS
-		fromServer = receiveFromServer();
-		strTok = new StringTokenizer(fromServer, " ");
-		for(int i = 0;strTok.hasMoreTokens(); i++)
-		{
-			tok = strTok.nextToken();
-
-			switch(i)
-			{
-			case 3 :
-				time = tok;
-				break;
-			default:
-				break;
-			}
-		}
-		System.out.println("Time till match: " + time);
-
+		
+		
+		
+	}
+///////////////////////////////////////
+	public void theProtocol(StringTokenizer strTok)
+	{
+		strTok.nextToken();//REMAINING
+		this.stackSize = strTok.nextToken();//<number_tiles>
+		this.tileStack = new String[Integer.parseInt(this.stackSize)];
+		strTok.nextToken();//TILES
+		strTok.nextToken();//ARE
+		strTok.nextToken();// [
+		tileStackProtocol(strTok);
+	}
+	
+	public void tileStackProtocol(StringTokenizer strTok)
+	{
+		for(int i = 0; i < this.tileStack.length; i++)
+			this.tileStack[i] = strTok.nextToken();
+		strTok.nextToken();// ] 
 		Stack<Tile> pile = new Stack<Tile>();
 		Board.createDefaultStack();
-		for (int i = tiles.length - 1; i >= 0; i--) {
-			pile.push(Board.tileMap.get(tiles[i].toLowerCase()).clone());
+		for (int i = tileStack.length - 1; i >= 0; i--) {
+			pile.push(Board.tileMap.get(tileStack[i].toLowerCase()).clone());
 		}
-
-		Tile startingTile = Board.tileMap.get(tile.toLowerCase()).clone();
-		this.board = new Board((Stack<Tile>)pile.clone(), startingTile, new Position(x, y), orientation);
-
-		// (move protocol repeated <number_tiles> times, alternating the <gid>)
-		String result = "";
-		for (int i = 0; i < Integer.parseInt(number_tiles) && result.length() == 0; i++) {
-			result = moveProtocol(receiveFromServer());
-		}
-
-		String gameOverGid = "";
-
-		if (result.length() > 0) {
-			// GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
-			fromServer = receiveFromServer();
-			strTok = new StringTokenizer(fromServer, " ");
-			for(int i = 0;strTok.hasMoreTokens(); i++) {
-				tok = strTok.nextToken();
-
-				switch(i) {
-				case 1:
-					gameOverGid = tok;
-					break;
-				default:
-					break;
-				}
-			}
-
-			// delete first game
-			games.remove(gameOverGid);
-
-			// GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
-			fromServer = receiveFromServer();
-
-			strTok = new StringTokenizer(fromServer, " ");
-			for(int i = 0;strTok.hasMoreTokens(); i++) {
-				tok = strTok.nextToken();
-
-				switch(i)
-				{
-				case 1 :
-					gameOverGid = tok;
-					break;
-				default:
-					break;
-				}
-			}
-
-			// delete second game
-			games.remove(gameOverGid);
-
-			// return early since we just handled both game overs
-			return;
-		}
-
-		// GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
-		fromServer = receiveFromServer();
-
-		strTok = new StringTokenizer(fromServer, " ");
-		for(int i = 0;strTok.hasMoreTokens(); i++)
-		{
-			tok = strTok.nextToken();
-
-			switch(i)
-			{
-			case 1 :
-				gameOverGid = tok;
-				break;
-			default:
-				break;
-			}
-		}
-
-		// delete first game
-		games.remove(gameOverGid);
-
-		// GAME <gid> OVER PLAYER <pid> <score> PLAYER <pid> <score>
-		fromServer = receiveFromServer();
-
-		gameOverGid = "";
-		strTok = new StringTokenizer(fromServer, " ");
-		for(int i = 0;strTok.hasMoreTokens(); i++)
-		{
-			tok = strTok.nextToken();
-
-			switch(i)
-			{
-			case 1 :
-				gameOverGid = tok;
-				break;
-			default:
-				break;
-			}
-		}
-
-		// delete second game
-		games.remove(gameOverGid);
+		Tile start = Board.tileMap.get(startingTile.toLowerCase()).clone();
+		final Position p = new Position(Integer.parseInt(startingX), Integer.parseInt(startingY));
+		this.board = new Board((Stack<Tile>)pile.clone(), start, p , Integer.parseInt(startingOrientation));
+		
 	}
-
-
-	/**
-	 * Parses move protocol messages.
-	 *
-	 * @param moveInstruction
-	 * @return
-	 */
-	public String moveProtocol(String moveInstruction){
-		String moveNumber = "movenumber";
-		String moveTile = "movetile";
-		String moveGid = "movegid";
-		String movePid = "movepid";
-		String moveTime  = "movetime";
-		String moveX = "movex";
-		String moveY = "movey";
-		String moveOrientation = "moveorientation";
-		String moveZone = "movezone";
-
-		// MAKE YOUR MOVE IN GAME <gid> WITHIN <moveTime> SECOND/SECONDS: MOVE <moveNumber> PLACE <moveTile>
-		StringTokenizer strTok = new StringTokenizer(moveInstruction, " ");
-		String tok = "";
-		boolean gameOver = false;
-		String overGid = "";
-		String firstWord = strTok.nextToken();
-		String secondWord = strTok.nextToken();
-		String thirdWord = strTok.nextToken();
-
-		// If we get a Forfeited message now, it is time to go back to Match Protocol
-		if (moveInstruction.contains("FORFEITED:")) {
-			return moveInstruction;
-		}
-
-		// Otherwise, it's opponent's move
-		else if (!(firstWord.equals("MAKE"))) {
-			analyzeMove(moveInstruction);
-		}
-
-		// or our own move -- MAKE MOVE
-		else {
-			for (int i = 3; strTok.hasMoreTokens(); i++) {
-				tok = strTok.nextToken();
-				switch(i)
-				{
-				case 5:
-					moveGid = tok;
-					break;
-				case 7:
-					moveTime = tok;
-					break;
-				case 10:
-					moveNumber = tok;
-					break;
-				case 12:
-					moveTile = tok;
-					break;
-				default:
-					break;
-				}
-			}
-			System.out.println("moveGid: " + moveGid + " moveTime: " + moveTime + " moveNumber: " + moveNumber + " moveTile: " + moveTile);
-
-			// we do not have an instance of Game for this gid
-			if (!games.containsKey(moveGid)) {
-				Game game = new Game(this.board.clone());
-
-				List<Player> players = new ArrayList<Player>(2);
-				List<AiPlayer> aiPlayers = new ArrayList<AiPlayer>(2);
-
-				players.add(new Player(0, this.pid));
-				players.add(new Player(1, this.opid));
-				aiPlayers.add(new CloseAiPlayer(game));
-				aiPlayers.add(new NetworkAiPlayer(game));
-
-				game.setPlayers(players);
-				game.setAiPlayers(aiPlayers);
-
-				this.games.put(moveGid, game);
-			}
-
-			final Action action = this.games.get(moveGid).conductTurn();
-
-			String input = "";
-
-			// CrocodilePlacement and TigerPlacement should be above TilePlacement here
-			if (action instanceof CrocodilePlacementAction) {
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
-						+ moveX + " " + moveY +  " " + moveOrientation + " CROCODILE ";
-			}
-			else if (action instanceof TigerPlacementAction) {
-				TigerPlacementAction tpa = (TigerPlacementAction) action;
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
-						+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " " + tpa.getTile().getRotation()
-						+ " TIGER " + tpa.getZone() + " ";
-			}
-			else if (action instanceof PassAction) {
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " TILE " + moveTile + " UNPLACEABLE PASS";
-			}
-			else if (action instanceof TigerRetrievalAction) {
-				TigerRetrievalAction tra = (TigerRetrievalAction) action;
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile
-						+ " UNPLACEABLE RETRIEVE TIGER AT " + tra.getPosition().getX() + " "
-						+ tra.getPosition().getY() + " ";
-			}
-			else if (action instanceof TigerAdditionAction) {
-				TigerAdditionAction taa = (TigerAdditionAction) action;
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile
-						+ " UNPLACEABLE ADD ANOTHER TIGER TO " + taa.getPosition().getX() + " "
-						+ taa.getPosition().getY() + " ";
-			}
-			else if (action instanceof TilePlacementAction) {
-				TilePlacementAction tpa = (TilePlacementAction) action;
-				input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
-						+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " "
-						+ tpa.getTile().getRotation() + " NONE ";
-			}
-			else {
-				if (action == null) {
-					System.err.printf("null action recevied\n");
-				}
-				else {
-					System.err.println("unknown action type");
-				}
-			}
-
-			System.out.println("Client: " + input);
-			sendToServer(input);
-
-			for (int i = 0; i < games.size(); i++) {
-				this.analyzeMove(this.receiveFromServer());
-			}
-		}
-		return "";
-	}
-
-	public void analyzeMove(String fromServer)
+////////////////////////////////////////////
+	public void matchProtocol(StringTokenizer strTok)
 	{
-		String tok = "";
-		String moveNumber = "movenumber";
-		String moveTile = "movetile";
-		String moveGid = "movegid";
-		String movePid = "movepid";
-		String moveTime  = "movetime";
-		String moveX = "movex";
-		String moveY = "movey";
-		String moveOrientation = "moveorientation";
-		String moveZone = "movezone";
-		boolean forfeit = false;
-		StringTokenizer strTok = new StringTokenizer(fromServer, " ");
-		for(int i = 0; strTok.hasMoreTokens(); i++)
-		{
-			tok = strTok.nextToken();
-			switch(i)
-			{
-			case 1:
-				moveGid = tok;
-				break;
-			case 3:
-				moveNumber = tok;
-				break;
-			case 5:
-				movePid = tok;
-				break;
-			case 6:
-				if(!tok.equals("FORFEITED:"))
-				{
-					if(tok.equals("PLACED"))
-					{
-						moveTile = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveTile;
-						strTok.nextToken();//AT
-						moveX = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveX;
-						moveY = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveY;
-						moveOrientation = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveOrientation;
-						if(strTok.hasMoreTokens()){
-							strTok.nextToken();//tiger
-							moveZone = (strTok.hasMoreTokens()) ? strTok.nextToken() : moveZone;
-						}
-					}
-				}
-				else
-					forfeit = true;
-				break;
-			default:
-				break;
-			}
-		}
-
-		// we do not have an instance of Game for this gid
+		//used to get time plan but we dont even need it
+	}
+///////////////////////////////////////////
+	public void makeProtocol(StringTokenizer strTok)
+	{
+		strTok.nextToken(); //YOUR
+		strTok.nextToken(); //MOVE
+		strTok.nextToken(); //IN
+		strTok.nextToken(); //GAME
+		String moveGid = strTok.nextToken();
+		strTok.nextToken(); //WITHIN
+		String moveTime = strTok.nextToken();
+		strTok.nextToken();//SECONDS/SECOND
+		strTok.nextToken();//MOVE
+		String moveNumber = strTok.nextToken();
+		strTok.nextToken();//PLACE
+		String moveTile = strTok.nextToken();
 		if (!games.containsKey(moveGid)) {
 			Game game = new Game(this.board.clone());
 
 			List<Player> players = new ArrayList<Player>(2);
 			List<AiPlayer> aiPlayers = new ArrayList<AiPlayer>(2);
 
-			players.add(new Player(0, this.opid));
-			players.add(new Player(1, this.pid));
-			aiPlayers.add(new NetworkAiPlayer(game));
+			players.add(new Player(0, this.ourPid));
+			players.add(new Player(1, this.opponentPid));
 			aiPlayers.add(new CloseAiPlayer(game));
+			aiPlayers.add(new NetworkAiPlayer(game));
 
 			game.setPlayers(players);
 			game.setAiPlayers(aiPlayers);
 
 			this.games.put(moveGid, game);
 		}
+		
+		final Action action = this.games.get(moveGid).conductTurn();
 
-		if(forfeit) {
-			// Main.displayGame(games.get(moveGid));
-			games.remove(moveGid);
+		String input = "";
+		// CrocodilePlacement and TigerPlacement should be above TilePlacement here
+		if (action instanceof CrocodilePlacementAction) {
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
+					+ "moveX" + " " + "moveY" +  " " + "moveOrientation" + " CROCODILE ";
+		}
+		else if (action instanceof TigerPlacementAction) {
+			TigerPlacementAction tpa = (TigerPlacementAction) action;
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
+					+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " " + tpa.getTile().getRotation()
+					+ " TIGER " + tpa.getZone() + " ";
+		}
+		else if (action instanceof PassAction) {
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " TILE " + moveTile + " UNPLACEABLE PASS";
+		}
+		else if (action instanceof TigerRetrievalAction) {
+			TigerRetrievalAction tra = (TigerRetrievalAction) action;
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile
+					+ " UNPLACEABLE RETRIEVE TIGER AT " + tra.getPosition().getX() + " "
+					+ tra.getPosition().getY() + " ";
+		}
+		else if (action instanceof TigerAdditionAction) {
+			TigerAdditionAction taa = (TigerAdditionAction) action;
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile
+					+ " UNPLACEABLE ADD ANOTHER TIGER TO " + taa.getPosition().getX() + " "
+					+ taa.getPosition().getY() + " ";
+		}
+		else if (action instanceof TilePlacementAction) {
+			TilePlacementAction tpa = (TilePlacementAction) action;
+			input = "GAME " + moveGid + " MOVE " + moveNumber + " PLACE " + moveTile + " AT "
+					+ tpa.getPosition().getX() + " " + tpa.getPosition().getY() +  " "
+					+ tpa.getTile().getRotation() + " NONE ";
+		}
+		else {
+			if (action == null) {
+				System.err.printf("null action recevied\n");
+			}
+			else {
+				System.err.println("unknown action type");
+			}
+		}
+		System.out.println("Client: " + input);
+		c.sendToServer(input);
+		
+	}
+//////////////////////////////////////////////////
+	public void gameProtocol(StringTokenizer strTok)
+	{
+		String currentGid = strTok.nextToken();
+		
+		String over_move = strTok.nextToken();
+		switch(over_move)
+		{
+		case "OVER": overProtocol(strTok, currentGid);
+			break;
+		case "MOVE": moveProtocol(strTok, currentGid);
+			break;
+		default: System.err.println("Syntax Exception in game protocol, unexpected token received: " + over_move);
+		}
+	}
+	
+	public void overProtocol(StringTokenizer strTok, String currentGid)
+	{
+		strTok.nextToken();//PLAYER
+		String gamePid =  strTok.nextToken();
+		
+		games.remove(currentGid);
+		//we don't care about scores
+	}
+	
+	public void moveProtocol(StringTokenizer strTok, String currentGid)
+	{
+		if (!games.containsKey(currentGid)) {
+			Game game = new Game(this.board.clone());
+
+			List<Player> players = new ArrayList<Player>(2);
+			List<AiPlayer> aiPlayers = new ArrayList<AiPlayer>(2);
+			players.add(new Player(0, this.opponentPid));
+			players.add(new Player(1, this.ourPid));
+			aiPlayers.add(new NetworkAiPlayer(game));
+			aiPlayers.add(new CloseAiPlayer(game));
+			
+
+			game.setPlayers(players);
+			game.setAiPlayers(aiPlayers);
+
+			this.games.put(currentGid, game);
+		}
+		String moveNumber = strTok.nextToken();
+		strTok.nextToken();//PLAYER
+		String playerPid = strTok.nextToken();
+		String placed_forfeited = strTok.nextToken();//PLACED, TILE, FORFEITED
+		//check to make sure we don't process our own move
+		if(!this.ourPid.equals(playerPid))
+		{
+			switch(placed_forfeited)
+			{
+			case "PLACED": subMoveProtocol(strTok, currentGid, playerPid);
+				break;
+			case "FORFEITED:": forfeitedProtocol(currentGid);
+				break;
+			case "TILE": unplaceableProtocol(strTok, currentGid, playerPid);
+				break;
+			default:
+				System.err.println("Syntax Exception in game->move protocol, unexpected token received: " + placed_forfeited);
+			}
+		}
+		
+	
+	}
+	public void forfeitedProtocol(String currentGid)
+	{
+		games.remove(currentGid);
+		///doesn't matter how
+	}
+	public void subMoveProtocol(StringTokenizer strTok, String currentGid, String playerPid)
+	{
+		
+		String moveTile = strTok.nextToken();
+		strTok.nextToken();//AT
+		String moveX = strTok.nextToken();
+		String moveY = strTok.nextToken();
+		String moveOrientation = strTok.nextToken();
+		String none_tiger = (strTok.hasMoreTokens()) ? strTok.nextToken():"";
+		
+		switch(none_tiger)
+		{
+		case "TIGER": tigerProtocol(strTok, currentGid, playerPid, moveTile, moveX, moveY, moveOrientation);
+			break;
+		case "CROCODILE":
+		case "NONE":
+			Board.createDefaultStack();
+			makeMove(Board.tileMap.get(moveTile.toLowerCase()), moveX, moveY, moveOrientation,"",  currentGid);
+			break;
+		default:
+			System.err.println("Syntax Exception in game-move->subMove protocol, unexpected token received: " + none_tiger);
+		}
+		
+	}
+	public void unplaceableProtocol(StringTokenizer strTok, String currentGid, String playerPid)
+	{
+		String unplaceableTile = strTok.nextToken();
+		strTok.nextToken();//unplaceable
+		strTok.nextToken();//pass
+		
+		Game gameAlias = null;
+
+		gameAlias = games.get(currentGid);
+		gameAlias.getBoard().getPile().pop();
+	
+		gameAlias.nextPlayer();
+	
+		
+	}
+	public void tigerProtocol(StringTokenizer strTok, String currentGid, String playerPid, String moveTile, String moveX, String moveY, String moveRot )
+	{
+		String tigerZone = strTok.nextToken();
+		Board.createDefaultStack();
+		makeMove(Board.tileMap.get(moveTile.toLowerCase()), moveX, moveY, moveRot,tigerZone,  currentGid);
+	}
+
+	public final void makeMove(Tile current, String x, String y, String orientation, String zoneIndex, String gid) {
+		Position pos = new Position(Integer.parseInt(x), Integer.parseInt(y));
+		Game gameAlias = null;
+
+		gameAlias = games.get(gid);
+
+		while(current.getRotation() != Integer.parseInt(orientation)){
+			current.rotate();
+		}
+		if(!gameAlias.getBoard().getPile().isEmpty())
+			gameAlias.getBoard().getPile().pop();
+		gameAlias.getBoard().addTile(pos, current);
+		gameAlias.nextPlayer();
+		
+		Tiger tiger = null;
+
+		if (zoneIndex.equals("")) {
 			return;
 		}
-
-		// TODO: figure out why we need containsKey here; any game overs should not make it this far
-		if(!movePid.equals(pid) && games.containsKey(moveGid))
-		{
-			System.out.printf("(about to makeMove, moveTile must be defined: %s)\n", moveTile);
-			makeMove(Board.tileMap.get(moveTile.toLowerCase()).clone(),moveX,moveY,moveOrientation,moveZone, moveGid);
+		else {
+			current.addTiger(current.getZone(Integer.parseInt(zoneIndex)), tiger);
+			return;
 		}
 	}
 
-	public String getPid() {
-		return pid;
-	}
-
-	public void setPid(String pid) {
-		this.pid = pid;
-	}
-
-	public String getOpid(){
-		return opid;
-	}
-
-	public void setOpid(String opid){
-		this.opid = opid;
-	}
-
-	public String getTournamentPassword() {
-		return tPassword;
-	}
-
-	public void setTournamentPassword(String tPassword) {
-		this.tPassword = tPassword;
-	}
-
-	public String getGid() {
-		return gid;
-	}
-
-	public void setGid(String gid) {
-		this.gid = gid;
-	}
-
-	public String getCid() {
-		return cid;
-	}
-
-	public void setCid(String cid) {
-		this.cid = cid;
-	}
-
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-
-	public String getRounds() {
-		return rounds;
-	}
-
-
-	public void setRounds(String rounds) {
-		this.rounds = rounds;
-	}
-
-	public String getRid() {
-		return rid;
-	}
-
-
-	public void setRid(String rid) {
-		this.rid = rid;
-	}
-
-	public String getNumber_tiles() {
-		return number_tiles;
-	}
-
-
-	public void setNumber_tiles(String number_tiles) {
-		this.number_tiles = number_tiles;
-	}
-
-
-	public String[] getTiles() {
-		return tiles;
-	}
-
-
-	public void setTiles(String[] tiles) {
-		this.tiles = tiles;
-	}
-
-
-	public String getTime() {
-		return time;
-	}
-
-
-	public void setTime(String time) {
-		this.time = time;
-	}
 }

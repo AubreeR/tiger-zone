@@ -12,7 +12,7 @@ import org.docopt.Docopt;
 
 import tiger_zone.Board;
 import tiger_zone.Game;
-import tiger_zone.NFAStateMachine;
+import tiger_zone.Protocol;
 import tiger_zone.Player;
 import tiger_zone.Position;
 import tiger_zone.Tile;
@@ -45,7 +45,7 @@ public class Main {
 		
 		if ((boolean) opts.get("connect")) {
 			long milli = System.currentTimeMillis();
-			new NFAStateMachine((String) opts.get("<ip>"), Integer.parseInt((String) opts.get("<port>")),
+			new Protocol((String) opts.get("<ip>"), Integer.parseInt((String) opts.get("<port>")),
 					(String) opts.get("<tournament-password>"), (String) opts.get("<username>"), (String) opts.get("<password>"));
 			System.out.println("Elapsed Time: " + (System.currentTimeMillis() - milli));
 		}
