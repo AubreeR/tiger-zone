@@ -1,6 +1,6 @@
 package tiger_zone;
 
-public class PlacementRule implements Rule {
+public abstract class PlacementRule implements Rule {
 	private String ruleName = "";
 	protected Board boardState;
 	protected Position position;
