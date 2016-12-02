@@ -449,15 +449,14 @@ public class Protocol {
 		if(!gameAlias.getBoard().getPile().isEmpty())
 			gameAlias.getBoard().getPile().pop();
 		gameAlias.getBoard().addTile(pos, current);
-		gameAlias.nextPlayer();
 		
-		Tiger tiger = null;
-
 		if (zoneIndex.equals("")) {
+			gameAlias.nextPlayer();
 			return;
 		}
 		else {
-			current.addTiger(current.getZone(Integer.parseInt(zoneIndex)), tiger);
+			current.addTiger(Integer.parseInt(zoneIndex), new Tiger(gameAlias.getCurrentPlayer()));
+			gameAlias.nextPlayer();
 			return;
 		}
 	}
