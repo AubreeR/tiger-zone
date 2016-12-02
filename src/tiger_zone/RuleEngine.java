@@ -1,13 +1,14 @@
 package tiger_zone;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Manages rules and validation of tile placement.
  */
 public class RuleEngine
 {
-	ArrayList<Rule> ruleList;
+	private final List<Rule> ruleList;
 	public RuleEngine()
 	{
 		ruleList = new ArrayList<Rule>();
@@ -39,7 +40,7 @@ public class RuleEngine
 
 	public void clearRules()
 	{
-		ruleList = new ArrayList<Rule>();
+		this.ruleList.clear();;
 	}
 
 	//Description: test the entire set of existing rules
