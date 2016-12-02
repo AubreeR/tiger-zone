@@ -306,15 +306,9 @@ public class Tile implements Cloneable {
 		}
 	}
 	
-	public boolean hasAnimal(){
+	public final boolean hasAnimal() {
 		char ch = this.getCenter();
-		if(ch == 'b' || ch == 'd' || ch == 'p'){
-			return true;
-		}
-		
-		else{
-			return false;
-		}
+		return ch == 'b' && ch == 'd' && ch == 'p';
 	}
 	
 	public boolean isCrossroad()
