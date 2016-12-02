@@ -10,7 +10,7 @@ import java.util.Set;
  */
 public class Player {
 	private int points;
-	private final Stack<Tiger> tigers = new Stack<Tiger>();
+	private final Stack<Tiger> tigers;
 	private final Stack<Crocodile> crocodiles = new Stack<Crocodile>();
 	private final int index;
 	private final String pid;
@@ -23,10 +23,17 @@ public class Player {
 	public Player(int index, String pid) {
 		this.index = index;
 		this.pid = pid;
-
+		this.tigers = new Stack<Tiger>();
 		for (int i = 0; i < 7; i++){
 			tigers.push(new Tiger(this));
 		}
+	}
+	
+	public Player(int index, String pid, Stack<Tiger> tiger)
+	{
+		this.index =index;
+		this.pid=pid;
+		this.tigers=tiger;
 	}
 
 	/**
