@@ -53,4 +53,16 @@ public class GameTest {
 		assertSame(aiPlayers.get(0), game.getAiPlayers().get(0));
 		assertSame(aiPlayers.get(1), game.getAiPlayers().get(1));
 	}
+	
+	@Test
+	public void getCurrentPlayerTest() {
+		Game game = new Game();
+		List<Player> players = new ArrayList<Player>(2);
+		players.add(new Player(0, "0"));
+		players.add(new Player(1, "1"));
+		game.setPlayers(players);
+		assertSame(game.getPlayers().get(0), game.getCurrentPlayer());
+		game.nextPlayer();
+		assertSame(game.getPlayers().get(1), game.getCurrentPlayer());
+	}
 }

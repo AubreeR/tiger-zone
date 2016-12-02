@@ -86,6 +86,15 @@ public class Game {
 	}
 
 	/**
+	 * Returns this game's current player
+	 * 
+	 * @return current player
+	 */
+	public final Player getCurrentPlayer() {
+		return this.currentPlayer;
+	}
+	
+	/**
 	 * Returns true if game is over. Otherwise returns false.
 	 * 
 	 * @return is game over?
