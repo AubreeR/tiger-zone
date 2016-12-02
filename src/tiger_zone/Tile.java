@@ -134,8 +134,13 @@ public class Tile implements Cloneable {
 		return tigerSpots;
 	}
 
-	public int getTigerPosition() {
-		return tigerPosition;
+	/**
+	 * Returns the zone of the tiger on this tile. Returns -1 if no tile exists on this tile.
+	 * 
+	 * @return tiger position
+	 */
+	public final int getTigerPosition() {
+		return this.tigerPosition;
 	}
 	
 
