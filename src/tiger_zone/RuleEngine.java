@@ -8,17 +8,18 @@ import java.util.List;
  */
 public class RuleEngine
 {
-	private final List<Rule> ruleList;
+	private final List<Rule> rules;
+	
 	public RuleEngine()
 	{
-		ruleList = new ArrayList<Rule>();
+		this.rules = new ArrayList<Rule>();
 	}
 
 	//Description: adds a rule to to the existing set of tests
 	//returns: void
 	public void addRule(Rule gameRule)
 	{
-		ruleList.add(gameRule);
+		this.rules.add(gameRule);
 	}
 
 	//Description: removes a rule from the set of rules to be tested
@@ -28,10 +29,10 @@ public class RuleEngine
 	public boolean removeRule(String ruleName)
 	{
 		boolean flagReturn = false;
-		for (int i = 0; i < ruleList.size(); i++)
-			if(ruleName.compareTo(ruleList.get(i).getName()) == 0)
+		for (int i = 0; i < this.rules.size(); i++)
+			if(ruleName.compareTo(this.rules.get(i).getName()) == 0)
 			{
-				ruleList.remove(i);
+				this.rules.remove(i);
 				flagReturn = true;
 			}
 
@@ -40,7 +41,7 @@ public class RuleEngine
 
 	public void clearRules()
 	{
-		this.ruleList.clear();;
+		this.rules.clear();
 	}
 
 	//Description: test the entire set of existing rules
@@ -48,7 +49,7 @@ public class RuleEngine
 	//       	false == a rule failed
 	public boolean evaluateRules()
 	{
-		for (Rule rule : ruleList)
+		for (Rule rule : this.rules)
 		{
 			if (!rule.evaluate()) {
 				return false;
