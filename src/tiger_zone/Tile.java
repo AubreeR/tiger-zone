@@ -259,7 +259,7 @@ public class Tile implements Cloneable {
 			return this.getSide(3);
 			
 		case 5: //middle center
-			if(isCrossroad())
+			if(isTerminatingRoad())
 				return '=';
 			else if(this.getSide(0) == 't' ||this.getSide(1) == 't' ||this.getSide(2) == 't' ||this.getSide(3) == 't' )
 				return 't';
@@ -316,15 +316,23 @@ public class Tile implements Cloneable {
 		return ch == 'b' && ch == 'd' && ch == 'p';
 	}
 	
-	public boolean isCrossroad()
-	{
-		int count  = 0;
-		//go through all sides
-		for(int i = 0; i < 4; i++)
-		{
-			count += ((this.getSide(i) == 't') ? 1:0);
+	/**
+	 * Returns true if this tile terminates a road. Otherwise, returns false.
+	 * 
+	 * @return is terminating road?
+	 */
+	public final boolean isTerminatingRoad() {
+		int count = 0;
+		for(int i = 0; i < 4; i++) {
+			count += ((this.getSide(i) == 't') ? 1 : 0);
 		}
-		return count == 3|| count == 4 || count == 1;
+		
+		// 0 road-sides: won't ever be connected to a road anyways
+		// 1 road-side: road hits a lake (terminates)
+		// 2 road-sides: straight road or turn
+		// 3 road-sides: crossroads (terminates)
+		// 4 road-sides: crossroads (terminates)
+		return count == 1 || count == 3 || count == 4;
 	}
 	
 	//tiger position is independent of rotation

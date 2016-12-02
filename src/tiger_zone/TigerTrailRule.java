@@ -49,7 +49,7 @@ public class TigerTrailRule extends PlacementRule {
 			return false;
 		}
 		
-		if (visited.contains(position) || tile == null || (tile.isCrossroad() && tile != this.tilePlaced)) {
+		if (visited.contains(position) || tile == null || (tile.isTerminatingRoad() && tile != this.tilePlaced)) {
 			return true;
 		}
 		
@@ -155,7 +155,7 @@ public class TigerTrailRule extends PlacementRule {
 			return true;
 		}
 		
-		if(tile.isCrossroad()) {
+		if(tile.isTerminatingRoad()) {
 			if(!visited.contains(position)) {
 				this.usedCells.add(position);
 				return true;
