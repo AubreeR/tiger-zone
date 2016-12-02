@@ -42,55 +42,6 @@ public class RuleEngine
 		ruleList = new ArrayList<Rule>();
 	}
 
-	//Description: test a specific subset of the rules
-	//returns: 	true == all rules passes
-	//			false == a rule failed
-	public boolean evaluateRules(ArrayList<String> ruleSet)
-	{
-		boolean flagReturn = true;
-		//should probably implement a find functionality that
-		//isn't n^2
-		for(String name : ruleSet)
-		{
-			for(Rule rule : ruleList)
-			{
-
-				if(rule.getName().compareTo(name) == 0)
-				{
-					//allows us to run through all evaluations but still
-					//retain failure status
-					flagReturn = rule.evaluate() && flagReturn;
-
-				}
-
-			}
-		}
-
-		return flagReturn;
-	}
-
-	//Description: test a specific subset of the rules with the same name
-	//returns: 	true == all rules passes
-	//			false == a rule failed
-	public boolean evaluateRules(String testRule)
-	{
-		boolean flagReturn = true;
-		for(Rule rule : ruleList)
-		{
-			if(flagReturn)
-			{
-				if(testRule.compareTo(rule.getName()) == 0)
-				{
-					flagReturn = rule.evaluate() && flagReturn;
-
-				}
-			}
-			else
-				break;
-		}
-		return flagReturn;
-	}
-
 	//Description: test the entire set of existing rules
 	//returns: 	true== all rules passed
 	//       	false == a rule failed
