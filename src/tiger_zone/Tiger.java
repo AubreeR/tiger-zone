@@ -9,7 +9,6 @@ public class Tiger {
 	 * The owner of this tiger.
 	 */
 	private final Player owner;
-	private Tiger tiger;
 
 	/**
 	 * Creates a new instance of tiger with the specified owner.
@@ -17,11 +16,6 @@ public class Tiger {
 	 * @param owner Player instance that owns this tiger.
 	 */
 	public Tiger(final Player owner) {
-		this.owner = owner;
-	}
-	
-	public Tiger(Tiger tiger, final Player owner){
-		this.tiger = tiger;
 		this.owner = owner;
 	}
 
