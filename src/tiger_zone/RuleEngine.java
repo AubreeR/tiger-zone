@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Manages rules and validation of tile placement.
  */
-public class RuleEngine
+public final class RuleEngine
 {
 	private final List<Rule> rules;
 	
@@ -17,29 +17,12 @@ public class RuleEngine
 
 	//Description: adds a rule to to the existing set of tests
 	//returns: void
-	public void addRule(Rule gameRule)
+	public final void addRule(final Rule gameRule)
 	{
 		this.rules.add(gameRule);
 	}
 
-	//Description: removes a rule from the set of rules to be tested
-	//	uses the name of the rule to find it
-	//returns: 	true == rules successfully found and removed
-	//			false == rule was not found or was not removed
-	public boolean removeRule(String ruleName)
-	{
-		boolean flagReturn = false;
-		for (int i = 0; i < this.rules.size(); i++)
-			if(ruleName.compareTo(this.rules.get(i).getName()) == 0)
-			{
-				this.rules.remove(i);
-				flagReturn = true;
-			}
-
-		return flagReturn;
-	}
-
-	public void clearRules()
+	public final void clearRules()
 	{
 		this.rules.clear();
 	}
@@ -47,7 +30,7 @@ public class RuleEngine
 	//Description: test the entire set of existing rules
 	//returns: 	true== all rules passed
 	//       	false == a rule failed
-	public boolean evaluateRules()
+	public final boolean evaluateRules()
 	{
 		for (Rule rule : this.rules)
 		{
