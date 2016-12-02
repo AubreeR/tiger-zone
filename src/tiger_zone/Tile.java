@@ -295,15 +295,13 @@ public class Tile implements Cloneable {
 		return '=';
 	}
 	
-	public boolean hasDen(){
-		char ch = this.getCenter();
-		if(ch == 'x'){
-			return true;
-		}
-		
-		else{
-			return false;
-		}
+	/**
+	 * Returns true if this tile has a den. Otherwise returns false.
+	 * 
+	 * @return has den?
+	 */
+	public final boolean hasDen() {
+		return this.getCenter() == 'x';
 	}
 	
 	/**
